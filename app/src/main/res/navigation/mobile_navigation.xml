@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.ajeetseeds.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+    android:id="@+id/nav_daily_activity"
+    android:name="com.example.ajeetseeds.ui.dailyActivity.DailyActivityFragment"
+    android:label="@string/menu_Daily_Activity"
+    tools:layout="@layout/fragment_daily_activity" />
+    <fragment
+        android:id="@+id/nav_daily_activityLine"
+        android:name="com.example.ajeetseeds.ui.dailyActivity.addLine.AddLinesFragment"
+        android:label="@string/menu_Daily_Activity"
+        tools:layout="@layout/add_lines_fragment" />
+    <fragment
+        android:id="@+id/nav_view_daily_activity_list"
+        android:name="com.example.ajeetseeds.ui.dailyActivity.viewDailyActivity.DailyActivityDetailFragment"
+        android:label="@string/menu_Daily_Activity_List"
+        tools:layout="@layout/daily_activity_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_employee_orderbook"
+        android:name="com.example.ajeetseeds.ui.order_creation.employee.EmployeeOrderBookFragment"
+        android:label="@string/menu_employee_orderbook"
+        tools:layout="@layout/employee_order_book_fragment" />
+
+    <fragment
+        android:id="@+id/nav_order_book"
+        android:name="com.example.ajeetseeds.ui.order_creation.orderBook.cropList.OrderBooksFragment"
+        android:label="@string/menu_order_book"
+        tools:layout="@layout/order_books_fragment" />
+    <fragment
+        android:id="@+id/nav_crop_item"
+        android:name="com.example.ajeetseeds.ui.order_creation.orderBook.crop_item_List.CropItemFragment"
+        android:label="@string/menu_crop_item"
+        tools:layout="@layout/crop_item_fragment" />
+    <fragment
+        android:id="@+id/nav_order_approval"
+        android:name="com.example.ajeetseeds.ui.order_creation.order_approval.OrderApprovalFragment"
+        android:label="@string/menu_order_approval"
+        tools:layout="@layout/order_approval_fragment" />
+    <fragment
+        android:id="@+id/nav_order_list"
+        android:name="com.example.ajeetseeds.ui.order_creation.view_book_order.BookOrderDetailFragment"
+        android:label="@string/menu_order_list"
+        tools:layout="@layout/book_order_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_event_create"
+        android:name="com.example.ajeetseeds.ui.eventManagement.createEvent.CreateEventFragment"
+        android:label="@string/menu_EventCreate"
+        tools:layout="@layout/create_event_fragment" />
+    <fragment
+        android:id="@+id/nav_event_view"
+        android:name="com.example.ajeetseeds.ui.eventManagement.viewEvent.ViewEventDetailFragment"
+        android:label="@string/menu_EventView"
+        tools:layout="@layout/view_event_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_event_approve"
+        android:name="com.example.ajeetseeds.ui.eventManagement.approveEvent.ApproveEventDetailFragment"
+        android:label="@string/menu_EventApprove"
+        tools:layout="@layout/view_event_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_event_expanse_Add"
+        android:name="com.example.ajeetseeds.ui.eventManagement.addExpanse.AddEventExpanseFragment"
+        android:label="@string/menu_EventexpanseAdd"
+        tools:layout="@layout/add_event_expanse_fragment" />
+    <fragment
+        android:id="@+id/nav_update_app"
+        android:name="com.example.ajeetseeds.ui.upgradeApp.UpgradeAppFragment"
+        android:label="@string/menu_UpgradeApp"
+        tools:layout="@layout/upgrade_app_fragment" />
+    <fragment
+        android:id="@+id/nav_manualSync"
+        android:name="com.example.ajeetseeds.ui.manualSync.ManualSyncFragment"
+        android:label="@string/menu_manualSync"
+        tools:layout="@layout/manual_sync_fragment" />
+    <fragment
+        android:id="@+id/nav_create_travel"
+        android:name="com.example.ajeetseeds.ui.travel.createTravel.CreateTravelFragment"
+        android:label="@string/menu_create_travel"
+        tools:layout="@layout/create_travel_fragment" />
+    <fragment
+        android:id="@+id/nav_view_travel"
+        android:name="com.example.ajeetseeds.ui.travel.viewtravel.ViewTravelDetailFragment"
+        android:label="@string/menu_view_travel"
+        tools:layout="@layout/view_travel_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_approve_travel"
+        android:name="com.example.ajeetseeds.ui.travel.approveTravel.ApproveTravelDetailFragment"
+        android:label="@string/menu_approve_travel"
+        tools:layout="@layout/view_travel_detail_fragment" />
+    <fragment
+        android:id="@+id/nav_travel_expence_list_add"
+        android:name="com.example.ajeetseeds.ui.travel.addExpanse.AddTravelExpanseFragment"
+        android:label="Add travel Expense"
+        tools:layout="@layout/add_travel_expanse_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_create"
+        android:name="com.example.ajeetseeds.ui.inspection.create_inspection.CreateInspectionFragment"
+        android:label="Create Inspection"
+        tools:layout="@layout/create_inspection_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_main_page"
+        android:name="com.example.ajeetseeds.ui.inspection.inspection_main_page.InspectionMainPageFragment"
+        android:label="Inspection"
+        tools:layout="@layout/inspection_main_page_fragment" />
+</navigation>

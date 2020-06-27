@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+ <translate xmlns:android="http://schemas.android.com/apk/res/android"
+           android:fromXDelta = "0%"
+           android:toXDelta="0%"
+           android:fromYDelta = "200%"
+           android:toYDelta = "0%"
+           android:duration="2000"
+           android:zAdjustment="top"></translate>
+
+<!-- android:duration="1000"-->
+
+<!-- <rotate-->
+<!--     android:duration="1100"-->
+<!--     android:fromDegrees="0"-->
+<!--     android:fromXDelta = "0%"-->
+<!--     android:toXDelta="0%"-->
+<!--     android:fromYDelta = "200%"-->
+<!--     android:toYDelta = "0%"-->
+<!--     android:repeatCount="infinite"-->
+<!--     android:repeatMode="restart"-->
+<!--     android:toDegrees="360" />-->
+</set>

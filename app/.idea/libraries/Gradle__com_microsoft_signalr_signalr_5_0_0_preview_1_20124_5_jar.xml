@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.microsoft.signalr:signalr:5.0.0-preview.1.20124.5@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.signalr/signalr/5.0.0-preview.1.20124.5/1eeb54eaca118d4abe17a1f97b7cf6385df69867/signalr-5.0.0-preview.1.20124.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.signalr/signalr/5.0.0-preview.1.20124.5/1807da6014ddca5dae9eed00fe8b131b025a9eb0/signalr-5.0.0-preview.1.20124.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.signalr/signalr/5.0.0-preview.1.20124.5/c3c133258bd800f27f248af0aa6a8754ca99c6e/signalr-5.0.0-preview.1.20124.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

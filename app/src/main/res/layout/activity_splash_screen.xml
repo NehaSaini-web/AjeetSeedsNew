@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity = "center"
+    android:id="@+id/linear_splash"
+    android:background="@drawable/splash"
+    tools:context=".SplashScreen">
+
+    <ImageView
+        android:id="@+id/company_splash_logo"
+        android:layout_width = "110dp"
+        android:layout_height = "110dp"
+        android:layout_gravity="center"
+        android:src="@drawable/logo"></ImageView>
+ <LinearLayout
+     android:id="@+id/tv_welcome"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_company"
+        android:layout_marginTop="5dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:text= "Welcome To Our Company!"
+        android:gravity="center"
+        android:textColor="#7f2725"
+        android:textStyle = "bold"
+        android:textSize = "20dp"></TextView>
+
+    <TextView
+        android:id="@+id/tv_poweredby"
+        android:layout_marginTop="10dp"
+        android:layout_width = "match_parent"
+        android:layout_height = "wrap_content"
+        android:text= "Powered By: Pristine Business Solutions"
+        android:gravity="center"
+        android:textColor="#7f2725"
+        android:textSize = "16dp"></TextView>
+ </LinearLayout>
+</LinearLayout>

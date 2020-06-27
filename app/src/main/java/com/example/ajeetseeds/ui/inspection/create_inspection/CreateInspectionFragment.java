@@ -1,0 +1,205 @@
+package com.example.ajeetseeds.ui.inspection.create_inspection;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import com.example.ajeetseeds.Http_Hanler.GlobalPostingMethod;
+import com.example.ajeetseeds.Http_Hanler.HttpHandlerModel;
+import com.example.ajeetseeds.Model.AsyModel;
+import com.example.ajeetseeds.Model.inspection.InspectionModel;
+import com.example.ajeetseeds.Model.StaticDataForApp;
+import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
+public class CreateInspectionFragment extends Fragment {
+
+    private CreateInspectionViewModel mViewModel;
+    Chip chip_production_lot_no_submit;
+    TextInputEditText edit_production_lot_no;
+    LinearLayout header_layout, footer_screen, line_list_ly;
+    ListView listview_headers_line;
+    LoadingDialog loadingDialog = new LoadingDialog();
+    ImageView go_back_screen;
+    TextView tv_Arrival_Plan_No, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
+            tv_City, tv_Contact, tv_Season_Code;
+ String entered_lot_no="";
+    public static CreateInspectionFragment newInstance() {
+        return new CreateInspectionFragment();
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.create_inspection_fragment, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        initView(view);
+        chip_production_lot_no_submit.setOnClickListener(view1 -> {
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view1.getApplicationWindowToken(), 0);
+            entered_lot_no=edit_production_lot_no.getText().toString();
+            if (entered_lot_no.equalsIgnoreCase("")) {
+                edit_production_lot_no.setError("Enter Production Lot no.");
+                return;
+            }
+            if (!loadingDialog.getLoadingState())
+                new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
+                        new AsyModel(StaticDataForApp.scanProductionLotNo + entered_lot_no, null, "ScanProductionLotNo"));
+        });
+        go_back_screen.setOnClickListener(view1 -> {
+            header_layout.setVisibility(View.VISIBLE);
+            footer_screen.setVisibility(View.GONE);
+            line_list_ly.setVisibility(View.GONE);
+        });
+
+        listview_headers_line.setOnItemClickListener((adapterView, view1, i, l) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+            bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(i).production_lot_no);
+            loadFragments(R.id.nav_inspection_main_page, "Inspection Main", bundle);
+        });
+        if(inspection_header_line.size()>0){
+            bind_Ui();
+        }
+    }
+
+    private void loadFragments(int id, String fragmentName, Bundle bundle) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//        navController.navigateUp();
+        navController.navigate(id, bundle);
+        getActivity().setTitle(fragmentName);
+    }
+
+    void initView(View view) {
+        chip_production_lot_no_submit = view.findViewById(R.id.chip_production_lot_no_submit);
+        edit_production_lot_no = view.findViewById(R.id.edit_production_lot_no);
+        header_layout = view.findViewById(R.id.header_layout);
+        footer_screen = view.findViewById(R.id.footer_screen);
+        listview_headers_line = view.findViewById(R.id.listview_headers_line);
+        line_list_ly = view.findViewById(R.id.line_list_ly);
+        go_back_screen = view.findViewById(R.id.go_back_screen);
+
+        tv_Arrival_Plan_No = view.findViewById(R.id.tv_Arrival_Plan_No);
+        tv_Organizer_No = view.findViewById(R.id.tv_Organizer_No);
+        tv_Organizer_Name = view.findViewById(R.id.tv_Organizer_Name);
+        tv_Organizer_Name_2 = view.findViewById(R.id.tv_Organizer_Name_2);
+        tv_Organizer_Address = view.findViewById(R.id.tv_Organizer_Address);
+        tv_Organizer_Address_2 = view.findViewById(R.id.tv_Organizer_Address_2);
+        tv_City = view.findViewById(R.id.tv_City);
+        tv_Contact = view.findViewById(R.id.tv_Contact);
+        tv_Season_Code = view.findViewById(R.id.tv_Season_Code);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = ViewModelProviders.of(this).get(CreateInspectionViewModel.class);
+        // TODO: Use the ViewModel
+    }
+
+    private class CommanHitToServer extends AsyncTask<AsyModel, Void, HttpHandlerModel> {
+        private GlobalPostingMethod hitObj = new GlobalPostingMethod();
+        private String flagOfAction;
+
+        @Override
+        protected void onPreExecute() {
+            loadingDialog.showLoadingDialog(getActivity());
+            super.onPreExecute();
+        }
+
+        @Override
+        protected HttpHandlerModel doInBackground(AsyModel... asyModels) {
+            try {
+                URL postingUrl = hitObj.createUrl(asyModels[0].getPostingUrl());
+                flagOfAction = asyModels[0].getFlagOfAction();
+                if (asyModels[0].getPostingJson() == null)
+                    return hitObj.getHttpRequest(postingUrl);
+                else
+                    return hitObj.postHttpRequest(postingUrl, asyModels[0].getPostingJson());
+            } catch (Exception e) {
+                return hitObj.setReturnMessage(false, "Problem retrieving the user JSON results." + e.getMessage());
+            }
+        }
+
+        @Override
+        protected void onPostExecute(HttpHandlerModel result) {
+            super.onPostExecute(result);
+            bindResponse(result, flagOfAction);
+        }
+    }
+
+    List<InspectionModel> inspection_header_line = new ArrayList<>();
+
+    void bindResponse(HttpHandlerModel result, String flagOfAction) {
+        try {
+            if (result.isConnectStatus() && !result.getJsonResponse().equalsIgnoreCase("")) {
+                if (flagOfAction.equalsIgnoreCase("ScanProductionLotNo")) {
+                    List<InspectionModel> responseslist = new Gson().fromJson(result.getJsonResponse(), new TypeToken<List<InspectionModel>>() {
+                    }.getType());
+                    if (responseslist.size() > 0 && responseslist.get(0).condition) {
+                        inspection_header_line = responseslist;
+                        bind_Ui();
+                    } else {
+                        Snackbar.make(chip_production_lot_no_submit, responseslist.get(0).message, Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                        }).show();
+                    }
+                }
+            } else {
+                Snackbar.make(chip_production_lot_no_submit, result.getJsonResponse(), Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                }).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            loadingDialog.dismissLoading();
+        }
+    }
+
+    void bind_Ui(){
+        tv_Arrival_Plan_No.setText(inspection_header_line.get(0).arrival_plan_no);
+        tv_Organizer_No.setText(inspection_header_line.get(0).organizer_no);
+        tv_Organizer_Name.setText(inspection_header_line.get(0).organizer_name);
+        tv_Organizer_Name_2.setText(inspection_header_line.get(0).organizer_name_2);
+        tv_Organizer_Address.setText(inspection_header_line.get(0).organizer_address);
+        tv_Organizer_Address_2.setText(inspection_header_line.get(0).organizer_address_2);
+        tv_City.setText(inspection_header_line.get(0).city);
+        tv_Contact.setText(inspection_header_line.get(0).contact);
+        tv_Season_Code.setText(inspection_header_line.get(0).season_code);
+        header_layout.setVisibility(View.GONE);
+        footer_screen.setVisibility(View.VISIBLE);
+        line_list_ly.setVisibility(View.VISIBLE);
+        InspectionLineListAdapter adapter = new InspectionLineListAdapter(getActivity(), inspection_header_line.get(0).il,entered_lot_no);
+        listview_headers_line.setAdapter(adapter);
+    }
+
+
+}

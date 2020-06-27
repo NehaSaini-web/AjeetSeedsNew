@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="F.Name: "
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_farmer_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="District : "
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_district"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="village : "
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_village"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Ajeet"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"></TextView>
+
+            <ImageView
+                android:id="@+id/ajeetArrow"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"></ImageView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/ajeetTableRowSection1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Verity:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_ajeet_crop_and_verity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Age:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_ajeet_crop_age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="Fruits Per:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_ajeet_fruits_per"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/ajeetTableRowSection2"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="Pest:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_ajeet_pest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Disease:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_ajeet_disease"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Check"
+                android:gravity="center_vertical"
+                android:textSize="15dp"
+                android:textColor="#000000"
+                android:textStyle="bold"></TextView>
+
+            <ImageView
+                android:id="@+id/check_arraw"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"></ImageView>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/checkTableRowSection1"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Verity:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_check_crop_and_verity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Age:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_check_crop_age"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:text="Fruits Per:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_check_fruits_per"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/checkTableRowSection2"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:text="Pest:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_check_pest"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:text="Disease:"
+                android:textColor="@color/colorAccent"
+                android:textSize="12dp" />
+
+            <TextView
+                android:id="@+id/tv_check_disease"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
