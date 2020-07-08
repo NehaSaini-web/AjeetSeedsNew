@@ -331,7 +331,7 @@ public class InspectionFourFragment extends Fragment {
                 postmodel.date_of_inspection= et_date_of_inspection.getText().toString();
                 postmodel.crop_condition= et_crop_condition.getText().toString();
                 postmodel.crop_stage= et_crop_stage.getText().toString();
-                postmodel.net_area_as_per_insp_3= et_net_area_as_per_insp_3.getText().toString();
+                postmodel.net_area_as_per_insp_3= et_net_area_as_per_insp_3.getText().toString().equalsIgnoreCase("")?"0": et_net_area_as_per_insp_3.getText().toString();
                 postmodel.crossing_start_date= et_crossing_start_date.getText().toString();
                 postmodel.crossing_end_date= et_crossing_end_date.getText().toString();
                 postmodel.final_plant_population= et_final_plant_population.getText().toString();

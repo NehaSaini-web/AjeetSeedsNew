@@ -352,12 +352,12 @@ public class InspectionQcFragment extends Fragment {
                 postmodel.crop_stage= et_crop_stage.getText().toString();
                 postmodel.date_of_inspection= et_date_of_inspection.getText().toString();
                 postmodel.suggestion_to_grower= et_suggestion_to_grower.getText().toString();
-                postmodel.avg_crossing_per_day= et_avg_crossing_per_day.getText().toString();
-                postmodel.avg_cross_boll_per_plant= et_avg_cross_boll_per_plant.getText().toString();
+                postmodel.avg_crossing_per_day= et_avg_crossing_per_day.getText().toString().equalsIgnoreCase("")?"0":et_avg_crossing_per_day.getText().toString();
+                postmodel.avg_cross_boll_per_plant= et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("")?"0":et_avg_cross_boll_per_plant.getText().toString();
                 postmodel.self_boll_per_plant= et_self_boll_per_plant.getText().toString();
                 postmodel.kapas_picking_if_any= et_kapas_picking_if_any.getText().toString();
-                postmodel.approx_kapas_balance_for_picking= et_approx_kapas_balance_for_picking.getText().toString();
-                postmodel.estimated_field_in_kg= et_estimated_field_in_kg.getText().toString();
+                postmodel.approx_kapas_balance_for_picking= et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("")?"0":et_approx_kapas_balance_for_picking.getText().toString();
+                postmodel.estimated_field_in_kg= et_estimated_field_in_kg.getText().toString().equalsIgnoreCase("")?"0":et_estimated_field_in_kg.getText().toString();
                 postmodel.name_of_fertilizer= et_name_of_fertilizer.getText().toString();
                 postmodel.fertilizer_date= et_fertilizer_date.getText().toString();
                 postmodel.fertilizer_dose= et_fertilizer_dose.getText().toString();

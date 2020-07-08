@@ -112,4 +112,29 @@
         android:name="com.example.ajeetseeds.ui.inspection.inspection_main_page.InspectionMainPageFragment"
         android:label="Inspection"
         tools:layout="@layout/inspection_main_page_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_one"
+        android:name="com.example.ajeetseeds.ui.inspection.inspection_one.InspectionOneFragment"
+        android:label="Inspection One"
+        tools:layout="@layout/fragment_inspection_one" />
+    <fragment
+        android:id="@+id/nav_inspection_two"
+        android:name="com.example.ajeetseeds.ui.inspection.inspectiontwo.InspectionTwoFragment"
+        android:label="Inspection Two"
+        tools:layout="@layout/inspection_two_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_three"
+        android:name="com.example.ajeetseeds.ui.inspection.inspection_three.InspectionThreeFragment"
+        android:label="Inspection Two"
+        tools:layout="@layout/inspection_three_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_four"
+        android:name="com.example.ajeetseeds.ui.inspection.inspection_four.InspectionFourFragment"
+        android:label="Inspection Four"
+        tools:layout="@layout/inspection_four_fragment" />
+    <fragment
+        android:id="@+id/nav_inspection_Qc"
+        android:name="com.example.ajeetseeds.ui.inspection.inspection_qc.InspectionQcFragment"
+        android:label="Inspection QC"
+        tools:layout="@layout/inspection_qc_fragment" />
 </navigation>

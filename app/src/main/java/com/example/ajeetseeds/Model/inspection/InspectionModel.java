@@ -14,11 +14,6 @@ public class InspectionModel {
     public String city;
     public String contact;
     public String season_code;
-    public int inspection_1;
-    public int inspection_2;
-    public int inspection_3;
-    public int inspection_4;
-    public int inspection_qc;
     public List<Inspection_Line> il;
 
     public class Inspection_Line {
@@ -32,5 +27,11 @@ public class InspectionModel {
         public String item_crop;
         public String item_croptype;
         public String itemclassofseeds;
+
+        public int inspection_1;
+        public int inspection_2;
+        public int inspection_3;
+        public int inspection_4;
+        public int inspection_qc;
     }
 }

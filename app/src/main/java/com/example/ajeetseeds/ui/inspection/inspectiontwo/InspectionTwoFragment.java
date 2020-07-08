@@ -311,12 +311,12 @@ public class InspectionTwoFragment extends Fragment {
                 oneInsertModel.Item_class_of_seeds = et_Item_class_of_seeds.getText().toString();
                 oneInsertModel.item_crop_type = et_item_crop_type.getText().toString();
                 oneInsertModel.date_of_inspection = et_date_of_inspection.getText().toString();
-                oneInsertModel.rejected_area = et_rejected_area.getText().toString();
-                oneInsertModel.net_area = et_net_area.getText().toString();
+                oneInsertModel.rejected_area = et_rejected_area.getText().toString().equalsIgnoreCase("")?"0":et_rejected_area.getText().toString();
+                oneInsertModel.net_area = et_net_area.getText().toString().equalsIgnoreCase("")?"0":et_net_area.getText().toString();
                 oneInsertModel.crop_condition = et_crop_condition.getText().toString();
                 oneInsertModel.crop_stage = et_crop_stage.getText().toString();
-                oneInsertModel.net_area_as_per_insp1 = et_net_area_as_per_insp1.getText().toString();
-                oneInsertModel.pld_area = et_pld_area.getText().toString();
+                oneInsertModel.net_area_as_per_insp1 = et_net_area_as_per_insp1.getText().toString().equalsIgnoreCase("")?"0":et_net_area_as_per_insp1.getText().toString();
+                oneInsertModel.pld_area = et_pld_area.getText().toString().equalsIgnoreCase("")?"0": et_pld_area.getText().toString();
                 oneInsertModel.crossing_start_date = et_crossing_start_date.getText().toString();
                 oneInsertModel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString();
                 oneInsertModel.avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString();

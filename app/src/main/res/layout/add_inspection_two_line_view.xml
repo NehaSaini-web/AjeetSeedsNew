@@ -178,7 +178,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_crop_condition"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="53dp"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>

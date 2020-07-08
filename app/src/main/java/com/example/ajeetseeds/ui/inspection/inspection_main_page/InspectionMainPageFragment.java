@@ -78,18 +78,6 @@ public class InspectionMainPageFragment extends Fragment {
 
             }
         });
-        if(inspectionModel.inspection_1>0){
-            viewPager.setCurrentItem(1);
-        }
-        if(inspectionModel.inspection_2>0){
-            viewPager.setCurrentItem(2);
-        }
-        if(inspectionModel.inspection_3>0){
-            viewPager.setCurrentItem(3);
-        }
-        if(inspectionModel.inspection_4>0){
-            viewPager.setCurrentItem(0);
-        }
 
     }
 

@@ -388,11 +388,11 @@ public class InspectionThreeFragment extends Fragment {
                 postmodel.date_of_inspection = et_date_of_inspection.getText().toString();
                 postmodel.crop_condition = et_crop_condition.getText().toString();
                 postmodel.crop_stage = et_crop_stage.getText().toString();
-                postmodel.net_area_as_per_insp2 = et_net_area_as_per_insp2.getText().toString();
-                postmodel.not_cross_area = et_not_cross_area.getText().toString();
-                postmodel.net_cross_area = et_net_cross_area.getText().toString();
+                postmodel.net_area_as_per_insp2 = et_net_area_as_per_insp2.getText().toString().equalsIgnoreCase("")?"0":et_net_area_as_per_insp2.getText().toString();
+                postmodel.not_cross_area = et_not_cross_area.getText().toString().equalsIgnoreCase("")?"0":et_not_cross_area.getText().toString();
+                postmodel.net_cross_area = et_net_cross_area.getText().toString().equalsIgnoreCase("")?"0":et_net_cross_area.getText().toString();
                 postmodel.crossing_start_date = et_crossing_start_date.getText().toString();
-                postmodel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString();
+                postmodel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString().equalsIgnoreCase("")?"0": et_avg_crossing_per_day.getText().toString();
                 postmodel.self_boll_per_plant = et_self_boll_per_plant.getText().toString();
                 postmodel.crossing_end_date = et_crossing_end_date.getText().toString();
                 postmodel.kapas_picking_if_any = et_kapas_picking_if_any.getText().toString();

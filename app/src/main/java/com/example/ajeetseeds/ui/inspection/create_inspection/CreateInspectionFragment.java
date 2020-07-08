@@ -1,18 +1,27 @@
 package com.example.ajeetseeds.ui.inspection.create_inspection;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -26,6 +35,8 @@ import com.example.ajeetseeds.Model.StaticDataForApp;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -48,7 +59,8 @@ public class CreateInspectionFragment extends Fragment {
     ImageView go_back_screen;
     TextView tv_Arrival_Plan_No, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_Contact, tv_Season_Code;
- String entered_lot_no="";
+    String entered_lot_no = "";
+
     public static CreateInspectionFragment newInstance() {
         return new CreateInspectionFragment();
     }
@@ -66,7 +78,7 @@ public class CreateInspectionFragment extends Fragment {
         chip_production_lot_no_submit.setOnClickListener(view1 -> {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(view1.getApplicationWindowToken(), 0);
-            entered_lot_no=edit_production_lot_no.getText().toString();
+            entered_lot_no = edit_production_lot_no.getText().toString();
             if (entered_lot_no.equalsIgnoreCase("")) {
                 edit_production_lot_no.setError("Enter Production Lot no.");
                 return;
@@ -82,15 +94,175 @@ public class CreateInspectionFragment extends Fragment {
         });
 
         listview_headers_line.setOnItemClickListener((adapterView, view1, i, l) -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-            bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(i).production_lot_no);
-            loadFragments(R.id.nav_inspection_main_page, "Inspection Main", bundle);
+            SelectInspectionTypePopup(i);
+//            Bundle bundle = new Bundle();
+//            bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+//            bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(i).production_lot_no);
+//            loadFragments(R.id.nav_inspection_main_page, "Inspection Main", bundle);
         });
-        if(inspection_header_line.size()>0){
+        if (inspection_header_line.size() > 0) {
             bind_Ui();
+
         }
     }
+
+    public class InspectionDataModel {
+        public String value;
+        public boolean is_selected;
+
+        public InspectionDataModel(String value, boolean is_selected) {
+            this.value = value;
+            this.is_selected = is_selected;
+        }
+    }
+
+    List<InspectionDataModel> inspection_array_list = new ArrayList<>();
+    String selected_inspection_type = "";
+
+    void SelectInspectionTypePopup(int selected_position) {
+        selected_inspection_type = "";
+        inspection_array_list.clear();
+        inspection_array_list.add(new InspectionDataModel("Inspection One", false));
+        inspection_array_list.add(new InspectionDataModel("Inspection Two", false));
+        inspection_array_list.add(new InspectionDataModel("Inspection Three", false));
+        inspection_array_list.add(new InspectionDataModel("Inspection Four", false));
+        inspection_array_list.add(new InspectionDataModel("Inspection QC", false));
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
+        builder.setTitle("Select Inspection Type... ");
+        builder.setIcon(R.drawable.approve_order_icon);
+        ScrollView ScrollViewparent = new ScrollView(getActivity());
+        LinearLayout.LayoutParams scrollparentVerticalParams = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        ScrollViewparent.setLayoutParams(scrollparentVerticalParams);
+
+        LinearLayout parentVertical = new LinearLayout(getActivity());
+        LinearLayout.LayoutParams parentVerticalParams = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        parentVertical.setLayoutParams(parentVerticalParams);
+        parentVertical.setOrientation(LinearLayout.VERTICAL);
+
+        BindPopupdata(builder, parentVertical, inspection_array_list, selected_position);
+
+        // parentVertical.setPadding(40, 20, 40, 10);
+
+        ScrollViewparent.addView(parentVertical);
+
+        builder.setView(ScrollViewparent);
+        builder.setPositiveButton("Confirm", (dialogInterface, i) -> {
+            selected_inspection_type = "";
+            for (int j = 0; j < inspection_array_list.size(); j++) {
+                if (inspection_array_list.get(j).is_selected) {
+                    selected_inspection_type = inspection_array_list.get(j).value;
+                }
+            }
+            //todo redirect to another page
+            if (selected_inspection_type.equalsIgnoreCase("Inspection One")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_one, "Inspection One", bundle);
+            } else if (selected_inspection_type.equalsIgnoreCase("Inspection Two")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_two, "Inspection Two", bundle);
+            } else if (selected_inspection_type.equalsIgnoreCase("Inspection Three")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_three, "Inspection Three", bundle);
+            } else if (selected_inspection_type.equalsIgnoreCase("Inspection Four")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_four, "Inspection Four", bundle);
+            } else if (selected_inspection_type.equalsIgnoreCase("Inspection QC")) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
+            }
+        });
+        builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
+
+        });
+        builder.setCancelable(false);
+        builder.show();
+    }
+
+    void BindPopupdata(MaterialAlertDialogBuilder builder, LinearLayout parentVertical, List<InspectionDataModel> size_choose, int selected_position) {
+        int paddingDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 10,
+                getResources().getDisplayMetrics()
+        );
+        for (int i = 0; i < size_choose.size(); i++) {
+            final InspectionDataModel sizedata = size_choose.get(i);
+            TextView messageSession = new TextView(getActivity());
+            if (sizedata.value.equalsIgnoreCase("Inspection One") && inspection_header_line.get(0).il.get(selected_position).inspection_1 == 1) {
+                messageSession.setText(sizedata.value + " (Completed)");
+            } else if (sizedata.value.equalsIgnoreCase("Inspection Two") && inspection_header_line.get(0).il.get(selected_position).inspection_2 == 1) {
+                messageSession.setText(sizedata.value + " (Completed)");
+            } else if (sizedata.value.equalsIgnoreCase("Inspection Three") && inspection_header_line.get(0).il.get(selected_position).inspection_3 == 1) {
+                messageSession.setText(sizedata.value + " (Completed)");
+            } else if (sizedata.value.equalsIgnoreCase("Inspection Four") && inspection_header_line.get(0).il.get(selected_position).inspection_4 == 1) {
+                messageSession.setText(sizedata.value + " (Completed)");
+            } else if (sizedata.value.equalsIgnoreCase("Inspection QC") && inspection_header_line.get(0).il.get(selected_position).inspection_qc == 1) {
+                messageSession.setText(sizedata.value + " (Completed)");
+            } else {
+                TypedValue outValue = new TypedValue();
+                getActivity().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+                messageSession.setBackgroundResource(outValue.resourceId);
+                messageSession.setText(sizedata.value);
+            }
+//            messageSession.setTypeface(messageSession.getTypeface(), Typeface.BOLD);
+            messageSession.setOnClickListener(v -> {
+                for (int j = 0; j < size_choose.size(); j++) {
+                    if (size_choose.get(j).value.equalsIgnoreCase(sizedata.value)) {
+                        size_choose.get(j).is_selected = !size_choose.get(j).is_selected;
+                        if (size_choose.get(j).is_selected)
+                            selected_inspection_type = size_choose.get(j).value;
+                    } else {
+                        size_choose.get(j).is_selected = false;
+                    }
+                }
+                parentVertical.removeAllViews();
+                BindPopupdata(builder, parentVertical, size_choose, selected_position);
+            });
+            View horizontaldevider = new View(getActivity());
+            int deviderhight = (int) TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP, 1,
+                    getResources().getDisplayMetrics()
+            );
+            horizontaldevider.setBackgroundColor(Color.parseColor("#72AAAAAA"));
+            LinearLayout.LayoutParams devide_params = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, deviderhight);
+            horizontaldevider.setLayoutParams(devide_params);
+
+            ChipGroup selected_cub_size_chipgroup = new ChipGroup(getActivity());
+            LinearLayout.LayoutParams chipgoupparams = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+            selected_cub_size_chipgroup.setLayoutParams(chipgoupparams);
+            selected_cub_size_chipgroup.removeAllViews();
+
+            //todo arrow up down
+            if (sizedata.is_selected) {
+                Drawable img = getContext().getResources().getDrawable(R.drawable.ic_baseline_check_24);
+                DrawableCompat.setTint(img, Color.RED);
+                messageSession.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                messageSession.setTextColor(Color.RED);
+                messageSession.setTypeface(messageSession.getTypeface(), Typeface.BOLD);
+                horizontaldevider.setVisibility(View.VISIBLE);
+                selected_cub_size_chipgroup.setVisibility(View.VISIBLE);
+            } else {
+                messageSession.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                selected_cub_size_chipgroup.setVisibility(View.GONE);
+            }
+
+            messageSession.setCompoundDrawablePadding(paddingDp);
+            messageSession.setPadding(paddingDp, paddingDp, paddingDp, paddingDp);
+            selected_cub_size_chipgroup.setPadding(paddingDp, 0, 0, 0);
+            parentVertical.addView(messageSession);
+            parentVertical.addView(selected_cub_size_chipgroup);
+            parentVertical.addView(horizontaldevider);
+        }
+    }
+
 
     private void loadFragments(int id, String fragmentName, Bundle bundle) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
@@ -184,7 +356,7 @@ public class CreateInspectionFragment extends Fragment {
         }
     }
 
-    void bind_Ui(){
+    void bind_Ui() {
         tv_Arrival_Plan_No.setText(inspection_header_line.get(0).arrival_plan_no);
         tv_Organizer_No.setText(inspection_header_line.get(0).organizer_no);
         tv_Organizer_Name.setText(inspection_header_line.get(0).organizer_name);
@@ -197,9 +369,16 @@ public class CreateInspectionFragment extends Fragment {
         header_layout.setVisibility(View.GONE);
         footer_screen.setVisibility(View.VISIBLE);
         line_list_ly.setVisibility(View.VISIBLE);
-        InspectionLineListAdapter adapter = new InspectionLineListAdapter(getActivity(), inspection_header_line.get(0).il,entered_lot_no);
+        InspectionLineListAdapter adapter = new InspectionLineListAdapter(getActivity(), inspection_header_line.get(0).il, entered_lot_no);
         listview_headers_line.setAdapter(adapter);
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!entered_lot_no.equalsIgnoreCase("") && !loadingDialog.getLoadingState())
+            new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
+                    new AsyModel(StaticDataForApp.scanProductionLotNo + entered_lot_no, null, "ScanProductionLotNo"));
+        getActivity().setTitle("Inspection");
+    }
 }
