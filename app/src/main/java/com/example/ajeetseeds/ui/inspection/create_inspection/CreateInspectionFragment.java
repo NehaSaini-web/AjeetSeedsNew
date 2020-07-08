@@ -160,25 +160,41 @@ public class CreateInspectionFragment extends Fragment {
                 bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
                 loadFragments(R.id.nav_inspection_one, "Inspection One", bundle);
             } else if (selected_inspection_type.equalsIgnoreCase("Inspection Two")) {
-                Bundle bundle = new Bundle();
-                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_two, "Inspection Two", bundle);
+                if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                    bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                    loadFragments(R.id.nav_inspection_two, "Inspection Two", bundle);
+                } else {
+                    Snackbar.make(listview_headers_line, "Please Submit Inspection One.", Snackbar.LENGTH_LONG).show();
+                }
             } else if (selected_inspection_type.equalsIgnoreCase("Inspection Three")) {
-                Bundle bundle = new Bundle();
-                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_three, "Inspection Three", bundle);
+                if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0 && inspection_header_line.get(0).il.get(selected_position).inspection_2 > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                    bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                    loadFragments(R.id.nav_inspection_three, "Inspection Three", bundle);
+                } else {
+                    Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
+                }
             } else if (selected_inspection_type.equalsIgnoreCase("Inspection Four")) {
-                Bundle bundle = new Bundle();
-                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_four, "Inspection Four", bundle);
+                if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0 && inspection_header_line.get(0).il.get(selected_position).inspection_2 > 0 && inspection_header_line.get(0).il.get(selected_position).inspection_3 > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                    bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                    loadFragments(R.id.nav_inspection_four, "Inspection Four", bundle);
+                } else {
+                    Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
+                }
             } else if (selected_inspection_type.equalsIgnoreCase("Inspection QC")) {
-                Bundle bundle = new Bundle();
-                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
+                if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0 && inspection_header_line.get(0).il.get(selected_position).inspection_2 > 0 && inspection_header_line.get(0).il.get(selected_position).inspection_3 > 0&& inspection_header_line.get(0).il.get(selected_position).inspection_4 > 0) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                    bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                    loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
+                }else {
+                    Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
+                }
             }
         });
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> {

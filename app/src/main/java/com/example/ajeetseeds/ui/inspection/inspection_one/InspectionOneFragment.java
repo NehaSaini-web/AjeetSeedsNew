@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -28,6 +29,8 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
+import com.example.ajeetseeds.ui.dailyActivity.addLine.DistrictAdapter;
+import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
 import com.example.ajeetseeds.ui.inspection.inspection_main_page.InspectionMainPageFragment;
 import com.example.ajeetseeds.ui.travel.approveTravel.ApproveTravelDetailFragment;
 import com.google.android.material.chip.Chip;
@@ -158,9 +161,13 @@ public class InspectionOneFragment extends Fragment {
     }
 
     boolean datedialog = false;
-
+   public List<String> crop_condition_list=new ArrayList<>();
     public void Add_Inspection_Line(String flag, InspectionOneModel.InspectionLineModel viewModel) {
         try {
+            crop_condition_list.clear();
+            crop_condition_list.add("Good");
+            crop_condition_list.add("Medium");
+            crop_condition_list.add("Poor");
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View PopupView = inflater.inflate(R.layout.add_inspection_one_line_view, null);
             Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_DeviceDefault_DialogWhenLarge_NoActionBar);
@@ -206,7 +213,9 @@ public class InspectionOneFragment extends Fragment {
             TextInputEditText et_plant_population_variety = PopupView.findViewById(R.id.et_plant_population_variety);
             TextInputEditText et_plant_population_male = PopupView.findViewById(R.id.et_plant_population_male);
             TextInputEditText et_plant_population_female = PopupView.findViewById(R.id.et_plant_population_female);
-            TextInputEditText et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
+            AutoCompleteTextView et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
+            CropConditionAdapter cropConditionAdapter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_condition_list);
+            et_crop_condition.setAdapter(cropConditionAdapter);
             TextInputEditText et_crop_stage = PopupView.findViewById(R.id.et_crop_stage);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
 
