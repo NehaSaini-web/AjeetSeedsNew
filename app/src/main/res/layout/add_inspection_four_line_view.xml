@@ -169,33 +169,35 @@
                     android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:hint="Crop Condition">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <AutoCompleteTextView
                             android:id="@+id/et_crop_condition"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
+                            android:editable="false"
+                            android:inputType="none"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:hint="Crop Stage">
 
-                        <com.google.android.material.textfield.TextInputEditText
+                        <AutoCompleteTextView
                             android:id="@+id/et_crop_stage"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
+                            android:editable="false"
+                            android:inputType="none"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>

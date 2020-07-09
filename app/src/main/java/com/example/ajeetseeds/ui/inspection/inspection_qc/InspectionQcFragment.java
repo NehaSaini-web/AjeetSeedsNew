@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
+import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
 import com.example.ajeetseeds.ui.inspection.inspection_four.InspectionFourFragment;
 import com.example.ajeetseeds.ui.inspection.inspection_four.InspectionFourLineListAdapter;
 import com.google.android.material.chip.Chip;
@@ -166,9 +168,28 @@ public class InspectionQcFragment extends Fragment {
     }
 
     boolean datedialog = false;
-
+    public List<String> crop_condition_list = new ArrayList<>();
+    public List<String> crop_stage_list = new ArrayList<>();
     public void Add_Inspection_Line(String flag, InspectionOneModel.InspectionQCLineModel viewModel) {
         try {
+            crop_condition_list.clear();
+            crop_condition_list.add("Good");
+            crop_condition_list.add("Medium");
+            crop_condition_list.add("Poor");
+
+            crop_stage_list.clear();
+            crop_stage_list.add("Germination");
+            crop_stage_list.add("Vegetative");
+            crop_stage_list.add("Flag-Off");
+            crop_stage_list.add("Square-Formation");
+            crop_stage_list.add("Flowering");
+            crop_stage_list.add("Boll Formation");
+            crop_stage_list.add("Crossing");
+            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Pod Formation");
+            crop_stage_list.add("Grain Formation");
+            crop_stage_list.add("Fruit Formation");
+
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View PopupView = inflater.inflate(R.layout.add_inspection_qc_line_view, null);
             Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_DeviceDefault_DialogWhenLarge_NoActionBar);
@@ -199,8 +220,12 @@ public class InspectionQcFragment extends Fragment {
             TextInputEditText et_item_crop_type= PopupView.findViewById(R.id.et_item_crop_type);
             et_item_crop_type.setText(inspection_header_line.get(0).item_croptype);
             et_item_crop_type.setEnabled(false);
-            TextInputEditText et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
-            TextInputEditText et_crop_stage = PopupView.findViewById(R.id.et_crop_stage);
+            AutoCompleteTextView et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
+            CropConditionAdapter cropConditionAdapter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_condition_list);
+            et_crop_condition.setAdapter(cropConditionAdapter);
+            AutoCompleteTextView et_crop_stage = PopupView.findViewById(R.id.et_crop_stage);
+            CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
+            et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_date_of_inspection = PopupView.findViewById(R.id.et_date_of_inspection);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
 

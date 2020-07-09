@@ -161,13 +161,38 @@ public class InspectionOneFragment extends Fragment {
     }
 
     boolean datedialog = false;
-   public List<String> crop_condition_list=new ArrayList<>();
+    public List<String> crop_condition_list = new ArrayList<>();
+    public List<String> crop_stage_list = new ArrayList<>();
+    public List<String> isolation_distance_status_list = new ArrayList<>();
+    public List<String> germination_status_list = new ArrayList<>();
+
     public void Add_Inspection_Line(String flag, InspectionOneModel.InspectionLineModel viewModel) {
         try {
+            isolation_distance_status_list.clear();
+            isolation_distance_status_list.add("Maintained");
+            isolation_distance_status_list.add("Non-Maintained");
+
+            germination_status_list.clear();
+            germination_status_list.add("Satisfactory");
+            germination_status_list.add("Non-Satisfactory");
+
             crop_condition_list.clear();
             crop_condition_list.add("Good");
             crop_condition_list.add("Medium");
             crop_condition_list.add("Poor");
+
+            crop_stage_list.clear();
+            crop_stage_list.add("Germination");
+            crop_stage_list.add("Vegetative");
+            crop_stage_list.add("Flag-Off");
+            crop_stage_list.add("Square-Formation");
+            crop_stage_list.add("Flowering");
+            crop_stage_list.add("Boll Formation");
+            crop_stage_list.add("Crossing");
+            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Pod Formation");
+            crop_stage_list.add("Grain Formation");
+            crop_stage_list.add("Fruit Formation");
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View PopupView = inflater.inflate(R.layout.add_inspection_one_line_view, null);
             Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_DeviceDefault_DialogWhenLarge_NoActionBar);
@@ -199,10 +224,14 @@ public class InspectionOneFragment extends Fragment {
             et_item_crop_type.setEnabled(false);
             TextInputEditText et_date_of_inspection = PopupView.findViewById(R.id.et_date_of_inspection);
             et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
-            TextInputEditText et_isolation_distance_status = PopupView.findViewById(R.id.et_isolation_distance_status);
+            AutoCompleteTextView et_isolation_distance_status = PopupView.findViewById(R.id.et_isolation_distance_status);
+            CropConditionAdapter isolation_distance_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, isolation_distance_status_list);
+            et_isolation_distance_status.setAdapter(isolation_distance_adapeter);
             TextInputEditText et_isolation_distance_in_metre = PopupView.findViewById(R.id.et_isolation_distance_in_metre);
             TextInputEditText et_previous_crop = PopupView.findViewById(R.id.et_previous_crop);
-            TextInputEditText et_germination_status = PopupView.findViewById(R.id.et_germination_status);
+            AutoCompleteTextView et_germination_status = PopupView.findViewById(R.id.et_germination_status);
+            CropConditionAdapter germination_status_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, germination_status_list);
+            et_germination_status.setAdapter(germination_status_adapeter);
             TextInputEditText et_germination_per = PopupView.findViewById(R.id.et_germination_per);
             TextInputEditText et_area = PopupView.findViewById(R.id.et_area);
             TextInputEditText et_rejection_area = PopupView.findViewById(R.id.et_rejection_area);
@@ -216,7 +245,9 @@ public class InspectionOneFragment extends Fragment {
             AutoCompleteTextView et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
             CropConditionAdapter cropConditionAdapter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_condition_list);
             et_crop_condition.setAdapter(cropConditionAdapter);
-            TextInputEditText et_crop_stage = PopupView.findViewById(R.id.et_crop_stage);
+            AutoCompleteTextView et_crop_stage = PopupView.findViewById(R.id.et_crop_stage);
+            CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
+            et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
 
             if (flag.equalsIgnoreCase("View")) {
@@ -306,19 +337,19 @@ public class InspectionOneFragment extends Fragment {
                 oneInsertModel.item_crop_type = et_item_crop_type.getText().toString();
                 oneInsertModel.date_of_inspection = et_date_of_inspection.getText().toString();
                 oneInsertModel.isolation_distance_status = et_isolation_distance_status.getText().toString();
-                oneInsertModel.isolation_distance_in_metre = et_isolation_distance_in_metre.getText().toString().equalsIgnoreCase("")?"0":et_isolation_distance_in_metre.getText().toString();
+                oneInsertModel.isolation_distance_in_metre = et_isolation_distance_in_metre.getText().toString().equalsIgnoreCase("") ? "0" : et_isolation_distance_in_metre.getText().toString();
                 oneInsertModel.previous_crop = et_previous_crop.getText().toString();
                 oneInsertModel.germination_status = et_germination_status.getText().toString();
-                oneInsertModel.germination_per = et_germination_per.getText().toString().equalsIgnoreCase("")?"0":et_germination_per.getText().toString();
-                oneInsertModel.area = et_area.getText().toString().equalsIgnoreCase("")?"0":et_area.getText().toString();
-                oneInsertModel.rejection_area = et_rejection_area.getText().toString().equalsIgnoreCase("")?"0":et_rejection_area.getText().toString();
-                oneInsertModel.net_area = et_net_area.getText().toString().equalsIgnoreCase("")?"0":et_net_area.getText().toString();
-                oneInsertModel.spacing_variety = et_spacing_variety.getText().toString().equalsIgnoreCase("")?"0": et_spacing_variety.getText().toString();
-                oneInsertModel.spacing_male = et_spacing_male.getText().toString().equalsIgnoreCase("")?"0":et_spacing_male.getText().toString();
-                oneInsertModel.spacing_female = et_spacing_female.getText().toString().equalsIgnoreCase("")?"0": et_spacing_female.getText().toString();
-                oneInsertModel.plant_population_variety = et_plant_population_variety.getText().toString().equalsIgnoreCase("")?"0":et_plant_population_variety.getText().toString();
-                oneInsertModel.plant_population_male = et_plant_population_male.getText().toString().equalsIgnoreCase("")?"0": et_plant_population_male.getText().toString();
-                oneInsertModel.plant_population_female = et_plant_population_female.getText().toString().equalsIgnoreCase("")?"0": et_plant_population_female.getText().toString();
+                oneInsertModel.germination_per = et_germination_per.getText().toString().equalsIgnoreCase("") ? "0" : et_germination_per.getText().toString();
+                oneInsertModel.area = et_area.getText().toString().equalsIgnoreCase("") ? "0" : et_area.getText().toString();
+                oneInsertModel.rejection_area = et_rejection_area.getText().toString().equalsIgnoreCase("") ? "0" : et_rejection_area.getText().toString();
+                oneInsertModel.net_area = et_net_area.getText().toString().equalsIgnoreCase("") ? "0" : et_net_area.getText().toString();
+                oneInsertModel.spacing_variety = et_spacing_variety.getText().toString().equalsIgnoreCase("") ? "0" : et_spacing_variety.getText().toString();
+                oneInsertModel.spacing_male = et_spacing_male.getText().toString().equalsIgnoreCase("") ? "0" : et_spacing_male.getText().toString();
+                oneInsertModel.spacing_female = et_spacing_female.getText().toString().equalsIgnoreCase("") ? "0" : et_spacing_female.getText().toString();
+                oneInsertModel.plant_population_variety = et_plant_population_variety.getText().toString().equalsIgnoreCase("") ? "0" : et_plant_population_variety.getText().toString();
+                oneInsertModel.plant_population_male = et_plant_population_male.getText().toString().equalsIgnoreCase("") ? "0" : et_plant_population_male.getText().toString();
+                oneInsertModel.plant_population_female = et_plant_population_female.getText().toString().equalsIgnoreCase("") ? "0" : et_plant_population_female.getText().toString();
                 oneInsertModel.crop_condition = et_crop_condition.getText().toString();
                 oneInsertModel.crop_stage = et_crop_stage.getText().toString();
                 oneInsertModel.suggestion_to_grower = et_suggestion_to_grower.getText().toString();
