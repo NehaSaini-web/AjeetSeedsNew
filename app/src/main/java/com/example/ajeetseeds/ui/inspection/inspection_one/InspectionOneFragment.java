@@ -249,7 +249,16 @@ public class InspectionOneFragment extends Fragment {
             CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
             et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
-
+            TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
+            et_planting_sowing_date_female.setText(DateUtilsCustome.getCurrentDateBY());
+            TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
+            et_planting_sowing_date_other.setText(DateUtilsCustome.getCurrentDateBY());
+            TextInputEditText et_spacing_female_row = PopupView.findViewById(R.id.et_spacing_female_row);
+            TextInputEditText et_spacing_female_plant = PopupView.findViewById(R.id.et_spacing_female_plant);
+            TextInputEditText et_spacing_variety_row = PopupView.findViewById(R.id.et_spacing_variety_row);
+            TextInputEditText et_spacing_variety_plant = PopupView.findViewById(R.id.et_spacing_variety_plant);
+            TextInputEditText et_spacing_male_row = PopupView.findViewById(R.id.et_spacing_male_row);
+            TextInputEditText et_spacing_male_plant = PopupView.findViewById(R.id.et_spacing_male_plant);
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);
@@ -302,6 +311,22 @@ public class InspectionOneFragment extends Fragment {
                 et_suggestion_to_grower.setText(viewModel.suggestion_to_grower);
                 et_suggestion_to_grower.setEnabled(false);
                 submitPage.setEnabled(false);
+                et_planting_sowing_date_female.setText(viewModel.planting_sowing_date_female);
+                et_planting_sowing_date_female.setEnabled(false);
+                et_planting_sowing_date_other.setText(viewModel.planting_sowing_date_other);
+                et_planting_sowing_date_other.setEnabled(false);
+                et_spacing_female_row.setText(viewModel.spacing_female_row);
+                et_spacing_female_row.setEnabled(false);
+                et_spacing_female_plant.setText(viewModel.spacing_female_plant);
+                et_spacing_female_plant.setEnabled(false);
+                et_spacing_variety_row.setText(viewModel.spacing_variety_row);
+                et_spacing_variety_row.setEnabled(false);
+                et_spacing_variety_plant.setText(viewModel.spacing_variety_plant);
+                et_spacing_variety_plant.setEnabled(false);
+                et_spacing_male_row.setText(viewModel.spacing_male_row);
+                et_spacing_female_row.setEnabled(false);
+                et_spacing_male_plant.setText(viewModel.spacing_male_plant);
+                et_spacing_male_plant.setEnabled(false);
             } else {
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
                     if (!datedialog) {
@@ -313,6 +338,42 @@ public class InspectionOneFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
+                et_planting_sowing_date_female.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_planting_sowing_date_female.setText(picker.getHeaderText());
+                                et_planting_sowing_date_female.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
+                et_planting_sowing_date_other.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_planting_sowing_date_other.setText(picker.getHeaderText());
+                                et_planting_sowing_date_other.setError(null);
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;
@@ -353,6 +414,15 @@ public class InspectionOneFragment extends Fragment {
                 oneInsertModel.crop_condition = et_crop_condition.getText().toString();
                 oneInsertModel.crop_stage = et_crop_stage.getText().toString();
                 oneInsertModel.suggestion_to_grower = et_suggestion_to_grower.getText().toString();
+
+                oneInsertModel.planting_sowing_date_female = et_planting_sowing_date_female.getText().toString();
+                oneInsertModel.planting_sowing_date_other = et_planting_sowing_date_other.getText().toString();
+                oneInsertModel.spacing_female_row = et_spacing_female_row.getText().toString();
+                oneInsertModel.spacing_female_plant = et_spacing_female_plant.getText().toString();
+                oneInsertModel.spacing_variety_row = et_spacing_variety_row.getText().toString();
+                oneInsertModel.spacing_variety_plant = et_spacing_variety_plant.getText().toString();
+                oneInsertModel.spacing_male_row = et_spacing_male_row.getText().toString();
+                oneInsertModel.spacing_male_plant = et_spacing_male_plant.getText().toString();
                 try {
                     new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
                             new AsyModel(StaticDataForApp.insert_inspection_one_line,

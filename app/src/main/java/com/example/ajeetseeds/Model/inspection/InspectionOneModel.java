@@ -58,6 +58,15 @@ public class InspectionOneModel {
         public String crop_condition;
         public String crop_stage;
         public String suggestion_to_grower;
+        //todo new add field
+        public String  planting_sowing_date_female;
+        public String planting_sowing_date_other;
+        public String spacing_female_row;
+        public String spacing_female_plant;
+        public String spacing_variety_row;
+        public String spacing_variety_plant;
+        public String spacing_male_row;
+        public String spacing_male_plant;
     }
 
     //todo for inspection 2
