@@ -29,6 +29,7 @@ import com.example.ajeetseeds.Model.inspection.InspectionModel;
 import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
 import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
@@ -81,9 +82,12 @@ public class InspectionTwoFragment extends Fragment {
         return inflater.inflate(R.layout.inspection_two_fragment, container, false);
     }
 
+    SessionManagement sessionManagement;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sessionManagement = new SessionManagement(getActivity());
         initView(view);
     }
 
@@ -136,7 +140,10 @@ public class InspectionTwoFragment extends Fragment {
                     .setPositiveButton("Confirm", (dialogInterface, i1) -> {
                         if (inspection_header_line.get(0).it.size() > 0) {
                             new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
-                                    new AsyModel(StaticDataForApp.Complete_inspection_two + inspectionModel.arrival_plan_no + "&production_lot_no=" + selected_production_lot_no, null, "CompleteHit"));
+                                    new AsyModel(StaticDataForApp.Complete_inspection_two + inspectionModel.arrival_plan_no
+                                            + "&production_lot_no=" + selected_production_lot_no
+                                            + "&email_id=" + sessionManagement.getUserEmail()
+                                            + "&inspection_type=Inspection II", null, "CompleteHit"));
                             dialogInterface.dismiss();
                         } else {
                             Snackbar.make(chip_add_inspection_line, "Please Add Minimum Single Line.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
