@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ import com.example.ajeetseeds.Model.StaticDataForApp;
 import com.example.ajeetseeds.Model.inspection.InspectionOneInsertModel;
 import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
@@ -56,6 +59,7 @@ public class InspectionOneFragment extends Fragment {
     LoadingDialog loadingDialog = new LoadingDialog();
     TextView tv_Arrival_Plan_No, tv_production_lot_no, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_Contact, tv_Season_Code, tv_grower_name;
+    InspectionModel.Inspection_Line inspectionModel_selected_line;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,7 @@ public class InspectionOneFragment extends Fragment {
         if (getArguments() != null) {
             selected_production_lot_no = getArguments().getString("Selected_production_lot_no", "");
             inspectionModel = new Gson().fromJson(getArguments().getString("inspection_header", ""), InspectionModel.class);
+            inspectionModel_selected_line = new Gson().fromJson(getArguments().getString("inspection_line", ""), InspectionModel.Inspection_Line.class);
         }
     }
 
@@ -73,9 +78,12 @@ public class InspectionOneFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_inspection_one, container, false);
     }
 
+    SessionManagement sessionManagement;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sessionManagement = new SessionManagement(getActivity());
         initView(view);
     }
 
@@ -122,7 +130,10 @@ public class InspectionOneFragment extends Fragment {
                     .setPositiveButton("Confirm", (dialogInterface, i1) -> {
                         if (inspection_header_line.get(0).io.size() > 0) {
                             new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
-                                    new AsyModel(StaticDataForApp.Complete_inspection_one + inspectionModel.arrival_plan_no + "&production_lot_no=" + selected_production_lot_no, null, "CompleteHit"));
+                                    new AsyModel(StaticDataForApp.Complete_inspection_one + inspectionModel.arrival_plan_no
+                                            + "&production_lot_no=" + selected_production_lot_no
+                                            + "&email_id=" + sessionManagement.getUserEmail()
+                                            + "&inspection_type=Inspection I", null, "CompleteHit"));
                             dialogInterface.dismiss();
                         } else {
                             Snackbar.make(chip_add_inspection_line, "Please Add Minimum Single Line.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
@@ -227,15 +238,63 @@ public class InspectionOneFragment extends Fragment {
             AutoCompleteTextView et_isolation_distance_status = PopupView.findViewById(R.id.et_isolation_distance_status);
             CropConditionAdapter isolation_distance_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, isolation_distance_status_list);
             et_isolation_distance_status.setAdapter(isolation_distance_adapeter);
+
             TextInputEditText et_isolation_distance_in_metre = PopupView.findViewById(R.id.et_isolation_distance_in_metre);
+            et_isolation_distance_status.setOnItemClickListener((adapterView, view, positin, l) -> {
+                if (isolation_distance_status_list.get(positin).equalsIgnoreCase("Maintained"))
+                    et_isolation_distance_in_metre.setEnabled(false);
+                else
+                    et_isolation_distance_in_metre.setEnabled(true);
+            });
+
             TextInputEditText et_previous_crop = PopupView.findViewById(R.id.et_previous_crop);
             AutoCompleteTextView et_germination_status = PopupView.findViewById(R.id.et_germination_status);
             CropConditionAdapter germination_status_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, germination_status_list);
             et_germination_status.setAdapter(germination_status_adapeter);
             TextInputEditText et_germination_per = PopupView.findViewById(R.id.et_germination_per);
             TextInputEditText et_area = PopupView.findViewById(R.id.et_area);
+            et_area.setText(inspectionModel_selected_line.Area);
             TextInputEditText et_rejection_area = PopupView.findViewById(R.id.et_rejection_area);
             TextInputEditText et_net_area = PopupView.findViewById(R.id.et_net_area);
+            et_net_area.setText(inspectionModel_selected_line.NetArea);
+            et_net_area.setEnabled(false);
+            et_area.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float area = !et_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_area.getText().toString()) : 0;
+                    float reject_area = !et_rejection_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_area.getText().toString()) : 0;
+                    et_net_area.setText(String.valueOf(area - reject_area));
+                }
+            });
+            et_rejection_area.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float area = !et_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_area.getText().toString()) : 0;
+                    float reject_area = !et_rejection_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_area.getText().toString()) : 0;
+                    et_net_area.setText(String.valueOf(area - reject_area));
+                }
+            });
+
             TextInputEditText et_spacing_variety = PopupView.findViewById(R.id.et_spacing_variety);
             TextInputEditText et_spacing_male = PopupView.findViewById(R.id.et_spacing_male);
             TextInputEditText et_spacing_female = PopupView.findViewById(R.id.et_spacing_female);
@@ -249,8 +308,10 @@ public class InspectionOneFragment extends Fragment {
             CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
             et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
+
             TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
-            et_planting_sowing_date_female.setText(DateUtilsCustome.getCurrentDateBY());
+            et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
+            et_planting_sowing_date_female.setEnabled(false);
             TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
             et_planting_sowing_date_other.setText(DateUtilsCustome.getCurrentDateBY());
             TextInputEditText et_spacing_female_row = PopupView.findViewById(R.id.et_spacing_female_row);
@@ -338,24 +399,6 @@ public class InspectionOneFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
-                    }
-                    return true;
-                });
-                et_planting_sowing_date_female.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_planting_sowing_date_female.setText(picker.getHeaderText());
-                                et_planting_sowing_date_female.setError(null);
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;

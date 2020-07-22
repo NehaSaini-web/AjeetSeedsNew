@@ -28,6 +28,19 @@ public class InspectionModel {
         public String item_croptype;
         public String itemclassofseeds;
 
+        public String  NetArea;
+        public String  NetAreaAsPerPrevINSP;
+        public String CrossingStartDate;
+        public String PreviousInspectionType;
+        public String DurationofCrop;
+        public String GivenArea;
+        public String  PlantPopulationVariety;
+        public String PlantPopulationFemale;
+        public String PreviousCrop;
+        public String Area;
+        public String SowingDateFemale;
+        public String SowingDateOther;
+
         public int inspection_1;
         public int inspection_2;
         public int inspection_3;

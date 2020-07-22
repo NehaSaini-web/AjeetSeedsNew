@@ -96,6 +96,15 @@ public class InspectionOneModel {
         public String self_boll_per_plant;
         public String off_type_plant;
         public String suggestion_to_grower;
+
+        public String  planting_sowing_date_female;
+        public String planting_sowing_date_other;
+        public String spacing_female_row;
+        public String spacing_female_plant;
+        public String spacing_variety_row;
+        public String spacing_variety_plant;
+        public String spacing_male_row;
+        public String spacing_male_plant;
     }
 
     //todo inspection three

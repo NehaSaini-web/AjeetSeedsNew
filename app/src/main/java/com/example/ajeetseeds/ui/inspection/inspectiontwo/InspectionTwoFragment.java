@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +58,8 @@ public class InspectionTwoFragment extends Fragment {
     ListView listview_headers_line;
     LoadingDialog loadingDialog = new LoadingDialog();
     TextView tv_Arrival_Plan_No, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
-            tv_City, tv_Contact, tv_Season_Code,tv_production_lot_no,tv_grower_name;
+            tv_City, tv_Contact, tv_Season_Code, tv_production_lot_no, tv_grower_name;
+    InspectionModel.Inspection_Line inspectionModel_selected_line;
 
     public static InspectionTwoFragment newInstance() {
         return new InspectionTwoFragment();
@@ -68,6 +71,7 @@ public class InspectionTwoFragment extends Fragment {
         if (getArguments() != null) {
             selected_production_lot_no = getArguments().getString("Selected_production_lot_no", "");
             inspectionModel = new Gson().fromJson(getArguments().getString("inspection_header", ""), InspectionModel.class);
+            inspectionModel_selected_line = new Gson().fromJson(getArguments().getString("inspection_line", ""), InspectionModel.Inspection_Line.class);
         }
     }
 
@@ -96,8 +100,8 @@ public class InspectionTwoFragment extends Fragment {
         tv_City = view.findViewById(R.id.tv_City);
         tv_Contact = view.findViewById(R.id.tv_Contact);
         tv_Season_Code = view.findViewById(R.id.tv_Season_Code);
-        tv_production_lot_no=view.findViewById(R.id.tv_production_lot_no);
-        tv_grower_name=view.findViewById(R.id.tv_grower_name);
+        tv_production_lot_no = view.findViewById(R.id.tv_production_lot_no);
+        tv_grower_name = view.findViewById(R.id.tv_grower_name);
         tv_production_lot_no.setText(selected_production_lot_no);
 
 
@@ -119,7 +123,7 @@ public class InspectionTwoFragment extends Fragment {
         chip_add_inspection_line.setOnClickListener(view1 -> {
             if (inspection_header_line.get(0).inspection_1 > 0) {
                 Add_Inspection_Line("", null);
-            }else{
+            } else {
                 Snackbar.make(chip_add_inspection_line, "Please Complete Inspection One.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
                 }).show();
             }
@@ -173,6 +177,7 @@ public class InspectionTwoFragment extends Fragment {
     boolean datedialog = false;
     public List<String> crop_condition_list = new ArrayList<>();
     public List<String> crop_stage_list = new ArrayList<>();
+
     public void Add_Inspection_Line(String flag, InspectionOneModel.InspectionTwoLines viewModel) {
         try {
             crop_condition_list.clear();
@@ -201,25 +206,25 @@ public class InspectionTwoFragment extends Fragment {
             dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation_2;
             dialog.show();
             Button submitPage = PopupView.findViewById(R.id.submitPage);
-            TextInputEditText et_grower_or_land_owner_name=  PopupView.findViewById(R.id.et_grower_or_land_owner_name);
+            TextInputEditText et_grower_or_land_owner_name = PopupView.findViewById(R.id.et_grower_or_land_owner_name);
             et_grower_or_land_owner_name.setText(inspection_header_line.get(0).grower_name);
             et_grower_or_land_owner_name.setEnabled(false);
-            TextInputEditText et_item_no =PopupView.findViewById(R.id.et_item_no);
+            TextInputEditText et_item_no = PopupView.findViewById(R.id.et_item_no);
             et_item_no.setText(inspection_header_line.get(0).item_no);
             et_item_no.setEnabled(false);
-            TextInputEditText et_item_name= PopupView.findViewById(R.id.et_item_name);
+            TextInputEditText et_item_name = PopupView.findViewById(R.id.et_item_name);
             et_item_name.setText(inspection_header_line.get(0).item_name);
             et_item_name.setEnabled(false);
-            TextInputEditText et_crop_code= PopupView.findViewById(R.id.et_crop_code);
+            TextInputEditText et_crop_code = PopupView.findViewById(R.id.et_crop_code);
             et_crop_code.setText(inspection_header_line.get(0).crop_code);
             et_crop_code.setEnabled(false);
-            TextInputEditText et_crop_name= PopupView.findViewById(R.id.et_crop_name);
+            TextInputEditText et_crop_name = PopupView.findViewById(R.id.et_crop_name);
             et_crop_name.setText(inspection_header_line.get(0).item_crop);
             et_crop_name.setEnabled(false);
-            TextInputEditText et_Item_class_of_seeds= PopupView.findViewById(R.id.et_Item_class_of_seeds);
+            TextInputEditText et_Item_class_of_seeds = PopupView.findViewById(R.id.et_Item_class_of_seeds);
             et_Item_class_of_seeds.setText(inspection_header_line.get(0).itemclassofseeds);
             et_Item_class_of_seeds.setEnabled(false);
-            TextInputEditText et_item_crop_type= PopupView.findViewById(R.id.et_item_crop_type);
+            TextInputEditText et_item_crop_type = PopupView.findViewById(R.id.et_item_crop_type);
             et_item_crop_type.setText(inspection_header_line.get(0).item_croptype);
             et_item_crop_type.setEnabled(false);
             TextInputEditText et_date_of_inspection = PopupView.findViewById(R.id.et_date_of_inspection);
@@ -230,16 +235,67 @@ public class InspectionTwoFragment extends Fragment {
             CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
             et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_net_area_as_per_insp1 = PopupView.findViewById(R.id.et_net_area_as_per_insp1);
+            et_net_area_as_per_insp1.setText(inspectionModel_selected_line.NetAreaAsPerPrevINSP);
+            et_net_area_as_per_insp1.setEnabled(false);
             TextInputEditText et_pld_area = PopupView.findViewById(R.id.et_pld_area);
             TextInputEditText et_rejected_area = PopupView.findViewById(R.id.et_rejected_area);
             TextInputEditText et_net_area = PopupView.findViewById(R.id.et_net_area);
+            et_net_area.setEnabled(false);
+            et_pld_area.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    float reject_area = !et_rejected_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejected_area.getText().toString()) : 0;
+                    et_net_area.setText(String.valueOf(area - reject_area));
+                }
+            });
+            et_rejected_area.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    float reject_area = !et_rejected_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejected_area.getText().toString()) : 0;
+                    et_net_area.setText(String.valueOf(area - reject_area));
+                }
+            });
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
+            et_crossing_start_date.setText(inspectionModel_selected_line.CrossingStartDate);
             TextInputEditText et_avg_crossing_per_day = PopupView.findViewById(R.id.et_avg_crossing_per_day);
             TextInputEditText et_avg_cross_boll_per_plant = PopupView.findViewById(R.id.et_avg_cross_boll_per_plant);
             TextInputEditText et_self_boll_per_plant = PopupView.findViewById(R.id.et_self_boll_per_plant);
             TextInputEditText et_off_type_plant = PopupView.findViewById(R.id.et_off_type_plant);
-
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
+
+            TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
+            et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
+            et_planting_sowing_date_female.setEnabled(false);
+            TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
+            et_planting_sowing_date_other.setText(DateUtilsCustome.getCurrentDateBY());
+            TextInputEditText et_spacing_female_row = PopupView.findViewById(R.id.et_spacing_female_row);
+            TextInputEditText et_spacing_female_plant = PopupView.findViewById(R.id.et_spacing_female_plant);
+            TextInputEditText et_spacing_variety_row = PopupView.findViewById(R.id.et_spacing_variety_row);
+            TextInputEditText et_spacing_variety_plant = PopupView.findViewById(R.id.et_spacing_variety_plant);
+            TextInputEditText et_spacing_male_row = PopupView.findViewById(R.id.et_spacing_male_row);
+            TextInputEditText et_spacing_male_plant = PopupView.findViewById(R.id.et_spacing_male_plant);
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);
@@ -282,6 +338,23 @@ public class InspectionTwoFragment extends Fragment {
                 et_suggestion_to_grower.setText(viewModel.suggestion_to_grower);
                 et_suggestion_to_grower.setEnabled(false);
                 submitPage.setEnabled(false);
+
+                et_planting_sowing_date_female.setText(viewModel.planting_sowing_date_female);
+                et_planting_sowing_date_female.setEnabled(false);
+                et_planting_sowing_date_other.setText(viewModel.planting_sowing_date_other);
+                et_planting_sowing_date_other.setEnabled(false);
+                et_spacing_female_row.setText(viewModel.spacing_female_row);
+                et_spacing_female_row.setEnabled(false);
+                et_spacing_female_plant.setText(viewModel.spacing_female_plant);
+                et_spacing_female_plant.setEnabled(false);
+                et_spacing_variety_row.setText(viewModel.spacing_variety_row);
+                et_spacing_variety_row.setEnabled(false);
+                et_spacing_variety_plant.setText(viewModel.spacing_variety_plant);
+                et_spacing_variety_plant.setEnabled(false);
+                et_spacing_male_row.setText(viewModel.spacing_male_row);
+                et_spacing_female_row.setEnabled(false);
+                et_spacing_male_plant.setText(viewModel.spacing_male_plant);
+                et_spacing_male_plant.setEnabled(false);
             } else {
                 et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
                 et_crossing_start_date.setText(DateUtilsCustome.getCurrentDateBY());
@@ -321,6 +394,24 @@ public class InspectionTwoFragment extends Fragment {
                     }
                     return true;
                 });
+                et_planting_sowing_date_other.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_planting_sowing_date_other.setText(picker.getHeaderText());
+                                et_planting_sowing_date_other.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
             }
 
 
@@ -336,18 +427,27 @@ public class InspectionTwoFragment extends Fragment {
                 oneInsertModel.Item_class_of_seeds = et_Item_class_of_seeds.getText().toString();
                 oneInsertModel.item_crop_type = et_item_crop_type.getText().toString();
                 oneInsertModel.date_of_inspection = et_date_of_inspection.getText().toString();
-                oneInsertModel.rejected_area = et_rejected_area.getText().toString().equalsIgnoreCase("")?"0":et_rejected_area.getText().toString();
-                oneInsertModel.net_area = et_net_area.getText().toString().equalsIgnoreCase("")?"0":et_net_area.getText().toString();
+                oneInsertModel.rejected_area = et_rejected_area.getText().toString().equalsIgnoreCase("") ? "0" : et_rejected_area.getText().toString();
+                oneInsertModel.net_area = et_net_area.getText().toString().equalsIgnoreCase("") ? "0" : et_net_area.getText().toString();
                 oneInsertModel.crop_condition = et_crop_condition.getText().toString();
                 oneInsertModel.crop_stage = et_crop_stage.getText().toString();
-                oneInsertModel.net_area_as_per_insp1 = et_net_area_as_per_insp1.getText().toString().equalsIgnoreCase("")?"0":et_net_area_as_per_insp1.getText().toString();
-                oneInsertModel.pld_area = et_pld_area.getText().toString().equalsIgnoreCase("")?"0": et_pld_area.getText().toString();
+                oneInsertModel.net_area_as_per_insp1 = et_net_area_as_per_insp1.getText().toString().equalsIgnoreCase("") ? "0" : et_net_area_as_per_insp1.getText().toString();
+                oneInsertModel.pld_area = et_pld_area.getText().toString().equalsIgnoreCase("") ? "0" : et_pld_area.getText().toString();
                 oneInsertModel.crossing_start_date = et_crossing_start_date.getText().toString();
                 oneInsertModel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString();
                 oneInsertModel.avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString();
                 oneInsertModel.self_boll_per_plant = et_self_boll_per_plant.getText().toString();
                 oneInsertModel.off_type_plant = et_off_type_plant.getText().toString();
                 oneInsertModel.suggestion_to_grower = et_suggestion_to_grower.getText().toString();
+
+                oneInsertModel.planting_sowing_date_female = et_planting_sowing_date_female.getText().toString();
+                oneInsertModel.planting_sowing_date_other = et_planting_sowing_date_other.getText().toString();
+                oneInsertModel.spacing_female_row = et_spacing_female_row.getText().toString();
+                oneInsertModel.spacing_female_plant = et_spacing_female_plant.getText().toString();
+                oneInsertModel.spacing_variety_row = et_spacing_variety_row.getText().toString();
+                oneInsertModel.spacing_variety_plant = et_spacing_variety_plant.getText().toString();
+                oneInsertModel.spacing_male_row = et_spacing_male_row.getText().toString();
+                oneInsertModel.spacing_male_plant = et_spacing_male_plant.getText().toString();
                 try {
                     new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
                             new AsyModel(StaticDataForApp.insert_inspection_two_line,
