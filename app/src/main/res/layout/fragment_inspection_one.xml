@@ -75,12 +75,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Arrival Plan No :"
+                            android:text="Doc Date :"
                             android:textSize="12dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
-                            android:id="@+id/tv_Arrival_Plan_No"
+                            android:id="@+id/tv_doc_date"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -111,67 +111,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Grower Name :"
-                            android:textSize="12dp"
-                            android:textStyle="bold"></TextView>
-
-                        <TextView
-                            android:id="@+id/tv_grower_name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="12dp"></TextView>
-
-                    </TableRow>
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:text="Organizer No :"
-                            android:textSize="12dp"
-                            android:textStyle="bold"></TextView>
-
-                        <TextView
-                            android:id="@+id/tv_Organizer_No"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="12dp"></TextView>
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
                             android:text="Organizer Name :"
                             android:textSize="12dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
                             android:id="@+id/tv_Organizer_Name"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textSize="12dp"></TextView>
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="0.5"
-                            android:text="Organizer Name 2 :"
-                            android:textSize="12dp"
-                            android:textStyle="bold"></TextView>
-
-                        <TextView
-                            android:id="@+id/tv_Organizer_Name_2"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -243,12 +188,12 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Contact :"
+                            android:text="Zone :"
                             android:textSize="12dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
-                            android:id="@+id/tv_Contact"
+                            android:id="@+id/tv_zone_code"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -261,12 +206,65 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Season Code :"
+                            android:text="State :"
                             android:textSize="12dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
-                            android:id="@+id/tv_Season_Code"
+                            android:id="@+id/tv_State_Code"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="12dp"></TextView>
+
+                    </TableRow>
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:text="Region :"
+                            android:textSize="12dp"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:id="@+id/tv_Region_Code"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="12dp"></TextView>
+                    </TableRow>
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:text="District :"
+                            android:textSize="12dp"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:id="@+id/tv_District_Code"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textSize="12dp"></TextView>
+
+                    </TableRow>
+                    <TableRow>
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            android:text="Taluka :"
+                            android:textSize="12dp"
+                            android:textStyle="bold"></TextView>
+
+                        <TextView
+                            android:id="@+id/tv_Taluka_Code"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

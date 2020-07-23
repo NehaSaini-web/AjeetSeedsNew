@@ -58,8 +58,8 @@ public class InspectionTwoFragment extends Fragment {
     Chip chip_add_inspection_line, chip_complete_hit;
     ListView listview_headers_line;
     LoadingDialog loadingDialog = new LoadingDialog();
-    TextView tv_Arrival_Plan_No, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
-            tv_City, tv_Contact, tv_Season_Code, tv_production_lot_no, tv_grower_name;
+    TextView tv_doc_date, tv_production_lot_no, tv_Region_Code, tv_Organizer_Name, tv_District_Code, tv_Organizer_Address, tv_Organizer_Address_2,
+            tv_City, tv_zone_code, tv_State_Code, tv_Taluka_Code;
     InspectionModel.Inspection_Line inspectionModel_selected_line;
 
     public static InspectionTwoFragment newInstance() {
@@ -95,29 +95,31 @@ public class InspectionTwoFragment extends Fragment {
         chip_add_inspection_line = view.findViewById(R.id.chip_add_inspection_line);
         chip_complete_hit = view.findViewById(R.id.chip_complete_hit);
         listview_headers_line = view.findViewById(R.id.listview_headers_line);
-        tv_Arrival_Plan_No = view.findViewById(R.id.tv_Arrival_Plan_No);
-        tv_Organizer_No = view.findViewById(R.id.tv_Organizer_No);
+        tv_doc_date = view.findViewById(R.id.tv_doc_date);
+        tv_production_lot_no = view.findViewById(R.id.tv_production_lot_no);
+        tv_Region_Code = view.findViewById(R.id.tv_Region_Code);
         tv_Organizer_Name = view.findViewById(R.id.tv_Organizer_Name);
-        tv_Organizer_Name_2 = view.findViewById(R.id.tv_Organizer_Name_2);
+        tv_District_Code = view.findViewById(R.id.tv_District_Code);
         tv_Organizer_Address = view.findViewById(R.id.tv_Organizer_Address);
         tv_Organizer_Address_2 = view.findViewById(R.id.tv_Organizer_Address_2);
         tv_City = view.findViewById(R.id.tv_City);
-        tv_Contact = view.findViewById(R.id.tv_Contact);
-        tv_Season_Code = view.findViewById(R.id.tv_Season_Code);
-        tv_production_lot_no = view.findViewById(R.id.tv_production_lot_no);
-        tv_grower_name = view.findViewById(R.id.tv_grower_name);
+        tv_zone_code = view.findViewById(R.id.tv_zone_code);
+        tv_State_Code = view.findViewById(R.id.tv_State_Code);
+        tv_Taluka_Code = view.findViewById(R.id.tv_Taluka_Code);
+
+
+        tv_doc_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspectionModel.create_on));
         tv_production_lot_no.setText(selected_production_lot_no);
-
-
-        tv_Arrival_Plan_No.setText(inspectionModel.arrival_plan_no);
-        tv_Organizer_No.setText(inspectionModel.organizer_no);
+        tv_Region_Code.setText(inspectionModel.Region_Code);
         tv_Organizer_Name.setText(inspectionModel.organizer_name);
-        tv_Organizer_Name_2.setText(inspectionModel.organizer_name_2);
+        tv_District_Code.setText(inspectionModel.District_Code);
         tv_Organizer_Address.setText(inspectionModel.organizer_address);
         tv_Organizer_Address_2.setText(inspectionModel.organizer_address_2);
         tv_City.setText(inspectionModel.city);
-        tv_Contact.setText(inspectionModel.contact);
-        tv_Season_Code.setText(inspectionModel.season_code);
+        tv_zone_code.setText(inspectionModel.Zone_Code);
+        tv_State_Code.setText(inspectionModel.State_Code);
+        tv_Taluka_Code.setText(inspectionModel.Taluka_Code);
+
         if (!loadingDialog.getLoadingState()) {
             new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
                     new AsyModel(StaticDataForApp.get_inspection_by_lot_arrival_plan_no +
@@ -261,9 +263,21 @@ public class InspectionTwoFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    float ins1_net_area=!et_net_area_as_per_insp1.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_net_area_as_per_insp1.getText().toString()) : 0;
+                    float pld_area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    if(pld_area>ins1_net_area){
+                        et_pld_area.setText("0");
+                        pld_area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    }
                     float reject_area = !et_rejected_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejected_area.getText().toString()) : 0;
-                    et_net_area.setText(String.valueOf(area - reject_area));
+
+                    float net_area =ins1_net_area- pld_area - reject_area;
+                    if (net_area < 0) {
+                        et_rejected_area.setText("0");
+                        et_pld_area.setText("0");
+                        net_area = ins1_net_area;
+                    }
+                    et_net_area.setText(String.valueOf(net_area));
                 }
             });
             et_rejected_area.addTextChangedListener(new TextWatcher() {
@@ -279,9 +293,21 @@ public class InspectionTwoFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    float ins1_net_area=!et_net_area_as_per_insp1.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_net_area_as_per_insp1.getText().toString()) : 0;
+                    float pld_area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    if(pld_area>ins1_net_area){
+                        et_pld_area.setText("0");
+                        pld_area = !et_pld_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_pld_area.getText().toString()) : 0;
+                    }
                     float reject_area = !et_rejected_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejected_area.getText().toString()) : 0;
-                    et_net_area.setText(String.valueOf(area - reject_area));
+
+                    float net_area =ins1_net_area- pld_area - reject_area;
+                    if (net_area < 0) {
+                        et_rejected_area.setText("0");
+                        et_pld_area.setText("0");
+                        net_area = ins1_net_area;
+                    }
+                    et_net_area.setText(String.valueOf(net_area));
                 }
             });
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
@@ -304,7 +330,23 @@ public class InspectionTwoFragment extends Fragment {
             TextInputEditText et_spacing_variety_plant = PopupView.findViewById(R.id.et_spacing_variety_plant);
             TextInputEditText et_spacing_male_row = PopupView.findViewById(R.id.et_spacing_male_row);
             TextInputEditText et_spacing_male_plant = PopupView.findViewById(R.id.et_spacing_male_plant);
+            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                et_spacing_male_row.setEnabled(true);
+                et_spacing_female_row.setEnabled(true);
+                et_spacing_variety_row.setEnabled(false);
 
+                et_spacing_male_plant.setEnabled(true);
+                et_spacing_female_plant.setEnabled(true);
+                et_spacing_variety_plant.setEnabled(false);
+            } else {
+                et_spacing_male_row.setEnabled(false);
+                et_spacing_female_row.setEnabled(false);
+                et_spacing_variety_row.setEnabled(true);
+
+                et_spacing_male_plant.setEnabled(false);
+                et_spacing_female_plant.setEnabled(false);
+                et_spacing_variety_plant.setEnabled(true);
+            }
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);
@@ -579,7 +621,6 @@ public class InspectionTwoFragment extends Fragment {
 
 
     public void bindUi() {
-        tv_grower_name.setText(inspection_header_line.get(0).grower_name);
         if (inspection_header_line.get(0).inspection_2 > 0) {
             chip_complete_hit.setVisibility(View.GONE);
             chip_add_inspection_line.setVisibility(View.GONE);

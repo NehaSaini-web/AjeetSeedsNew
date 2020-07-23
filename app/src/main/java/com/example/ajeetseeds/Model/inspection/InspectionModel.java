@@ -14,6 +14,12 @@ public class InspectionModel {
     public String city;
     public String contact;
     public String season_code;
+    public String create_on;
+    public String Zone_Code;
+    public String State_Code;
+    public String District_Code;
+    public String Region_Code;
+    public String Taluka_Code;
     public List<Inspection_Line> il;
 
     public class Inspection_Line {
