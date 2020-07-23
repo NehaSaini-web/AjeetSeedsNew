@@ -296,13 +296,15 @@ public class InspectionTwoFragment extends Fragment {
             et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
             et_planting_sowing_date_female.setEnabled(false);
             TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
-            et_planting_sowing_date_other.setText(DateUtilsCustome.getCurrentDateBY());
+            et_planting_sowing_date_other.setText(inspectionModel_selected_line.SowingDateOther);
+            et_planting_sowing_date_other.setEnabled(false);
             TextInputEditText et_spacing_female_row = PopupView.findViewById(R.id.et_spacing_female_row);
             TextInputEditText et_spacing_female_plant = PopupView.findViewById(R.id.et_spacing_female_plant);
             TextInputEditText et_spacing_variety_row = PopupView.findViewById(R.id.et_spacing_variety_row);
             TextInputEditText et_spacing_variety_plant = PopupView.findViewById(R.id.et_spacing_variety_plant);
             TextInputEditText et_spacing_male_row = PopupView.findViewById(R.id.et_spacing_male_row);
             TextInputEditText et_spacing_male_plant = PopupView.findViewById(R.id.et_spacing_male_plant);
+
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);

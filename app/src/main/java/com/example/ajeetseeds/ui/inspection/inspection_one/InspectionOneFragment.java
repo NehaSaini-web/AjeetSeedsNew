@@ -252,6 +252,14 @@ public class InspectionOneFragment extends Fragment {
             CropConditionAdapter germination_status_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, germination_status_list);
             et_germination_status.setAdapter(germination_status_adapeter);
             TextInputEditText et_germination_per = PopupView.findViewById(R.id.et_germination_per);
+            et_germination_per.setEnabled(false);
+            et_germination_status.setOnItemClickListener((adapterView, view, position, l) -> {
+              if(germination_status_list.get(position).equalsIgnoreCase("Satisfactory")){
+                  et_germination_per.setEnabled(false);
+              }else{
+                  et_germination_per.setEnabled(true);
+              }
+            });
             TextInputEditText et_area = PopupView.findViewById(R.id.et_area);
             et_area.setText(inspectionModel_selected_line.Area);
             TextInputEditText et_rejection_area = PopupView.findViewById(R.id.et_rejection_area);
@@ -313,13 +321,31 @@ public class InspectionOneFragment extends Fragment {
             et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
             et_planting_sowing_date_female.setEnabled(false);
             TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
-            et_planting_sowing_date_other.setText(DateUtilsCustome.getCurrentDateBY());
+            et_planting_sowing_date_other.setText(inspectionModel_selected_line.SowingDateOther);
+            et_planting_sowing_date_other.setEnabled(false);
             TextInputEditText et_spacing_female_row = PopupView.findViewById(R.id.et_spacing_female_row);
             TextInputEditText et_spacing_female_plant = PopupView.findViewById(R.id.et_spacing_female_plant);
             TextInputEditText et_spacing_variety_row = PopupView.findViewById(R.id.et_spacing_variety_row);
             TextInputEditText et_spacing_variety_plant = PopupView.findViewById(R.id.et_spacing_variety_plant);
             TextInputEditText et_spacing_male_row = PopupView.findViewById(R.id.et_spacing_male_row);
             TextInputEditText et_spacing_male_plant = PopupView.findViewById(R.id.et_spacing_male_plant);
+            if(et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")){
+                et_spacing_variety.setEnabled(false);
+                et_spacing_male.setEnabled(true);
+                et_spacing_female.setEnabled(true);
+
+                et_plant_population_male.setEnabled(true);
+                et_plant_population_female.setEnabled(true);
+                et_plant_population_variety.setEnabled(false);
+            }else{
+                et_spacing_variety.setEnabled(true);
+                et_spacing_male.setEnabled(false);
+                et_spacing_female.setEnabled(false);
+
+                et_plant_population_male.setEnabled(false);
+                et_plant_population_female.setEnabled(false);
+                et_plant_population_variety.setEnabled(true);
+            }
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);

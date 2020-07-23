@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../AjeetSeeds.iml" filepath="$PROJECT_DIR$/../AjeetSeeds.iml" group="AjeetSeeds" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AjeetSeeds-app.iml" filepath="$PROJECT_DIR$/.idea/modules/AjeetSeeds-app.iml" group="AjeetSeeds/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-823283498/AjeetSeedsAndroid-master-AjeetSeeds.iml" filepath="$PROJECT_DIR$/.idea/modules/-823283498/AjeetSeedsAndroid-master-AjeetSeeds.iml" group="AjeetSeeds" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="AjeetSeeds/app" />
     </modules>
   </component>
