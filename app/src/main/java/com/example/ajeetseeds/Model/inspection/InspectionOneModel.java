@@ -30,6 +30,10 @@ public class InspectionOneModel {
     public String   crossing_start_date_ins2;
     public String durationofCrop;
 
+    public String net_area_as_per_insp_3;
+    public String   crossing_start_date;
+    public String crossing_end_date;
+
     public List<InspectionLineModel> io;
 
     public class InspectionLineModel {
@@ -172,6 +176,10 @@ public class InspectionOneModel {
         public String estimated_field_in_kg;
         public String other_specific_observations;
         public String suggestion_to_grower;
+
+        public String harvestingDateMale;
+        public String harvestingDateFemale;
+        public String harvestingDateOther;
     }
 
     public List<InspectionQCLineModel> iQC;
