@@ -348,7 +348,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Kapas Picking If Any">
+                        android:hint="Yield Picking If Any">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_kapas_picking_if_any"
@@ -502,7 +502,20 @@
                         android:textColor="@color/black" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Duration Of Crop">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_durationofCrop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="3"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
         </ScrollView>

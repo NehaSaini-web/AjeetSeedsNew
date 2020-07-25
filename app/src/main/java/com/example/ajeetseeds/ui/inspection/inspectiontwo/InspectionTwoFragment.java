@@ -249,6 +249,7 @@ public class InspectionTwoFragment extends Fragment {
             TextInputEditText et_pld_area = PopupView.findViewById(R.id.et_pld_area);
             TextInputEditText et_rejected_area = PopupView.findViewById(R.id.et_rejected_area);
             TextInputEditText et_net_area = PopupView.findViewById(R.id.et_net_area);
+            et_net_area.setText(inspectionModel_selected_line.NetAreaAsPerPrevINSP);
             et_net_area.setEnabled(false);
             et_pld_area.addTextChangedListener(new TextWatcher() {
                 @Override

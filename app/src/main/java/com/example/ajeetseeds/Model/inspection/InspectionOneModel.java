@@ -26,6 +26,9 @@ public class InspectionOneModel {
     public String item_croptype;
     public String itemclassofseeds;
 
+    public String net_area_as_per_ins2;
+    public String   crossing_start_date_ins2;
+    public String durationofCrop;
 
     public List<InspectionLineModel> io;
 
@@ -140,6 +143,7 @@ public class InspectionOneModel {
         public String sprying_fungi_or_insecticide_dose;
         public String other_specific_observations;
         public String suggestion_to_grower;
+        public String durationofCrop;
     }
 
     public List<InspectionFourLineModel> ifour;

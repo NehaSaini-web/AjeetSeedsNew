@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +29,7 @@ import com.example.ajeetseeds.Model.inspection.InspectionModel;
 import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
 import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
@@ -77,9 +80,12 @@ public class InspectionThreeFragment extends Fragment {
         return inflater.inflate(R.layout.inspection_three_fragment, container, false);
     }
 
+    SessionManagement sessionManagement;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sessionManagement = new SessionManagement(getActivity());
         initView(view);
     }
 
@@ -118,9 +124,9 @@ public class InspectionThreeFragment extends Fragment {
                             + "&flag=INS3", null, "getInItData"));
         }
         chip_add_inspection_line.setOnClickListener(view1 -> {
-            if (inspection_header_line.get(0).inspection_1>0 && inspection_header_line.get(0).inspection_2 > 0) {
+            if (inspection_header_line.get(0).inspection_1 > 0 && inspection_header_line.get(0).inspection_2 > 0) {
                 Add_Inspection_Line("", null);
-            }else{
+            } else {
                 Snackbar.make(chip_add_inspection_line, "Please Complete Previous Inspection ", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
                 }).show();
             }
@@ -133,7 +139,11 @@ public class InspectionThreeFragment extends Fragment {
                     .setPositiveButton("Confirm", (dialogInterface, i1) -> {
                         if (inspection_header_line.get(0).ithree.size() > 0) {
                             new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
-                                    new AsyModel(StaticDataForApp.Complete_inspection_three + inspectionModel.arrival_plan_no + "&production_lot_no=" + selected_production_lot_no, null, "CompleteHit"));
+                                    new AsyModel(StaticDataForApp.Complete_inspection_three
+                                            + inspectionModel.arrival_plan_no
+                                            + "&production_lot_no=" + selected_production_lot_no
+                                            + "&email_id=" + sessionManagement.getUserEmail()
+                                            + "&inspection_type=Inspection III", null, "CompleteHit"));
                             dialogInterface.dismiss();
                         } else {
                             Snackbar.make(chip_add_inspection_line, "Please Add Minimum Single Line.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
@@ -174,6 +184,7 @@ public class InspectionThreeFragment extends Fragment {
     boolean datedialog = false;
     public List<String> crop_condition_list = new ArrayList<>();
     public List<String> crop_stage_list = new ArrayList<>();
+
     public void Add_Inspection_Line(String flag, InspectionOneModel.InspectionThreeLineModel viewModel) {
         try {
             crop_condition_list.clear();
@@ -203,25 +214,25 @@ public class InspectionThreeFragment extends Fragment {
             dialog.show();
             Button submitPage = PopupView.findViewById(R.id.submitPage);
 
-            TextInputEditText et_grower_or_land_owner_name=  PopupView.findViewById(R.id.et_grower_or_land_owner_name);
+            TextInputEditText et_grower_or_land_owner_name = PopupView.findViewById(R.id.et_grower_or_land_owner_name);
             et_grower_or_land_owner_name.setText(inspection_header_line.get(0).grower_name);
             et_grower_or_land_owner_name.setEnabled(false);
-            TextInputEditText et_item_no =PopupView.findViewById(R.id.et_item_no);
+            TextInputEditText et_item_no = PopupView.findViewById(R.id.et_item_no);
             et_item_no.setText(inspection_header_line.get(0).item_no);
             et_item_no.setEnabled(false);
-            TextInputEditText et_item_name= PopupView.findViewById(R.id.et_item_name);
+            TextInputEditText et_item_name = PopupView.findViewById(R.id.et_item_name);
             et_item_name.setText(inspection_header_line.get(0).item_name);
             et_item_name.setEnabled(false);
-            TextInputEditText et_crop_code= PopupView.findViewById(R.id.et_crop_code);
+            TextInputEditText et_crop_code = PopupView.findViewById(R.id.et_crop_code);
             et_crop_code.setText(inspection_header_line.get(0).crop_code);
             et_crop_code.setEnabled(false);
-            TextInputEditText et_crop_name= PopupView.findViewById(R.id.et_crop_name);
+            TextInputEditText et_crop_name = PopupView.findViewById(R.id.et_crop_name);
             et_crop_name.setText(inspection_header_line.get(0).item_crop);
             et_crop_name.setEnabled(false);
-            TextInputEditText et_Item_class_of_seeds= PopupView.findViewById(R.id.et_Item_class_of_seeds);
+            TextInputEditText et_Item_class_of_seeds = PopupView.findViewById(R.id.et_Item_class_of_seeds);
             et_Item_class_of_seeds.setText(inspection_header_line.get(0).itemclassofseeds);
             et_Item_class_of_seeds.setEnabled(false);
-            TextInputEditText et_item_crop_type= PopupView.findViewById(R.id.et_item_crop_type);
+            TextInputEditText et_item_crop_type = PopupView.findViewById(R.id.et_item_crop_type);
             et_item_crop_type.setText(inspection_header_line.get(0).item_croptype);
             et_item_crop_type.setEnabled(false);
             TextInputEditText et_date_of_inspection = PopupView.findViewById(R.id.et_date_of_inspection);
@@ -232,9 +243,43 @@ public class InspectionThreeFragment extends Fragment {
             CropConditionAdapter crop_stage_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_stage_list);
             et_crop_stage.setAdapter(crop_stage_adapeter);
             TextInputEditText et_net_area_as_per_insp2 = PopupView.findViewById(R.id.et_net_area_as_per_insp2);
+            et_net_area_as_per_insp2.setText(inspection_header_line.get(0).net_area_as_per_ins2);
+            et_net_area_as_per_insp2.setEnabled(false);
             TextInputEditText et_not_cross_area = PopupView.findViewById(R.id.et_not_cross_area);
+            et_not_cross_area.setText("0");
             TextInputEditText et_net_cross_area = PopupView.findViewById(R.id.et_net_cross_area);
+            et_net_cross_area.setText(et_net_area_as_per_insp2.getText());
+            et_net_cross_area.setEnabled(false);
+
+            et_not_cross_area.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float net_area_as_per_insp2 = !inspection_header_line.get(0).net_area_as_per_ins2.equalsIgnoreCase("") ? Float.parseFloat(inspection_header_line.get(0).net_area_as_per_ins2) : 0;
+                    float not_cross_area = !et_not_cross_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_not_cross_area.getText().toString()) : 0;
+                    float net_area = net_area_as_per_insp2 - not_cross_area;
+                    if (net_area < 0) {
+                        et_not_cross_area.setText("0");
+                        et_net_cross_area.setText(inspection_header_line.get(0).net_area_as_per_ins2);
+                    } else {
+                        et_net_cross_area.setText(String.valueOf(net_area));
+                    }
+
+                }
+            });
+
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
+            et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date_ins2));
+            et_crossing_start_date.setEnabled(false);
             TextInputEditText et_avg_crossing_per_day = PopupView.findViewById(R.id.et_avg_crossing_per_day);
             TextInputEditText et_self_boll_per_plant = PopupView.findViewById(R.id.et_self_boll_per_plant);
             TextInputEditText et_crossing_end_date = PopupView.findViewById(R.id.et_crossing_end_date);
@@ -247,7 +292,9 @@ public class InspectionThreeFragment extends Fragment {
             TextInputEditText et_sprying_fungi_or_insecticide_dose = PopupView.findViewById(R.id.et_sprying_fungi_or_insecticide_dose);
             TextInputEditText et_other_specific_observations = PopupView.findViewById(R.id.et_other_specific_observations);
             TextInputEditText et_suggestion_to_grower = PopupView.findViewById(R.id.et_suggestion_to_grower);
-
+            TextInputEditText et_durationofCrop = PopupView.findViewById(R.id.et_durationofCrop);
+            et_durationofCrop.setText(inspection_header_line.get(0).durationofCrop);
+            et_durationofCrop.setEnabled(false);
             if (flag.equalsIgnoreCase("View")) {
                 et_grower_or_land_owner_name.setText(viewModel.grower_or_land_owner_name);
                 et_grower_or_land_owner_name.setEnabled(false);
@@ -301,10 +348,11 @@ public class InspectionThreeFragment extends Fragment {
                 et_other_specific_observations.setEnabled(false);
                 et_suggestion_to_grower.setText(viewModel.suggestion_to_grower);
                 et_suggestion_to_grower.setEnabled(false);
+                et_durationofCrop.setText(viewModel.durationofCrop);
+                et_durationofCrop.setEnabled(false);
                 submitPage.setEnabled(false);
             } else {
                 et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
-                et_crossing_start_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_crossing_end_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_fertilizer_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getCurrentDateBY());
@@ -318,24 +366,6 @@ public class InspectionThreeFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
-                    }
-                    return true;
-                });
-                et_crossing_start_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_crossing_start_date.setText(picker.getHeaderText());
-                                et_crossing_start_date.setError(null);
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;
@@ -415,11 +445,11 @@ public class InspectionThreeFragment extends Fragment {
                 postmodel.date_of_inspection = et_date_of_inspection.getText().toString();
                 postmodel.crop_condition = et_crop_condition.getText().toString();
                 postmodel.crop_stage = et_crop_stage.getText().toString();
-                postmodel.net_area_as_per_insp2 = et_net_area_as_per_insp2.getText().toString().equalsIgnoreCase("")?"0":et_net_area_as_per_insp2.getText().toString();
-                postmodel.not_cross_area = et_not_cross_area.getText().toString().equalsIgnoreCase("")?"0":et_not_cross_area.getText().toString();
-                postmodel.net_cross_area = et_net_cross_area.getText().toString().equalsIgnoreCase("")?"0":et_net_cross_area.getText().toString();
+                postmodel.net_area_as_per_insp2 = et_net_area_as_per_insp2.getText().toString().equalsIgnoreCase("") ? "0" : et_net_area_as_per_insp2.getText().toString();
+                postmodel.not_cross_area = et_not_cross_area.getText().toString().equalsIgnoreCase("") ? "0" : et_not_cross_area.getText().toString();
+                postmodel.net_cross_area = et_net_cross_area.getText().toString().equalsIgnoreCase("") ? "0" : et_net_cross_area.getText().toString();
                 postmodel.crossing_start_date = et_crossing_start_date.getText().toString();
-                postmodel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString().equalsIgnoreCase("")?"0": et_avg_crossing_per_day.getText().toString();
+                postmodel.avg_crossing_per_day = et_avg_crossing_per_day.getText().toString().equalsIgnoreCase("") ? "0" : et_avg_crossing_per_day.getText().toString();
                 postmodel.self_boll_per_plant = et_self_boll_per_plant.getText().toString();
                 postmodel.crossing_end_date = et_crossing_end_date.getText().toString();
                 postmodel.kapas_picking_if_any = et_kapas_picking_if_any.getText().toString();
@@ -431,7 +461,7 @@ public class InspectionThreeFragment extends Fragment {
                 postmodel.sprying_fungi_or_insecticide_dose = et_sprying_fungi_or_insecticide_dose.getText().toString();
                 postmodel.other_specific_observations = et_other_specific_observations.getText().toString();
                 postmodel.suggestion_to_grower = et_suggestion_to_grower.getText().toString();
-
+                postmodel.durationofCrop = et_durationofCrop.getText().toString();
                 try {
                     new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
                             new AsyModel(StaticDataForApp.insert_inspection_three_line,
@@ -545,7 +575,7 @@ public class InspectionThreeFragment extends Fragment {
                 }).show();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+
         } finally {
             if (!flagOfAction.equalsIgnoreCase("Insert_Line") || !flagOfAction.equalsIgnoreCase("DeleteLine"))
                 loadingDialog.dismissLoading();
