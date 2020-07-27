@@ -34,6 +34,7 @@ public class InspectionOneModel {
     public String   crossing_start_date;
     public String crossing_end_date;
 
+
     public List<InspectionLineModel> io;
 
     public class InspectionLineModel {
@@ -214,5 +215,20 @@ public class InspectionOneModel {
         public String sprying_fungi_or_Insecticide_dose;
         public String plants_rouged_male;
         public String plants_rouged_female;
+
+        public String previousCrop;
+        public String givenArea;
+        public String rejection_PLDArea;
+        public String actualArea;
+        public String crossingStartDate;
+        public String plantPopulationVariety;
+        public String plantPopulationFemale;
+        public String spacingFemaleRow;
+        public String spacingFemalePlant;
+        public String isolationDistanceStatus;
+        public String isolationDistanceinMetre;
+        public String spacingVarietyRow;
+        public String spacingVarietyPlant;
+        public String crossingEndDate;
     }
 }
