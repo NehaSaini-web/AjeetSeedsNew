@@ -281,15 +281,8 @@ public class InspectionOneFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float area = !et_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_area.getText().toString()) : 0;
-                    float reject_area = !et_rejection_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_area.getText().toString()) : 0;
-                    float net_area = area - reject_area;
-                    if (net_area < 0) {
-                        et_rejection_area.setText("0");
-                        et_area.setText("0");
-                        net_area = 0;
-                    }
-                    et_net_area.setText(String.valueOf(net_area));
+
+
                 }
             });
             et_rejection_area.addTextChangedListener(new TextWatcher() {
@@ -305,15 +298,15 @@ public class InspectionOneFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float area = !et_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_area.getText().toString()) : 0;
+                    float area = !inspectionModel_selected_line.Area.equalsIgnoreCase("") ? Float.parseFloat(inspectionModel_selected_line.Area) : 0;
                     float reject_area = !et_rejection_area.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_area.getText().toString()) : 0;
                     float net_area = area - reject_area;
                     if (net_area < 0) {
                         et_rejection_area.setText("0");
-                        et_area.setText("0");
-                        net_area = 0;
+                        et_area.setText(inspectionModel_selected_line.Area);
+                    }else{
+                        et_net_area.setText(String.valueOf(net_area));
                     }
-                    et_net_area.setText(String.valueOf(net_area));
                 }
             });
 

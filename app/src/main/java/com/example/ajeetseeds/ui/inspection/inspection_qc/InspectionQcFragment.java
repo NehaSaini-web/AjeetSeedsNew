@@ -288,7 +288,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float GivenArea = Float.parseFloat(inspection_line.GivenArea.equalsIgnoreCase("") ? "0" : inspection_line.GivenArea);
+                    float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("")?0:Float.parseFloat( inspection_line.GivenArea);
                     float reject_area = !et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_PLDArea.getText().toString()) : 0;
                     float actual_area = GivenArea - reject_area;
                     if (actual_area < 0) {
