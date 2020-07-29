@@ -148,6 +148,9 @@ public class DateUtilsCustome {
     }
     public static String getDateMMMDDYYYY(String value) {
         try {
+            if(value==null || value.equalsIgnoreCase("")){
+                return "";
+            }
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date date = formatter1.parse(value);
             String month = monthName[date.getMonth()];

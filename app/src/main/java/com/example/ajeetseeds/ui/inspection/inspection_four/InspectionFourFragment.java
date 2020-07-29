@@ -243,11 +243,16 @@ public class InspectionFourFragment extends Fragment {
             et_net_area_as_per_insp_3.setText(inspection_header_line.get(0).net_area_as_per_insp_3);
             et_net_area_as_per_insp_3.setEnabled(false);
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
-            et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date));
-            et_crossing_start_date.setEnabled(false);
             TextInputEditText et_crossing_end_date = PopupView.findViewById(R.id.et_crossing_end_date);
-            et_crossing_end_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_end_date));
-            et_crossing_end_date.setEnabled(false);
+            if(inspection_header_line.get(0).crossing_start_date!=null && !inspection_header_line.get(0).crossing_start_date.equalsIgnoreCase("") ) {
+                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date));
+                et_crossing_start_date.setEnabled(false);
+            }
+            if(inspection_header_line.get(0).crossing_end_date!=null && !inspection_header_line.get(0).crossing_end_date.equalsIgnoreCase("") ) {
+                et_crossing_end_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_end_date));
+                et_crossing_end_date.setEnabled(false);
+            }
+
             TextInputEditText et_final_plant_population = PopupView.findViewById(R.id.et_final_plant_population);
             TextInputEditText et_avg_cross_boll_per_plant = PopupView.findViewById(R.id.et_avg_cross_boll_per_plant);
             TextInputEditText et_kapas_picking_if_any = PopupView.findViewById(R.id.et_kapas_picking_if_any);
@@ -368,6 +373,44 @@ public class InspectionFourFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
+
+                et_crossing_start_date.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_crossing_start_date.setText(picker.getHeaderText());
+                                et_crossing_start_date.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
+
+                et_crossing_end_date.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_crossing_end_date.setText(picker.getHeaderText());
+                                et_crossing_end_date.setError(null);
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;

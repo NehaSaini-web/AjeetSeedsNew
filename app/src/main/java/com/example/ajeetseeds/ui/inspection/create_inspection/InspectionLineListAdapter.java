@@ -61,22 +61,38 @@ public class InspectionLineListAdapter extends BaseAdapter {
     }
 
     public String getInspection(InspectionModel.Inspection_Line inspection_line) {
-        if (inspection_line.inspection_1 == 0) {
-            return "Pending";
-        } else {
-            if (inspection_line.inspection_2 == 0) {
-                return "INS 1 Done";
+        if (inspection_line.crop_code.equalsIgnoreCase("FCROP") || inspection_line.crop_code.equalsIgnoreCase("VEG")) {
+            if (inspection_line.inspection_1 == 0) {
+                return "Pending";
             } else {
-                if (inspection_line.inspection_3 == 0) {
-                    return "INS 2 Done";
+                if (inspection_line.inspection_4 == 0) {
+                    return "INS 1 Done";
                 } else {
-                    if (inspection_line.inspection_4 == 0) {
-                        return "INS 3 Done";
+                    if (inspection_line.inspection_qc == 0) {
+                        return "INS 4 Done";
                     } else {
-                        if (inspection_line.inspection_qc == 0) {
-                            return "INS 4 Done";
+                        return "INS QC Done";
+                    }
+                }
+            }
+        } else {
+            if (inspection_line.inspection_1 == 0) {
+                return "Pending";
+            } else {
+                if (inspection_line.inspection_2 == 0) {
+                    return "INS 1 Done";
+                } else {
+                    if (inspection_line.inspection_3 == 0) {
+                        return "INS 2 Done";
+                    } else {
+                        if (inspection_line.inspection_4 == 0) {
+                            return "INS 3 Done";
                         } else {
-                            return "INS QC Done";
+                            if (inspection_line.inspection_qc == 0) {
+                                return "INS 4 Done";
+                            } else {
+                                return "INS QC Done";
+                            }
                         }
                     }
                 }

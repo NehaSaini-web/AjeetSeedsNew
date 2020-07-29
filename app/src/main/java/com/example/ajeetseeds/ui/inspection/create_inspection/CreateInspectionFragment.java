@@ -121,12 +121,19 @@ public class CreateInspectionFragment extends Fragment {
 
     void SelectInspectionTypePopup(int selected_position) {
         selected_inspection_type = "";
-        inspection_array_list.clear();
-        inspection_array_list.add(new InspectionDataModel("Inspection One", false));
-        inspection_array_list.add(new InspectionDataModel("Inspection Two", false));
-        inspection_array_list.add(new InspectionDataModel("Inspection Three", false));
-        inspection_array_list.add(new InspectionDataModel("Inspection Four", false));
-        inspection_array_list.add(new InspectionDataModel("Inspection QC", false));
+        if(inspection_header_line.get(0).il.get(selected_position).crop_code.equalsIgnoreCase("FCROP")||inspection_header_line.get(0).il.get(selected_position).crop_code.equalsIgnoreCase("VEG")){
+            inspection_array_list.clear();
+            inspection_array_list.add(new InspectionDataModel("Inspection One", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection Four", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection QC", false));
+        }else {
+            inspection_array_list.clear();
+            inspection_array_list.add(new InspectionDataModel("Inspection One", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection Two", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection Three", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection Four", false));
+            inspection_array_list.add(new InspectionDataModel("Inspection QC", false));
+        }
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
         builder.setTitle("Select Inspection Type... ");
         builder.setIcon(R.drawable.approve_order_icon);
