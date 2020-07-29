@@ -61,7 +61,7 @@ public class InspectionLineListAdapter extends BaseAdapter {
     }
 
     public String getInspection(InspectionModel.Inspection_Line inspection_line) {
-        if (inspection_line.crop_code.equalsIgnoreCase("FCROP") || inspection_line.crop_code.equalsIgnoreCase("VEG")) {
+        if (inspection_line.crop_code.equalsIgnoreCase("FCROP") && inspection_line.item_croptype.equalsIgnoreCase("Improved")) {
             if (inspection_line.inspection_1 == 0) {
                 return "Pending";
             } else {

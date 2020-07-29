@@ -197,15 +197,18 @@ public class InspectionOneFragment extends Fragment {
             crop_stage_list.clear();
             crop_stage_list.add("Germination");
             crop_stage_list.add("Vegetative");
-            crop_stage_list.add("Flag-Off");
-            crop_stage_list.add("Square-Formation");
+            crop_stage_list.add("Flag Leaf");
+            crop_stage_list.add("Square Formation");
             crop_stage_list.add("Flowering");
-            crop_stage_list.add("Boll Formation");
             crop_stage_list.add("Crossing");
-            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Boll Formation");
             crop_stage_list.add("Pod Formation");
             crop_stage_list.add("Grain Formation");
             crop_stage_list.add("Fruit Formation");
+            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Tassel");
+            crop_stage_list.add("Silk");
+
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View PopupView = inflater.inflate(R.layout.add_inspection_one_line_view, null);
             Dialog dialog = new Dialog(getActivity(), android.R.style.Theme_DeviceDefault_DialogWhenLarge_NoActionBar);
@@ -266,7 +269,7 @@ public class InspectionOneFragment extends Fragment {
             et_area.setText(inspectionModel_selected_line.Area);
             TextInputEditText et_rejection_area = PopupView.findViewById(R.id.et_rejection_area);
             TextInputEditText et_net_area = PopupView.findViewById(R.id.et_net_area);
-            et_net_area.setText(inspectionModel_selected_line.NetArea);
+            et_net_area.setText(inspectionModel_selected_line.Area);
             et_net_area.setEnabled(false);
             et_area.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -384,7 +387,7 @@ public class InspectionOneFragment extends Fragment {
                 et_Item_class_of_seeds.setEnabled(false);
                 et_item_crop_type.setText(viewModel.item_crop_type);
                 et_item_crop_type.setEnabled(false);
-                et_date_of_inspection.setText(viewModel.date_of_inspection);
+                et_date_of_inspection.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.date_of_inspection));
                 et_date_of_inspection.setEnabled(false);
                 et_isolation_distance_status.setText(viewModel.isolation_distance_status);
                 et_isolation_distance_status.setEnabled(false);

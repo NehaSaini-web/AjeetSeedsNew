@@ -121,7 +121,7 @@ public class CreateInspectionFragment extends Fragment {
 
     void SelectInspectionTypePopup(int selected_position) {
         selected_inspection_type = "";
-        if(inspection_header_line.get(0).il.get(selected_position).crop_code.equalsIgnoreCase("FCROP")||inspection_header_line.get(0).il.get(selected_position).crop_code.equalsIgnoreCase("VEG")){
+        if(inspection_header_line.get(0).il.get(selected_position).crop_code.equalsIgnoreCase("FCROP")&&inspection_header_line.get(0).il.get(selected_position).item_croptype.equalsIgnoreCase("Improved")){
             inspection_array_list.clear();
             inspection_array_list.add(new InspectionDataModel("Inspection One", false));
             inspection_array_list.add(new InspectionDataModel("Inspection Four", false));

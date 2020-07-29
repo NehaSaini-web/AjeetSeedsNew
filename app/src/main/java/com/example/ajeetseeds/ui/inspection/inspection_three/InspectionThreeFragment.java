@@ -195,15 +195,17 @@ public class InspectionThreeFragment extends Fragment {
             crop_stage_list.clear();
             crop_stage_list.add("Germination");
             crop_stage_list.add("Vegetative");
-            crop_stage_list.add("Flag-Off");
-            crop_stage_list.add("Square-Formation");
+            crop_stage_list.add("Flag Leaf");
+            crop_stage_list.add("Square Formation");
             crop_stage_list.add("Flowering");
-            crop_stage_list.add("Boll Formation");
             crop_stage_list.add("Crossing");
-            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Boll Formation");
             crop_stage_list.add("Pod Formation");
             crop_stage_list.add("Grain Formation");
             crop_stage_list.add("Fruit Formation");
+            crop_stage_list.add("Maturity");
+            crop_stage_list.add("Tassel");
+            crop_stage_list.add("Silk");
 
             LayoutInflater inflater = getActivity().getLayoutInflater();
             View PopupView = inflater.inflate(R.layout.add_inspection_three_line_view, null);
@@ -278,8 +280,11 @@ public class InspectionThreeFragment extends Fragment {
             });
 
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
-            et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date_ins2));
-            et_crossing_start_date.setEnabled(false);
+            if(inspection_header_line.get(0).crossing_start_date_ins2!=null && !inspection_header_line.get(0).crossing_start_date_ins2.equalsIgnoreCase("") ) {
+                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date_ins2));
+                et_crossing_start_date.setEnabled(false);
+            }
+
             TextInputEditText et_avg_crossing_per_day = PopupView.findViewById(R.id.et_avg_crossing_per_day);
             TextInputEditText et_self_boll_per_plant = PopupView.findViewById(R.id.et_self_boll_per_plant);
             TextInputEditText et_crossing_end_date = PopupView.findViewById(R.id.et_crossing_end_date);
@@ -353,7 +358,6 @@ public class InspectionThreeFragment extends Fragment {
                 submitPage.setEnabled(false);
             } else {
                 et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
-                et_crossing_end_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_fertilizer_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
@@ -366,6 +370,24 @@ public class InspectionThreeFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
+                            });
+                            picker.addOnDismissListener(dialogInterface -> {
+                                datedialog = false;
+                            });
+                        }
+                    }
+                    return true;
+                });
+                et_crossing_start_date.setOnTouchListener((view1, motionEvent) -> {
+                    if (!datedialog) {
+                        datedialog = true;
+                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
+                        MaterialDatePicker picker = builder.build();
+                        if (!picker.isVisible()) {
+                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
+                            picker.addOnPositiveButtonClickListener(selection -> {
+                                et_crossing_start_date.setText(picker.getHeaderText());
+                                et_crossing_start_date.setError(null);
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;

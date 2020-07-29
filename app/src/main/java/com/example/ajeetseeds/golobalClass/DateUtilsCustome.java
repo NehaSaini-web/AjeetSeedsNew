@@ -155,7 +155,7 @@ public class DateUtilsCustome {
             Date date = formatter1.parse(value);
             String month = monthName[date.getMonth()];
             int year =1900+ date.getYear();
-            long day = date.getDay();
+            long day = date.getDate();
             return month + " " + day + ", " + year;
         } catch (Exception e) {
             return value.substring(0, 10);
