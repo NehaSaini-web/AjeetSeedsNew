@@ -47,6 +47,7 @@ public class InspectionModel {
         public String SowingDateFemale;
         public String SowingDateOther;
 
+        public String Grower_Village;
         public int inspection_1;
         public int inspection_2;
         public int inspection_3;

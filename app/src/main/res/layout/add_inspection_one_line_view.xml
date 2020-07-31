@@ -35,6 +35,20 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Grower Village">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_grower_village"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,7 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Item No">
+                        android:hint="Item Code">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_item_no"
@@ -133,12 +147,70 @@
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:hint="Date Of Inspection">
+                        android:layout_weight="1"
+                        android:hint="Item Crop Type">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_date_of_inspection"
+                            android:id="@+id/et_item_crop_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Date Of Inspection">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_date_of_inspection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                        android:editable="false"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Sowing Date Female">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_planting_sowing_date_female"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                            android:editable="false"
+                            android:textColor="@color/black" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Sowing Date Other">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_planting_sowing_date_other"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
@@ -149,49 +221,40 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Item Crop Type">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_item_crop_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:textColor="@color/black" />
-                </com.google.android.material.textfield.TextInputLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
+
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Spacing Male">
+                        android:hint="Germination Status">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_male"
+                        <AutoCompleteTextView
+                            android:id="@+id/et_germination_status"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
+                            android:editable="false"
+                            android:inputType="none"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Spacing Female">
+                        android:hint="Germination Per">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_female"
+                            android:id="@+id/et_germination_per"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -208,10 +271,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Spacing Variety">
+                        android:hint="Spacing Female Row">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_variety"
+                            android:id="@+id/et_spacing_female_row"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -224,12 +287,53 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Plant Population Variety">
+                        android:hint="Spacing Male Row">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_plant_population_variety"
+                            android:id="@+id/et_spacing_male_row"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Spacing Female Plant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_spacing_female_plant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Spacing Male Plant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_spacing_male_plant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -245,6 +349,62 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Spacing Variety Row">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_spacing_variety_row"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Spacing Variety Plant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_spacing_variety_plant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Plant Population Female">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_plant_population_female"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+
                         android:layout_weight="1"
                         android:hint="Plant Population Male">
 
@@ -257,22 +417,47 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Plant Population Variety">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_plant_population_variety"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Plant Population Female">
+                        android:hint="Previous Crop">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_plant_population_female"
+                            android:id="@+id/et_previous_crop"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -304,122 +489,6 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_isolation_distance_in_metre"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Previous Crop">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_previous_crop"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Germination Status">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/et_germination_status"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:inputType="none"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Germination Per">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_germination_per"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Area">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_area"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Rejection Area">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_rejection_area"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Net Area">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_net_area"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
@@ -467,6 +536,61 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Area">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_area"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Rejection Area">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_rejection_area"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Net Area">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_net_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:maxLines="1"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
@@ -482,10 +606,13 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -493,41 +620,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Planting Sowing Date Female">
+                        android:hint="Spacing Variety">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_planting_sowing_date_female"
+                            android:id="@+id/et_spacing_variety"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
-                            android:editable="false"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
                             android:textColor="@color/black" />
-
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Planting Sowing Date Other">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_planting_sowing_date_other"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
-                            android:editable="false"
-                            android:textColor="@color/black" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -535,13 +637,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Spacing Male Row">
+                        android:hint="Spacing Male">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_male_row"
+                            android:id="@+id/et_spacing_male"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -551,95 +652,18 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Spacing Male Plant">
+                        android:hint="Spacing Female">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_male_plant"
+                            android:id="@+id/et_spacing_female"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
+
+
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Spacing Female Row">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_female_row"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Spacing Female Plant">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_female_plant"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Spacing Variety Row">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_variety_row"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:inputType="numberDecimal"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Spacing Variety Plant">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_spacing_variety_plant"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
 
             </LinearLayout>
 

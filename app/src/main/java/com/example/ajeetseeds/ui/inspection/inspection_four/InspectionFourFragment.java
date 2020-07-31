@@ -59,7 +59,7 @@ public class InspectionFourFragment extends Fragment {
     LoadingDialog loadingDialog = new LoadingDialog();
     TextView tv_doc_date, tv_production_lot_no, tv_Region_Code, tv_Organizer_Name, tv_District_Code, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_zone_code, tv_State_Code, tv_Taluka_Code;
-
+    InspectionModel.Inspection_Line inspectionModel_selected_line;
     public static InspectionFourFragment newInstance() {
         return new InspectionFourFragment();
     }
@@ -70,6 +70,7 @@ public class InspectionFourFragment extends Fragment {
         if (getArguments() != null) {
             selected_production_lot_no = getArguments().getString("Selected_production_lot_no", "");
             inspectionModel = new Gson().fromJson(getArguments().getString("inspection_header", ""), InspectionModel.class);
+            inspectionModel_selected_line = new Gson().fromJson(getArguments().getString("inspection_line", ""), InspectionModel.Inspection_Line.class);
         }
     }
 
@@ -216,6 +217,9 @@ public class InspectionFourFragment extends Fragment {
             TextInputEditText et_grower_or_land_owner_name = PopupView.findViewById(R.id.et_grower_or_land_owner_name);
             et_grower_or_land_owner_name.setText(inspection_header_line.get(0).grower_name);
             et_grower_or_land_owner_name.setEnabled(false);
+            TextInputEditText et_grower_village = PopupView.findViewById(R.id.et_grower_village);
+            et_grower_village.setText(inspectionModel_selected_line.Grower_Village);
+            et_grower_village.setEnabled(false);
             TextInputEditText et_item_no = PopupView.findViewById(R.id.et_item_no);
             et_item_no.setText(inspection_header_line.get(0).item_no);
             et_item_no.setEnabled(false);
@@ -235,6 +239,14 @@ public class InspectionFourFragment extends Fragment {
             et_item_crop_type.setText(inspection_header_line.get(0).item_croptype);
             et_item_crop_type.setEnabled(false);
             TextInputEditText et_date_of_inspection = PopupView.findViewById(R.id.et_date_of_inspection);
+
+            TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
+            et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
+            et_planting_sowing_date_female.setEnabled(false);
+            TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
+            et_planting_sowing_date_other.setText(inspectionModel_selected_line.SowingDateOther);
+            et_planting_sowing_date_other.setEnabled(false);
+
             AutoCompleteTextView et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
             CropConditionAdapter cropConditionAdapter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_condition_list);
             et_crop_condition.setAdapter(cropConditionAdapter);

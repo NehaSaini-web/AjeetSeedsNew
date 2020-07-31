@@ -34,7 +34,19 @@
                         android:textColor="@color/black" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Grower Village">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_grower_village"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -46,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
-                        android:hint="Item No">
+                        android:hint="Item Code">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_item_no"
@@ -145,23 +157,86 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:orientation="horizontal"
+                   android:layout_height="wrap_content">
+                   <com.google.android.material.textfield.TextInputLayout
+                       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:layout_marginRight="5dp"
+                       android:layout_height="wrap_content"
+                       android:hint="Date Of Inspection">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                       <com.google.android.material.textfield.TextInputEditText
+                           android:id="@+id/et_date_of_inspection"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:clickable="true"
+                           android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                           android:editable="false"
+                           android:textColor="@color/black" />
+
+                   </com.google.android.material.textfield.TextInputLayout>
+                   <com.google.android.material.textfield.TextInputLayout
+                       style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                       android:layout_width="0dp"
+                       android:layout_weight="1"
+                       android:layout_height="wrap_content"
+                       android:hint="Duration Of Crop">
+
+                       <com.google.android.material.textfield.TextInputEditText
+                           android:id="@+id/et_durationofCrop"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:maxLines="3"
+                           android:textColor="@color/black" />
+
+                   </com.google.android.material.textfield.TextInputLayout>
+               </LinearLayout>
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Date Of Inspection">
+                    android:orientation="horizontal">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_date_of_inspection"
-                        android:layout_width="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
-                        android:editable="false"
-                        android:textColor="@color/black" />
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Sowing Date Female">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_planting_sowing_date_female"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                            android:editable="false"
+                            android:textColor="@color/black" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Sowing Date Other">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_planting_sowing_date_other"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                            android:editable="false"
+                            android:textColor="@color/black" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -203,6 +278,84 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_marginRight="5dp"
+                        android:layout_height="wrap_content"
+                        android:hint="Crossing Start Date">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_crossing_start_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                            android:editable="false"
+                            android:textColor="@color/black" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Avg. Crossing Per Day">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_avg_crossing_per_day"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:hint="Self Bolls/Fruits Per Plant">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_self_boll_per_plant"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Crossing End Date">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_crossing_end_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                            android:editable="false"
+                            android:textColor="@color/black" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
@@ -228,7 +381,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Not Cross Area">
+                        android:hint="Not Crossed Area">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_not_cross_area"
@@ -261,114 +414,10 @@
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Crossing Start Date">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_crossing_start_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:drawableRight="@drawable/ic_baseline_calendar_today_24"
-                        android:editable="false"
-                        android:textColor="@color/black" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Avg. Crossing Pper Day">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_avg_crossing_per_day"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="numberDecimal"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Self Boll Per Plant">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_self_boll_per_plant"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="1"
-                        android:hint="Crossing End Date">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_crossing_end_date"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
-                            android:editable="false"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="Yield Picking If Any">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_kapas_picking_if_any"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:textColor="@color/black" />
-                    </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:hint="Name Of Fertilizer">
 
@@ -380,10 +429,18 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:hint="Fertilizer Date">
 
@@ -396,18 +453,10 @@
                             android:editable="false"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:hint="Fertilizer Dose">
 
@@ -420,10 +469,18 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:hint="Sprying Fungi/Insecticide Date">
                         <com.google.android.material.textfield.TextInputEditText
@@ -435,28 +492,29 @@
                             android:editable="false"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="Name Of Insecticide/Fungicide">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/et_name_of_insecticide_or_fungicide"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="2"
+                            android:textColor="@color/black" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Name Of Insecticide/Fungicide">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_name_of_insecticide_or_fungicide"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2"
-                        android:textColor="@color/black" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
@@ -474,22 +532,35 @@
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:hint="Other Specific Observations">
+                        android:hint="Yield Picking If Any">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_other_specific_observations"
+                            android:id="@+id/et_kapas_picking_if_any"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Other Specific Observations">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_other_specific_observations"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:textColor="@color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
@@ -504,20 +575,7 @@
                         android:textColor="@color/black" />
 
                 </com.google.android.material.textfield.TextInputLayout>
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Duration Of Crop">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_durationofCrop"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="3"
-                        android:textColor="@color/black" />
-
-                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
         </ScrollView>

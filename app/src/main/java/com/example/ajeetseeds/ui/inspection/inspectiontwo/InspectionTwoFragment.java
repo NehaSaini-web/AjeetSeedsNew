@@ -220,6 +220,9 @@ public class InspectionTwoFragment extends Fragment {
             TextInputEditText et_grower_or_land_owner_name = PopupView.findViewById(R.id.et_grower_or_land_owner_name);
             et_grower_or_land_owner_name.setText(inspection_header_line.get(0).grower_name);
             et_grower_or_land_owner_name.setEnabled(false);
+            TextInputEditText et_grower_village = PopupView.findViewById(R.id.et_grower_village);
+            et_grower_village.setText(inspectionModel_selected_line.Grower_Village);
+            et_grower_village.setEnabled(false);
             TextInputEditText et_item_no = PopupView.findViewById(R.id.et_item_no);
             et_item_no.setText(inspection_header_line.get(0).item_no);
             et_item_no.setEnabled(false);
