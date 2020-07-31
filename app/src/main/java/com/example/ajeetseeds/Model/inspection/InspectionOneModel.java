@@ -34,7 +34,7 @@ public class InspectionOneModel {
     public String   crossing_start_date;
     public String crossing_end_date;
 
-
+    public String final_plant_population;
     public List<InspectionLineModel> io;
 
     public class InspectionLineModel {

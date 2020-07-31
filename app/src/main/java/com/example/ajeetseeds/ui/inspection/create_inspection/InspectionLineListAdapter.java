@@ -76,26 +76,33 @@ public class InspectionLineListAdapter extends BaseAdapter {
                 }
             }
         } else {
+            String status="";
             if (inspection_line.inspection_1 == 0) {
-                return "Pending";
+                status= "Pending";
             } else {
                 if (inspection_line.inspection_2 == 0) {
-                    return "INS 1 Done";
+                    status= "INS 1 Done";
                 } else {
                     if (inspection_line.inspection_3 == 0) {
-                        return "INS 2 Done";
+                        status= "INS 2 Done";
                     } else {
                         if (inspection_line.inspection_4 == 0) {
-                            return "INS 3 Done";
+                            status= "INS 3 Done";
                         } else {
-                            if (inspection_line.inspection_qc == 0) {
-                                return "INS 4 Done";
-                            } else {
-                                return "INS QC Done";
-                            }
+                                status= "INS 4 Done";
                         }
                     }
                 }
+            }
+            if (inspection_line.inspection_qc == 0) {
+               return status;
+            } else {
+                if (inspection_line.inspection_4 == 0) {
+                    return status+"/QC Done";
+                }else{
+                    return "INS QC Done";
+                }
+
             }
         }
 

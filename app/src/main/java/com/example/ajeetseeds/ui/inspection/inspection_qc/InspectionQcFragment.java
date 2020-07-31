@@ -126,12 +126,7 @@ public class InspectionQcFragment extends Fragment {
                             + "&flag=INSQC", null, "getInItData"));
         }
         chip_add_inspection_line.setOnClickListener(view1 -> {
-            if (inspection_header_line.get(0).inspection_1 > 0 && inspection_header_line.get(0).inspection_2 > 0 && inspection_header_line.get(0).inspection_3 > 0 && inspection_header_line.get(0).inspection_4 > 0) {
                 Add_Inspection_Line("", null);
-            } else {
-                Snackbar.make(chip_add_inspection_line, "Please Complete Previous Inspection ", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view12 -> {
-                }).show();
-            }
         });
         chip_complete_hit.setOnClickListener(view1 -> {
             new MaterialAlertDialogBuilder(getActivity())

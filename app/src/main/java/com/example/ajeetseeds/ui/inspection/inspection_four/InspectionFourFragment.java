@@ -268,6 +268,8 @@ public class InspectionFourFragment extends Fragment {
             }
 
             TextInputEditText et_final_plant_population = PopupView.findViewById(R.id.et_final_plant_population);
+            et_final_plant_population.setText(inspection_header_line.get(0).final_plant_population);
+            et_final_plant_population.setEnabled(false);
             TextInputEditText et_avg_cross_boll_per_plant = PopupView.findViewById(R.id.et_avg_cross_boll_per_plant);
             TextInputEditText et_kapas_picking_if_any = PopupView.findViewById(R.id.et_kapas_picking_if_any);
             TextInputEditText et_approx_kapas_balance_for_picking = PopupView.findViewById(R.id.et_approx_kapas_balance_for_picking);
