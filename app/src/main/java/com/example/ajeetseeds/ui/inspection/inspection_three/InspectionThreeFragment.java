@@ -47,7 +47,9 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 import java.net.URL;
+import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InspectionThreeFragment extends Fragment {
@@ -61,6 +63,7 @@ public class InspectionThreeFragment extends Fragment {
     TextView tv_doc_date, tv_production_lot_no, tv_Region_Code, tv_Organizer_Name, tv_District_Code, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_zone_code, tv_State_Code, tv_Taluka_Code;
     InspectionModel.Inspection_Line inspectionModel_selected_line;
+
     public static InspectionThreeFragment newInstance() {
         return new InspectionThreeFragment();
     }
@@ -292,7 +295,7 @@ public class InspectionThreeFragment extends Fragment {
             });
 
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
-            if(inspection_header_line.get(0).crossing_start_date_ins2!=null && !inspection_header_line.get(0).crossing_start_date_ins2.equalsIgnoreCase("") ) {
+            if (inspection_header_line.get(0).crossing_start_date_ins2 != null && !inspection_header_line.get(0).crossing_start_date_ins2.equalsIgnoreCase("")) {
                 et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date_ins2));
                 et_crossing_start_date.setEnabled(false);
             }
@@ -345,7 +348,7 @@ public class InspectionThreeFragment extends Fragment {
                 et_avg_crossing_per_day.setEnabled(false);
                 et_self_boll_per_plant.setText(viewModel.self_boll_per_plant);
                 et_self_boll_per_plant.setEnabled(false);
-                et_crossing_end_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.crossing_end_date));
+                et_crossing_end_date.setText(viewModel.crossing_end_date);
                 et_crossing_end_date.setEnabled(false);
                 et_kapas_picking_if_any.setText(viewModel.kapas_picking_if_any);
                 et_kapas_picking_if_any.setEnabled(false);
@@ -382,6 +385,15 @@ public class InspectionThreeFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
+                                if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(DateUtilsCustome.getCurrentDateBY_(), inspectionModel_selected_line.SowingDateFemale));
+                                } else {
+                                    String[] data = et_date_of_inspection.getText().toString().split(" ");
+                                    int selectmonth = Arrays.asList(DateUtilsCustome.monthName).indexOf(data[0]);
+                                    selectmonth = selectmonth + 1;
+                                    data[1] = data[1].split(",")[0];
+                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(data[2] + "-" + selectmonth + "-" + data[1], inspectionModel_selected_line.SowingDateFemale));
+                                }
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;

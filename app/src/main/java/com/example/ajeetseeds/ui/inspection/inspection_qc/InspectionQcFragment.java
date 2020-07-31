@@ -298,7 +298,7 @@ public class InspectionQcFragment extends Fragment {
                 }
             });
             TextInputEditText et_crossingStartDate = PopupView.findViewById(R.id.et_crossingStartDate);
-            et_crossingStartDate.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date));
+            et_crossingStartDate.setText(inspection_header_line.get(0).crossing_start_date);
             et_crossingStartDate.setEnabled(false);
             TextInputEditText et_plantPopulationVariety = PopupView.findViewById(R.id.et_plantPopulationVariety);
             et_plantPopulationVariety.setText(inspection_line.PlantPopulationVariety);
@@ -322,7 +322,7 @@ public class InspectionQcFragment extends Fragment {
             TextInputEditText et_spacingVarietyRow = PopupView.findViewById(R.id.et_spacingVarietyRow);
             TextInputEditText et_spacingVarietyPlant = PopupView.findViewById(R.id.et_spacingVarietyPlant);
             TextInputEditText et_crossingEndDate = PopupView.findViewById(R.id.et_crossingEndDate);
-            et_crossingEndDate.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_end_date));
+            et_crossingEndDate.setText(inspection_header_line.get(0).crossing_end_date);
             et_crossingEndDate.setEnabled(false);
             if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
                 et_plants_rouged_male.setEnabled(true);

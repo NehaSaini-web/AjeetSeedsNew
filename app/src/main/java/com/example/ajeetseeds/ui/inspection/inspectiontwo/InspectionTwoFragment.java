@@ -382,7 +382,7 @@ public class InspectionTwoFragment extends Fragment {
                 et_net_area_as_per_insp1.setEnabled(false);
                 et_pld_area.setText(viewModel.pld_area);
                 et_pld_area.setEnabled(false);
-                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.crossing_start_date));
+                et_crossing_start_date.setText(viewModel.crossing_start_date);
                 et_crossing_start_date.setEnabled(false);
                 et_avg_crossing_per_day.setText(viewModel.avg_crossing_per_day);
                 et_avg_crossing_per_day.setEnabled(false);
@@ -414,7 +414,6 @@ public class InspectionTwoFragment extends Fragment {
                 et_spacing_male_plant.setEnabled(false);
             } else {
                 et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
-                et_crossing_start_date.setText(DateUtilsCustome.getCurrentDateBY());
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
                     if (!datedialog) {
                         datedialog = true;

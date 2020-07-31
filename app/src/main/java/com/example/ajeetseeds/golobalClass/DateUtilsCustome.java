@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class DateUtilsCustome {
     private static final String TAG = "DateUtils";
@@ -135,9 +136,11 @@ public class DateUtilsCustome {
             return value.substring(0, 10);
         }
     }
-   public static String[] monthName = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
+
+    public static String[] monthName = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul",
             "Aug", "Sep", "Oct", "Nov",
             "Dec"};
+
     public static String getCurrentDateBY() {
         Calendar c = Calendar.getInstance();
 
@@ -146,21 +149,31 @@ public class DateUtilsCustome {
         int date = c.get(Calendar.DATE);
         return month + " " + date + ", " + year;
     }
+    public static String getCurrentDateBY_() {
+        Calendar c = Calendar.getInstance();
+
+        int month = c.get(Calendar.MONTH)+1;
+        int year = c.get(Calendar.YEAR);
+        int date = c.get(Calendar.DATE);
+        return year + "-" + month + "-" + date;
+    }
+
     public static String getDateMMMDDYYYY(String value) {
         try {
-            if(value==null || value.equalsIgnoreCase("")){
+            if (value == null || value.equalsIgnoreCase("")) {
                 return "";
             }
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date date = formatter1.parse(value);
             String month = monthName[date.getMonth()];
-            int year =1900+ date.getYear();
+            int year = 1900 + date.getYear();
             long day = date.getDate();
             return month + " " + day + ", " + year;
         } catch (Exception e) {
             return value.substring(0, 10);
         }
     }
+
     public static String getDateOnly(String value) {
         try {
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -169,6 +182,27 @@ public class DateUtilsCustome {
             return newFormat.format(date);
         } catch (Exception e) {
             return value;
+        }
+    }
+
+    public static String dateDiffrence(String passdate, String passdate1) {
+        try {
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = formatter1.parse(passdate);
+            Date date1 = formatter1.parse(passdate1);
+            Date secondDate, firstDate;
+            if (date.compareTo(date1) > 0) {
+                secondDate = date;
+                firstDate = date1;
+            } else {
+                secondDate = date1;
+                firstDate = date;
+            }
+            long diffInMillies = Math.abs(secondDate.getTime() - firstDate.getTime());
+            long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+            return String.valueOf(diff);
+        } catch (Exception e) {
+            return "0";
         }
     }
 }

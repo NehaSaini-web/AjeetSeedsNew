@@ -259,11 +259,11 @@ public class InspectionFourFragment extends Fragment {
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
             TextInputEditText et_crossing_end_date = PopupView.findViewById(R.id.et_crossing_end_date);
             if(inspection_header_line.get(0).crossing_start_date!=null && !inspection_header_line.get(0).crossing_start_date.equalsIgnoreCase("") ) {
-                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date));
+                et_crossing_start_date.setText(inspection_header_line.get(0).crossing_start_date);
                 et_crossing_start_date.setEnabled(false);
             }
             if(inspection_header_line.get(0).crossing_end_date!=null && !inspection_header_line.get(0).crossing_end_date.equalsIgnoreCase("") ) {
-                et_crossing_end_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_end_date));
+                et_crossing_end_date.setText(inspection_header_line.get(0).crossing_end_date);
                 et_crossing_end_date.setEnabled(false);
             }
 
@@ -352,9 +352,9 @@ public class InspectionFourFragment extends Fragment {
                 et_crop_stage.setEnabled(false);
                 et_net_area_as_per_insp_3.setText(viewModel.net_area_as_per_insp_3);
                 et_net_area_as_per_insp_3.setEnabled(false);
-                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.crossing_start_date));
+                et_crossing_start_date.setText(viewModel.crossing_start_date);
                 et_crossing_start_date.setEnabled(false);
-                et_crossing_end_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.crossing_end_date));
+                et_crossing_end_date.setText(viewModel.crossing_end_date);
                 et_crossing_end_date.setEnabled(false);
                 et_final_plant_population.setText(viewModel.final_plant_population);
                 et_final_plant_population.setEnabled(false);
