@@ -32,6 +32,7 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
+import com.example.ajeetseeds.golobalClass.StaticMethods;
 import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
 import com.example.ajeetseeds.ui.inspection.inspection_three.InspectionThreeFragment;
 import com.example.ajeetseeds.ui.inspection.inspection_three.InspectionThreeLineListAdapter;
@@ -60,6 +61,7 @@ public class InspectionFourFragment extends Fragment {
     TextView tv_doc_date, tv_production_lot_no, tv_Region_Code, tv_Organizer_Name, tv_District_Code, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_zone_code, tv_State_Code, tv_Taluka_Code;
     InspectionModel.Inspection_Line inspectionModel_selected_line;
+
     public static InspectionFourFragment newInstance() {
         return new InspectionFourFragment();
     }
@@ -243,6 +245,7 @@ public class InspectionFourFragment extends Fragment {
             TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
             et_planting_sowing_date_female.setText(inspectionModel_selected_line.SowingDateFemale);
             et_planting_sowing_date_female.setEnabled(false);
+
             TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
             et_planting_sowing_date_other.setText(inspectionModel_selected_line.SowingDateOther);
             et_planting_sowing_date_other.setEnabled(false);
@@ -258,11 +261,11 @@ public class InspectionFourFragment extends Fragment {
             et_net_area_as_per_insp_3.setEnabled(false);
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
             TextInputEditText et_crossing_end_date = PopupView.findViewById(R.id.et_crossing_end_date);
-            if(inspection_header_line.get(0).crossing_start_date!=null && !inspection_header_line.get(0).crossing_start_date.equalsIgnoreCase("") ) {
+            if (inspection_header_line.get(0).crossing_start_date != null && !inspection_header_line.get(0).crossing_start_date.equalsIgnoreCase("")) {
                 et_crossing_start_date.setText(inspection_header_line.get(0).crossing_start_date);
                 et_crossing_start_date.setEnabled(false);
             }
-            if(inspection_header_line.get(0).crossing_end_date!=null && !inspection_header_line.get(0).crossing_end_date.equalsIgnoreCase("") ) {
+            if (inspection_header_line.get(0).crossing_end_date != null && !inspection_header_line.get(0).crossing_end_date.equalsIgnoreCase("")) {
                 et_crossing_end_date.setText(inspection_header_line.get(0).crossing_end_date);
                 et_crossing_end_date.setEnabled(false);
             }
@@ -273,6 +276,29 @@ public class InspectionFourFragment extends Fragment {
             TextInputEditText et_avg_cross_boll_per_plant = PopupView.findViewById(R.id.et_avg_cross_boll_per_plant);
             TextInputEditText et_kapas_picking_if_any = PopupView.findViewById(R.id.et_kapas_picking_if_any);
             TextInputEditText et_approx_kapas_balance_for_picking = PopupView.findViewById(R.id.et_approx_kapas_balance_for_picking);
+            et_approx_kapas_balance_for_picking.setEnabled(false);
+            et_avg_cross_boll_per_plant.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        float avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("") ? 0 : (Float.parseFloat(et_avg_cross_boll_per_plant.getText().toString()));
+                        float approx_kapas_balance_for_picking = avg_cross_boll_per_plant * Float.parseFloat(inspection_header_line.get(0).final_plant_population) * ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
+                        et_approx_kapas_balance_for_picking.setText(String.valueOf(StaticMethods.removeDecimal(approx_kapas_balance_for_picking)));
+                    } catch (Exception e) {
+                        et_approx_kapas_balance_for_picking.setText("0");
+                    }
+                }
+            });
             TextInputEditText et_estimated_field_in_kg = PopupView.findViewById(R.id.et_estimated_field_in_kg);
             et_estimated_field_in_kg.setText("0");
             et_estimated_field_in_kg.setEnabled(false);
@@ -289,10 +315,14 @@ public class InspectionFourFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
-                    double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
-                    double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
-                    et_estimated_field_in_kg.setText(String.valueOf(estimated_field_in_kg));
+                    try {
+                        double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
+                        double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
+                        double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
+                        et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                    } catch (Exception e) {
+                        et_estimated_field_in_kg.setText("0");
+                    }
                 }
             });
             et_approx_kapas_balance_for_picking.addTextChangedListener(new TextWatcher() {
@@ -308,10 +338,14 @@ public class InspectionFourFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
-                    double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
-                    double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
-                    et_estimated_field_in_kg.setText(String.valueOf(estimated_field_in_kg));
+                    try {
+                        double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
+                        double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
+                        double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
+                        et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                    } catch (Exception e) {
+                        et_estimated_field_in_kg.setText("0");
+                    }
                 }
             });
             TextInputEditText et_other_specific_observations = PopupView.findViewById(R.id.et_other_specific_observations);

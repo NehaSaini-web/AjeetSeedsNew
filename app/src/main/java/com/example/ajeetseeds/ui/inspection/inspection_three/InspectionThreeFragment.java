@@ -385,15 +385,23 @@ public class InspectionThreeFragment extends Fragment {
                             picker.addOnPositiveButtonClickListener(selection -> {
                                 et_date_of_inspection.setText(picker.getHeaderText());
                                 et_date_of_inspection.setError(null);
-                                if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
-                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(DateUtilsCustome.getCurrentDateBY_(), inspectionModel_selected_line.SowingDateFemale));
-                                } else {
+                                try {
                                     String[] data = et_date_of_inspection.getText().toString().split(" ");
                                     int selectmonth = Arrays.asList(DateUtilsCustome.monthName).indexOf(data[0]);
                                     selectmonth = selectmonth + 1;
                                     data[1] = data[1].split(",")[0];
                                     et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(data[2] + "-" + selectmonth + "-" + data[1], inspectionModel_selected_line.SowingDateFemale));
+                                } catch (Exception e) {
                                 }
+//                                if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+//                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(DateUtilsCustome.getCurrentDateBY_(), inspectionModel_selected_line.SowingDateFemale));
+//                                } else {
+//                                    String[] data = et_date_of_inspection.getText().toString().split(" ");
+//                                    int selectmonth = Arrays.asList(DateUtilsCustome.monthName).indexOf(data[0]);
+//                                    selectmonth = selectmonth + 1;
+//                                    data[1] = data[1].split(",")[0];
+//                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(data[2] + "-" + selectmonth + "-" + data[1], inspectionModel_selected_line.SowingDateFemale));
+//                                }
                             });
                             picker.addOnDismissListener(dialogInterface -> {
                                 datedialog = false;

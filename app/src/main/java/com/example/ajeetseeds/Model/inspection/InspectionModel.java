@@ -46,6 +46,7 @@ public class InspectionModel {
         public String Area;
         public String SowingDateFemale;
         public String SowingDateOther;
+        public String item_weight;
 
         public String Grower_Village;
         public int inspection_1;
