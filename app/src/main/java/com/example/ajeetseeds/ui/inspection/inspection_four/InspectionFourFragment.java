@@ -268,12 +268,13 @@ public class InspectionFourFragment extends Fragment {
             }
             if (inspection_header_line.get(0).crossing_end_date != null && !inspection_header_line.get(0).crossing_end_date.equalsIgnoreCase("")) {
                 et_crossing_end_date.setText(inspection_header_line.get(0).crossing_end_date);
-                et_crossing_end_date.setEnabled(false);
+                //et_crossing_end_date.setEnabled(false);
             }
 
             TextInputEditText et_final_plant_population = PopupView.findViewById(R.id.et_final_plant_population);
             et_final_plant_population.setText(inspection_header_line.get(0).final_plant_population);
-            et_final_plant_population.setEnabled(false);
+//            et_final_plant_population.setEnabled(false);
+
             TextInputEditText et_avg_cross_boll_per_plant = PopupView.findViewById(R.id.et_avg_cross_boll_per_plant);
             TextInputEditText et_kapas_picking_if_any = PopupView.findViewById(R.id.et_kapas_picking_if_any);
             TextInputEditText et_approx_kapas_balance_for_picking = PopupView.findViewById(R.id.et_approx_kapas_balance_for_picking);
@@ -293,7 +294,33 @@ public class InspectionFourFragment extends Fragment {
                 public void afterTextChanged(Editable editable) {
                     try {
                         float avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("") ? 0 : (Float.parseFloat(et_avg_cross_boll_per_plant.getText().toString()));
-                        float approx_kapas_balance_for_picking = avg_cross_boll_per_plant * Float.parseFloat(inspection_header_line.get(0).final_plant_population) * ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
+                        float approx_kapas_balance_for_picking = avg_cross_boll_per_plant *
+                                (et_final_plant_population.getText().toString().equalsIgnoreCase("")?0: Float.parseFloat(et_final_plant_population.getText().toString())) *
+                                ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
+                        et_approx_kapas_balance_for_picking.setText(String.valueOf(StaticMethods.removeDecimal(approx_kapas_balance_for_picking)));
+                    } catch (Exception e) {
+                        et_approx_kapas_balance_for_picking.setText("0");
+                    }
+                }
+            });
+            et_final_plant_population.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        float avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("") ? 0 : (Float.parseFloat(et_avg_cross_boll_per_plant.getText().toString()));
+                        float approx_kapas_balance_for_picking = avg_cross_boll_per_plant *
+                               (et_final_plant_population.getText().toString().equalsIgnoreCase("")?0: Float.parseFloat(et_final_plant_population.getText().toString())) *
+                                ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
                         et_approx_kapas_balance_for_picking.setText(String.valueOf(StaticMethods.removeDecimal(approx_kapas_balance_for_picking)));
                     } catch (Exception e) {
                         et_approx_kapas_balance_for_picking.setText("0");

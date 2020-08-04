@@ -334,8 +334,8 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_avg_cross_boll_per_plant"
                             android:layout_width="match_parent"
-                            android:inputType="numberDecimal"
                             android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
                             android:maxLines="1"
                             android:textColor="@color/black" />
                     </com.google.android.material.textfield.TextInputLayout>
