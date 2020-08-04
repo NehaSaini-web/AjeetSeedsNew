@@ -184,6 +184,16 @@ public class DateUtilsCustome {
             return value;
         }
     }
+    public static String getDateYYYYMMDD(String value) {
+        try {
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = formatter1.parse(value);
+            SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd");
+            return newFormat.format(date);
+        } catch (Exception e) {
+            return value;
+        }
+    }
 
     public static String dateDiffrence(String passdate, String passdate1) {
         try {

@@ -30,6 +30,7 @@ import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
 import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
+import com.example.ajeetseeds.globalconfirmation.CustomeDatePicker;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
@@ -296,7 +297,7 @@ public class InspectionThreeFragment extends Fragment {
 
             TextInputEditText et_crossing_start_date = PopupView.findViewById(R.id.et_crossing_start_date);
             if (inspection_header_line.get(0).crossing_start_date_ins2 != null && !inspection_header_line.get(0).crossing_start_date_ins2.equalsIgnoreCase("")) {
-                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(inspection_header_line.get(0).crossing_start_date_ins2));
+                et_crossing_start_date.setText(inspection_header_line.get(0).crossing_start_date_ins2);
                 et_crossing_start_date.setEnabled(false);
             }
 
@@ -330,7 +331,7 @@ public class InspectionThreeFragment extends Fragment {
                 et_Item_class_of_seeds.setEnabled(false);
                 et_item_crop_type.setText(viewModel.item_crop_type);
                 et_item_crop_type.setEnabled(false);
-                et_date_of_inspection.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.date_of_inspection));
+                et_date_of_inspection.setText(DateUtilsCustome.getDateYYYYMMDD(viewModel.date_of_inspection));
                 et_date_of_inspection.setEnabled(false);
                 et_crop_condition.setText(viewModel.crop_condition);
                 et_crop_condition.setEnabled(false);
@@ -342,7 +343,7 @@ public class InspectionThreeFragment extends Fragment {
                 et_not_cross_area.setEnabled(false);
                 et_net_cross_area.setText(viewModel.net_cross_area);
                 et_net_cross_area.setEnabled(false);
-                et_crossing_start_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.crossing_start_date));
+                et_crossing_start_date.setText(DateUtilsCustome.getDateYYYYMMDD(viewModel.crossing_start_date));
                 et_crossing_start_date.setEnabled(false);
                 et_avg_crossing_per_day.setText(viewModel.avg_crossing_per_day);
                 et_avg_crossing_per_day.setEnabled(false);
@@ -354,11 +355,11 @@ public class InspectionThreeFragment extends Fragment {
                 et_kapas_picking_if_any.setEnabled(false);
                 et_name_of_fertilizer.setText(viewModel.name_of_fertilizer);
                 et_name_of_fertilizer.setEnabled(false);
-                et_fertilizer_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.fertilizer_date));
+                et_fertilizer_date.setText(DateUtilsCustome.getDateYYYYMMDD(viewModel.fertilizer_date));
                 et_fertilizer_date.setEnabled(false);
                 et_fertilizer_dose.setText(viewModel.fertilizer_dose);
                 et_fertilizer_dose.setEnabled(false);
-                et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.sprying_fungi_or_insecticide_date));
+                et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getDateYYYYMMDD(viewModel.sprying_fungi_or_insecticide_date));
                 et_sprying_fungi_or_insecticide_date.setEnabled(false);
                 et_name_of_insecticide_or_fungicide.setText(viewModel.name_of_insecticide_or_fungicide);
                 et_name_of_insecticide_or_fungicide.setEnabled(false);
@@ -372,113 +373,52 @@ public class InspectionThreeFragment extends Fragment {
                 et_durationofCrop.setEnabled(false);
                 submitPage.setEnabled(false);
             } else {
-                et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
-                et_fertilizer_date.setText(DateUtilsCustome.getCurrentDateBY());
-                et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getCurrentDateBY());
+                et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY_());
+                et_fertilizer_date.setText(DateUtilsCustome.getCurrentDateBY_());
+                et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getCurrentDateBY_());
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_date_of_inspection.setText(picker.getHeaderText());
-                                et_date_of_inspection.setError(null);
-                                try {
-                                    String[] data = et_date_of_inspection.getText().toString().split(" ");
-                                    int selectmonth = Arrays.asList(DateUtilsCustome.monthName).indexOf(data[0]);
-                                    selectmonth = selectmonth + 1;
-                                    data[1] = data[1].split(",")[0];
-                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(data[2] + "-" + selectmonth + "-" + data[1], inspectionModel_selected_line.SowingDateFemale));
-                                } catch (Exception e) {
-                                }
-//                                if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
-//                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(DateUtilsCustome.getCurrentDateBY_(), inspectionModel_selected_line.SowingDateFemale));
-//                                } else {
-//                                    String[] data = et_date_of_inspection.getText().toString().split(" ");
-//                                    int selectmonth = Arrays.asList(DateUtilsCustome.monthName).indexOf(data[0]);
-//                                    selectmonth = selectmonth + 1;
-//                                    data[1] = data[1].split(",")[0];
-//                                    et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(data[2] + "-" + selectmonth + "-" + data[1], inspectionModel_selected_line.SowingDateFemale));
-//                                }
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_date_of_inspection);
                     }
                     return true;
                 });
+                et_date_of_inspection.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        et_durationofCrop.setText(DateUtilsCustome.dateDiffrence(et_date_of_inspection.getText().toString(), inspectionModel_selected_line.SowingDateFemale));
+                    }
+                });
                 et_crossing_start_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_crossing_start_date.setText(picker.getHeaderText());
-                                et_crossing_start_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossing_start_date);
                     }
                     return true;
                 });
                 et_crossing_end_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_crossing_end_date.setText(picker.getHeaderText());
-                                et_crossing_end_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossing_end_date);
                     }
                     return true;
                 });
                 et_fertilizer_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_fertilizer_date.setText(picker.getHeaderText());
-                                et_fertilizer_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_fertilizer_date);
                     }
                     return true;
                 });
                 et_sprying_fungi_or_insecticide_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_sprying_fungi_or_insecticide_date.setText(picker.getHeaderText());
-                                et_sprying_fungi_or_insecticide_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_sprying_fungi_or_insecticide_date);
                     }
                     return true;
                 });

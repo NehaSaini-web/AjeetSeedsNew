@@ -53,4 +53,5 @@ dependencies {
     //todo dialog
     //todo material betterspiner
     implementation 'com.weiwangcn.betterspinner:library-material:1.1.0'
+    implementation 'com.prolificinteractive:material-calendarview:1.4.0'
 }

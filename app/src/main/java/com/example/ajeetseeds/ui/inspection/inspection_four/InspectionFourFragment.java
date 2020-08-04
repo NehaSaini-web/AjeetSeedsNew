@@ -30,6 +30,7 @@ import com.example.ajeetseeds.Model.inspection.InspectionOneModel;
 import com.example.ajeetseeds.Model.inspection.InspectionResponse;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
+import com.example.ajeetseeds.globalconfirmation.CustomeDatePicker;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.golobalClass.StaticMethods;
@@ -378,7 +379,7 @@ public class InspectionFourFragment extends Fragment {
                 et_Item_class_of_seeds.setEnabled(false);
                 et_item_crop_type.setText(viewModel.item_crop_type);
                 et_item_crop_type.setEnabled(false);
-                et_date_of_inspection.setText(DateUtilsCustome.getDateMMMDDYYYY(viewModel.date_of_inspection));
+                et_date_of_inspection.setText(DateUtilsCustome.getDateYYYYMMDD(viewModel.date_of_inspection));
                 et_date_of_inspection.setEnabled(false);
                 et_crop_condition.setText(viewModel.crop_condition);
                 et_crop_condition.setEnabled(false);
@@ -412,114 +413,42 @@ public class InspectionFourFragment extends Fragment {
                 et_HarvestingDateOther.setEnabled(false);
                 submitPage.setEnabled(false);
             } else {
-                et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY());
+                et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY_());
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_date_of_inspection.setText(picker.getHeaderText());
-                                et_date_of_inspection.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_date_of_inspection);
                     }
                     return true;
                 });
 
                 et_crossing_start_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_crossing_start_date.setText(picker.getHeaderText());
-                                et_crossing_start_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossing_start_date);
                     }
                     return true;
                 });
 
                 et_crossing_end_date.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_crossing_end_date.setText(picker.getHeaderText());
-                                et_crossing_end_date.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossing_end_date);
                     }
                     return true;
                 });
                 et_HarvestingDateMale.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_HarvestingDateMale.setText(picker.getHeaderText());
-                                et_HarvestingDateMale.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_HarvestingDateMale);
                     }
                     return true;
                 });
                 et_HarvestingDateFemale.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_HarvestingDateFemale.setText(picker.getHeaderText());
-                                et_HarvestingDateFemale.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_HarvestingDateFemale);
                     }
                     return true;
                 });
                 et_HarvestingDateOther.setOnTouchListener((view1, motionEvent) -> {
-                    if (!datedialog) {
-                        datedialog = true;
-                        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                        MaterialDatePicker picker = builder.build();
-                        if (!picker.isVisible()) {
-                            picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                            picker.addOnPositiveButtonClickListener(selection -> {
-                                et_HarvestingDateOther.setText(picker.getHeaderText());
-                                et_HarvestingDateOther.setError(null);
-                            });
-                            picker.addOnDismissListener(dialogInterface -> {
-                                datedialog = false;
-                            });
-                        }
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_HarvestingDateOther);
                     }
                     return true;
                 });
