@@ -35,6 +35,16 @@ public class InspectionOneModel {
     public String crossing_end_date;
 
     public String final_plant_population;
+
+    //todo variable for qc_new Add
+    public String previous_crop;
+    public String spacing_female_row;
+    public String spacing_variety_row;
+    public String spacing_female_plant;
+    public String spacing_variety_plant;
+    public String plant_population_female;
+    public String plant_population_variety;
+
     public List<InspectionLineModel> io;
 
     public class InspectionLineModel {

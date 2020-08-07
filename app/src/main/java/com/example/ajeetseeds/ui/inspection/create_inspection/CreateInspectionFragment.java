@@ -211,11 +211,15 @@ public class CreateInspectionFragment extends Fragment {
                 Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
             }
         } else if (selected_inspection_type.equalsIgnoreCase("Inspection QC")) {
-            Bundle bundle = new Bundle();
-            bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
-            bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
-            bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-            loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
+            if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0) {
+                Bundle bundle = new Bundle();
+                bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
+                bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
+                bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
+            }else{
+                Snackbar.make(listview_headers_line, "Please Submit Inspection One Then Click On QC.", Snackbar.LENGTH_LONG).show();
+            }
         }
     }
 

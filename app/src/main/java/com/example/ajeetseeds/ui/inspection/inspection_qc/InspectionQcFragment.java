@@ -33,6 +33,7 @@ import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.CustomeDatePicker;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
+import com.example.ajeetseeds.golobalClass.StaticMethods;
 import com.example.ajeetseeds.ui.inspection.CropConditionAdapter;
 import com.example.ajeetseeds.ui.inspection.inspection_four.InspectionFourFragment;
 import com.example.ajeetseeds.ui.inspection.inspection_four.InspectionFourLineListAdapter;
@@ -127,7 +128,7 @@ public class InspectionQcFragment extends Fragment {
                             + "&flag=INSQC", null, "getInItData"));
         }
         chip_add_inspection_line.setOnClickListener(view1 -> {
-                Add_Inspection_Line("", null);
+            Add_Inspection_Line("", null);
         });
         chip_complete_hit.setOnClickListener(view1 -> {
             new MaterialAlertDialogBuilder(getActivity())
@@ -221,6 +222,9 @@ public class InspectionQcFragment extends Fragment {
             TextInputEditText et_grower_or_land_owner_name = PopupView.findViewById(R.id.et_grower_or_land_owner_name);
             et_grower_or_land_owner_name.setText(inspection_header_line.get(0).grower_name);
             et_grower_or_land_owner_name.setEnabled(false);
+            TextInputEditText et_grower_village = PopupView.findViewById(R.id.et_grower_village);
+            et_grower_village.setText(inspection_line.Grower_Village);
+            et_grower_village.setEnabled(false);
             TextInputEditText et_item_no = PopupView.findViewById(R.id.et_item_no);
             et_item_no.setText(inspection_header_line.get(0).item_no);
             et_item_no.setEnabled(false);
@@ -239,6 +243,12 @@ public class InspectionQcFragment extends Fragment {
             TextInputEditText et_item_crop_type = PopupView.findViewById(R.id.et_item_crop_type);
             et_item_crop_type.setText(inspection_header_line.get(0).item_croptype);
             et_item_crop_type.setEnabled(false);
+            TextInputEditText et_planting_sowing_date_female = PopupView.findViewById(R.id.et_planting_sowing_date_female);
+            et_planting_sowing_date_female.setText(inspection_line.SowingDateFemale);
+            et_planting_sowing_date_female.setEnabled(false);
+            TextInputEditText et_planting_sowing_date_other = PopupView.findViewById(R.id.et_planting_sowing_date_other);
+            et_planting_sowing_date_other.setText(inspection_line.SowingDateOther);
+            et_planting_sowing_date_other.setEnabled(false);
             AutoCompleteTextView et_crop_condition = PopupView.findViewById(R.id.et_crop_condition);
             CropConditionAdapter cropConditionAdapter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, crop_condition_list);
             et_crop_condition.setAdapter(cropConditionAdapter);
@@ -264,51 +274,25 @@ public class InspectionQcFragment extends Fragment {
             TextInputEditText et_plants_rouged_female = PopupView.findViewById(R.id.et_plants_rouged_female);
 
             TextInputEditText et_previousCrop = PopupView.findViewById(R.id.et_previousCrop);
-            et_previousCrop.setText(inspection_line.PreviousCrop);
+            et_previousCrop.setText(inspection_header_line.get(0).previous_crop);
             et_previousCrop.setEnabled(false);
             TextInputEditText et_givenArea = PopupView.findViewById(R.id.et_givenArea);
             et_givenArea.setText(inspection_line.GivenArea);
             et_givenArea.setEnabled(false);
             TextInputEditText et_rejection_PLDArea = PopupView.findViewById(R.id.et_rejection_PLDArea);
             TextInputEditText et_actualArea = PopupView.findViewById(R.id.et_actualArea);
-            et_actualArea.setText(inspection_line.GivenArea);
             et_actualArea.setEnabled(false);
-            et_rejection_PLDArea.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("")?0:Float.parseFloat( inspection_line.GivenArea);
-                    float reject_area = !et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_rejection_PLDArea.getText().toString()) : 0;
-                    float actual_area = GivenArea - reject_area;
-                    if (actual_area < 0) {
-                        et_rejection_PLDArea.setText("0");
-                        et_actualArea.setText(inspection_line.GivenArea);
-                    } else {
-                        et_actualArea.setText(String.valueOf(actual_area));
-                    }
-
-                }
-            });
             TextInputEditText et_crossingStartDate = PopupView.findViewById(R.id.et_crossingStartDate);
             et_crossingStartDate.setText(inspection_header_line.get(0).crossing_start_date);
-            et_crossingStartDate.setEnabled(false);
+            //  et_crossingStartDate.setEnabled(false);
             TextInputEditText et_plantPopulationVariety = PopupView.findViewById(R.id.et_plantPopulationVariety);
-            et_plantPopulationVariety.setText(inspection_line.PlantPopulationVariety);
-            et_plantPopulationVariety.setEnabled(false);
+            et_plantPopulationVariety.setText(inspection_header_line.get(0).plant_population_variety);
             TextInputEditText et_plantPopulationFemale = PopupView.findViewById(R.id.et_plantPopulationFemale);
-            et_plantPopulationFemale.setText(inspection_line.PlantPopulationFemale);
-            et_plantPopulationFemale.setEnabled(false);
+            et_plantPopulationFemale.setText(inspection_header_line.get(0).plant_population_female);
             TextInputEditText et_spacingFemaleRow = PopupView.findViewById(R.id.et_spacingFemaleRow);
+            et_spacingFemaleRow.setText(inspection_header_line.get(0).spacing_female_row);
             TextInputEditText et_spacingFemalePlant = PopupView.findViewById(R.id.et_spacingFemalePlant);
+            et_spacingFemalePlant.setText(inspection_header_line.get(0).spacing_female_plant);
             TextInputEditText et_isolationDistanceinMetre = PopupView.findViewById(R.id.et_isolationDistanceinMetre);
             AutoCompleteTextView et_isolation_distance_status = PopupView.findViewById(R.id.et_isolation_distance_status);
             CropConditionAdapter isolation_distance_adapeter = new CropConditionAdapter(getContext(), R.layout.drop_down_textview, isolation_distance_status_list);
@@ -321,10 +305,12 @@ public class InspectionQcFragment extends Fragment {
                     et_isolationDistanceinMetre.setEnabled(true);
             });
             TextInputEditText et_spacingVarietyRow = PopupView.findViewById(R.id.et_spacingVarietyRow);
+            et_spacingVarietyRow.setText(inspection_header_line.get(0).spacing_variety_row);
             TextInputEditText et_spacingVarietyPlant = PopupView.findViewById(R.id.et_spacingVarietyPlant);
+            et_spacingVarietyPlant.setText(inspection_header_line.get(0).spacing_variety_plant);
             TextInputEditText et_crossingEndDate = PopupView.findViewById(R.id.et_crossingEndDate);
             et_crossingEndDate.setText(inspection_header_line.get(0).crossing_end_date);
-            et_crossingEndDate.setEnabled(false);
+            //  et_crossingEndDate.setEnabled(false);
             if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
                 et_plants_rouged_male.setEnabled(true);
                 et_plants_rouged_female.setEnabled(true);
@@ -350,7 +336,359 @@ public class InspectionQcFragment extends Fragment {
                 et_spacingFemalePlant.setEnabled(false);
                 et_spacingVarietyPlant.setEnabled(true);
             }
+            et_rejection_PLDArea.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_spacingFemaleRow.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_spacingFemalePlant.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_plantPopulationFemale.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_spacingVarietyRow.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_spacingVarietyPlant.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            et_plantPopulationVariety.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try{
+                        et_actualArea.setError(null);
+                        if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                            float actual_area = 0;
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                                float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                                float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                                float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                                actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                                float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                                float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                                float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                                actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
+                            float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                            float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (actual_area + rejection_PLDArea > GivenArea) {
+                                et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                                Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                                }).show();
+                            }
+                        } else {
+                            if (!flag.equalsIgnoreCase("View")) {
+                                et_actualArea.setEnabled(true);
+                            }
+                        }
+                    }catch (Exception e){}
+                }
+            });
+            try{
+                et_actualArea.setError(null);
+                if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
+                    float actual_area = 0;
+                    if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
+                        float spacingFemaleRow = et_spacingFemaleRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemaleRow.getText().toString());
+                        float spacing_female_plant = et_spacingFemalePlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingFemalePlant.getText().toString());
+                        float plantPopulationFemale = et_plantPopulationFemale.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationFemale.getText().toString());
+                        actual_area = ((spacingFemaleRow * spacing_female_plant) * ((float) plantPopulationFemale / 1000));
+                        et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                    }
+                    if (et_item_crop_type.getText().toString().equalsIgnoreCase("Improved")) {
+                        float spacingVarietyRow = et_spacingVarietyRow.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyRow.getText().toString());
+                        float spacingVarietyPlant = et_spacingVarietyPlant.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_spacingVarietyPlant.getText().toString());
+                        float plantPopulationVariety = et_plantPopulationVariety.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_plantPopulationVariety.getText().toString());
+                        actual_area = ((spacingVarietyRow * spacingVarietyPlant) * ((float) plantPopulationVariety / 1000));
+                        et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                    }
+                    float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
+                    float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                    if (actual_area + rejection_PLDArea > GivenArea) {
+                        et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
+                        Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                        }).show();
+                    }
+                } else {
+                    if (!flag.equalsIgnoreCase("View")) {
+                        et_actualArea.setEnabled(true);
+                    }
+                }
+            }catch (Exception e){}
             if (flag.equalsIgnoreCase("View")) {
                 et_organizer_or_co_ordinator_name.setText(viewModel.organizer_or_co_ordinator_name);
                 et_organizer_or_co_ordinator_name.setEnabled(false);
@@ -439,6 +777,7 @@ public class InspectionQcFragment extends Fragment {
                 et_date_of_inspection.setText(DateUtilsCustome.getCurrentDateBY_());
                 et_fertilizer_date.setText(DateUtilsCustome.getCurrentDateBY_());
                 et_sprying_fungi_or_insecticide_date.setText(DateUtilsCustome.getCurrentDateBY_());
+
                 et_date_of_inspection.setOnTouchListener((view1, motionEvent) -> {
                     if (!CustomeDatePicker.datedialog) {
                         new CustomeDatePicker(getActivity()).displayDate(et_date_of_inspection);
@@ -457,10 +796,41 @@ public class InspectionQcFragment extends Fragment {
                     }
                     return true;
                 });
+                et_crossingStartDate.setOnTouchListener((view1, motionEvent) -> {
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossingStartDate);
+                    }
+                    return true;
+                });
+                et_crossingEndDate.setOnTouchListener((view1, motionEvent) -> {
+                    if (!CustomeDatePicker.datedialog) {
+                        new CustomeDatePicker(getActivity()).displayDate(et_crossingEndDate);
+                    }
+                    return true;
+                });
             }
 
 
             submitPage.setOnClickListener(view -> {
+                if (et_date_of_inspection.getText().toString().equalsIgnoreCase("")) {
+                    et_date_of_inspection.setError("Please Enter Date Of Inspection.");
+                    return;
+                } else if (et_crop_condition.getText().toString().equalsIgnoreCase("")) {
+                    et_crop_condition.setError("Please Enter Crop Condition.");
+                    et_date_of_inspection.setError(null);
+                    et_crop_stage.setError(null);
+                    return;
+                }
+                if (et_crop_stage.getText().toString().equalsIgnoreCase("")) {
+                    et_crop_stage.setError("Please Enter Crop Stage.");
+                    et_date_of_inspection.setError(null);
+                    et_crop_condition.setError(null);
+                    return;
+                } else {
+                    et_date_of_inspection.setError(null);
+                    et_crop_condition.setError(null);
+                    et_crop_stage.setError(null);
+                }
                 InspectionOneModel.InspectionQCLineModel postmodel = new InspectionOneModel().new InspectionQCLineModel();
                 postmodel.arrival_plan_no = inspectionModel.arrival_plan_no;
                 postmodel.production_lot_no = selected_production_lot_no;
