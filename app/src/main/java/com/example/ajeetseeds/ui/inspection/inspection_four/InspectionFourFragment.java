@@ -295,7 +295,7 @@ public class InspectionFourFragment extends Fragment {
                     try {
                         float avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("") ? 0 : (Float.parseFloat(et_avg_cross_boll_per_plant.getText().toString()));
                         float approx_kapas_balance_for_picking = avg_cross_boll_per_plant *
-                                (et_final_plant_population.getText().toString().equalsIgnoreCase("")?0: Float.parseFloat(et_final_plant_population.getText().toString())) *
+                                (et_final_plant_population.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_final_plant_population.getText().toString())) *
                                 ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
                         et_approx_kapas_balance_for_picking.setText(String.valueOf(StaticMethods.removeDecimal(approx_kapas_balance_for_picking)));
                     } catch (Exception e) {
@@ -319,7 +319,7 @@ public class InspectionFourFragment extends Fragment {
                     try {
                         float avg_cross_boll_per_plant = et_avg_cross_boll_per_plant.getText().toString().equalsIgnoreCase("") ? 0 : (Float.parseFloat(et_avg_cross_boll_per_plant.getText().toString()));
                         float approx_kapas_balance_for_picking = avg_cross_boll_per_plant *
-                               (et_final_plant_population.getText().toString().equalsIgnoreCase("")?0: Float.parseFloat(et_final_plant_population.getText().toString())) *
+                                (et_final_plant_population.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_final_plant_population.getText().toString())) *
                                 ((Float) Float.parseFloat(inspectionModel_selected_line.item_weight) / 1000);
                         et_approx_kapas_balance_for_picking.setText(String.valueOf(StaticMethods.removeDecimal(approx_kapas_balance_for_picking)));
                     } catch (Exception e) {
@@ -329,7 +329,7 @@ public class InspectionFourFragment extends Fragment {
             });
             TextInputEditText et_estimated_field_in_kg = PopupView.findViewById(R.id.et_estimated_field_in_kg);
             et_estimated_field_in_kg.setText("0");
-            et_estimated_field_in_kg.setEnabled(false);
+            //et_estimated_field_in_kg.setEnabled(false);
             et_kapas_picking_if_any.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -344,10 +344,12 @@ public class InspectionFourFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     try {
-                        double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
-                        double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
-                        double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
-                        et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                        if ((inspection_header_line.get(0).crop_code.equalsIgnoreCase("CT"))) {
+                            double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
+                            double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
+                            double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
+                            et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                        }
                     } catch (Exception e) {
                         et_estimated_field_in_kg.setText("0");
                     }
@@ -367,10 +369,12 @@ public class InspectionFourFragment extends Fragment {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     try {
-                        double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
-                        double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
-                        double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
-                        et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                        if ((inspection_header_line.get(0).crop_code.equalsIgnoreCase("CT"))) {
+                            double kapas_picking_if_any = !et_kapas_picking_if_any.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_kapas_picking_if_any.getText().toString()) : 0;
+                            double approx_kapas_balance_for_picking = !et_approx_kapas_balance_for_picking.getText().toString().equalsIgnoreCase("") ? Float.parseFloat(et_approx_kapas_balance_for_picking.getText().toString()) : 0;
+                            double estimated_field_in_kg = kapas_picking_if_any + approx_kapas_balance_for_picking;
+                            et_estimated_field_in_kg.setText(String.valueOf(StaticMethods.removeDecimalKG(estimated_field_in_kg)));
+                        }
                     } catch (Exception e) {
                         et_estimated_field_in_kg.setText("0");
                     }
