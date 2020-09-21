@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,15 +33,21 @@ import com.example.ajeetseeds.Http_Hanler.HttpHandlerModel;
 import com.example.ajeetseeds.Model.AsyModel;
 import com.example.ajeetseeds.Model.inspection.InspectionModel;
 import com.example.ajeetseeds.Model.StaticDataForApp;
+import com.example.ajeetseeds.Model.inspection.LocationModel;
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.example.ajeetseeds.ui.eventManagement.createEvent.EventTypeAdapter;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,6 +67,7 @@ public class CreateInspectionFragment extends Fragment {
     TextView tv_Arrival_Plan_No, tv_Organizer_No, tv_Organizer_Name, tv_Organizer_Name_2, tv_Organizer_Address, tv_Organizer_Address_2,
             tv_City, tv_Contact, tv_Season_Code;
     String entered_lot_no = "";
+    AutoCompleteTextView dropdown_location;
 
     public static CreateInspectionFragment newInstance() {
         return new CreateInspectionFragment();
@@ -71,9 +79,12 @@ public class CreateInspectionFragment extends Fragment {
         return inflater.inflate(R.layout.create_inspection_fragment, container, false);
     }
 
+    SessionManagement sessionManagement;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sessionManagement = new SessionManagement(getActivity());
         initView(view);
         chip_production_lot_no_submit.setOnClickListener(view1 -> {
             InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
@@ -82,10 +93,23 @@ public class CreateInspectionFragment extends Fragment {
             if (entered_lot_no.equalsIgnoreCase("")) {
                 edit_production_lot_no.setError("Enter Production Lot no.");
                 return;
+            } else if (selected_Location == null) {
+                dropdown_location.setError("Please Select Location.");
+                return;
+            } else if (!dropdown_location.getText().toString().contains(selected_Location.location_code)) {
+                dropdown_location.setError("Please Select Location Again.");
+                return;
             }
-            if (!loadingDialog.getLoadingState())
-                new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
-                        new AsyModel(StaticDataForApp.scanProductionLotNo + entered_lot_no, null, "ScanProductionLotNo"));
+                try{
+                    if (!loadingDialog.getLoadingState()) {
+                    JSONObject postedJson=new JSONObject();
+                    postedJson.put("production_lot_no",entered_lot_no);
+                    postedJson.put("location_code",selected_Location.location_code);
+                    postedJson.put("location_name",selected_Location.location_name);
+                    new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
+                            new AsyModel(StaticDataForApp.scanProductionLotNo , postedJson, "ScanProductionLotNo"));
+                    }
+                }catch (Exception e){}
         });
         go_back_screen.setOnClickListener(view1 -> {
             header_layout.setVisibility(View.VISIBLE);
@@ -161,9 +185,16 @@ public class CreateInspectionFragment extends Fragment {
                 }
             }
             //todo redirect to another page
-            if (!loadingDialog.getLoadingState())
-                new CommanHitToServer(selected_position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
-                        new AsyModel(StaticDataForApp.scanProductionLotNo + inspection_header_line.get(0).il.get(selected_position).production_lot_no, null, "RedirectIt"));
+           try{
+                if (!loadingDialog.getLoadingState()) {
+                    JSONObject postedJson=new JSONObject();
+                    postedJson.put("production_lot_no",inspection_header_line.get(0).il.get(selected_position).production_lot_no);
+                    postedJson.put("location_code",inspection_header_line.get(0).location_code);
+                    postedJson.put("location_name",inspection_header_line.get(0).location_name);
+                    new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
+                            new AsyModel(StaticDataForApp.scanProductionLotNo , postedJson, "RedirectIt"));
+                }
+            }catch (Exception e){}
             dialogInterface.dismiss();
         });
         builder.setNegativeButton("Cancel", (dialogInterface, i) -> {
@@ -179,14 +210,14 @@ public class CreateInspectionFragment extends Fragment {
             bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
             bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
             bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-            loadFragments(R.id.nav_inspection_one, "Inspection One", bundle);
+            loadFragments(R.id.nav_inspection_one, "Inspection One "+inspection_header_line.get(0).location_name, bundle);
         } else if (selected_inspection_type.equalsIgnoreCase("Inspection Two")) {
             if (inspection_header_line.get(0).il.get(selected_position).inspection_1 > 0) {
                 Bundle bundle = new Bundle();
                 bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
                 bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
                 bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_two, "Inspection Two", bundle);
+                loadFragments(R.id.nav_inspection_two, "Inspection Two "+inspection_header_line.get(0).location_name, bundle);
             } else {
                 Snackbar.make(listview_headers_line, "Please Submit Inspection One.", Snackbar.LENGTH_LONG).show();
             }
@@ -196,7 +227,7 @@ public class CreateInspectionFragment extends Fragment {
                 bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
                 bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
                 bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_three, "Inspection Three", bundle);
+                loadFragments(R.id.nav_inspection_three, "Inspection Three "+inspection_header_line.get(0).location_name, bundle);
             } else {
                 Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
             }
@@ -206,7 +237,7 @@ public class CreateInspectionFragment extends Fragment {
                 bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
                 bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
                 bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_four, "Inspection Four", bundle);
+                loadFragments(R.id.nav_inspection_four, "Inspection Four "+inspection_header_line.get(0).location_name, bundle);
             } else {
                 Snackbar.make(listview_headers_line, "Please Submit Previous Inspection.", Snackbar.LENGTH_LONG).show();
             }
@@ -216,8 +247,8 @@ public class CreateInspectionFragment extends Fragment {
                 bundle.putString("inspection_header", new Gson().toJson(inspection_header_line.get(0)));
                 bundle.putString("inspection_line", new Gson().toJson(inspection_header_line.get(0).il.get(selected_position)));
                 bundle.putString("Selected_production_lot_no", inspection_header_line.get(0).il.get(selected_position).production_lot_no);
-                loadFragments(R.id.nav_inspection_Qc, "Inspection QC", bundle);
-            }else{
+                loadFragments(R.id.nav_inspection_Qc, "Inspection QC "+inspection_header_line.get(0).location_name, bundle);
+            } else {
                 Snackbar.make(listview_headers_line, "Please Submit Inspection One Then Click On QC.", Snackbar.LENGTH_LONG).show();
             }
         }
@@ -324,7 +355,18 @@ public class CreateInspectionFragment extends Fragment {
         tv_City = view.findViewById(R.id.tv_City);
         tv_Contact = view.findViewById(R.id.tv_Contact);
         tv_Season_Code = view.findViewById(R.id.tv_Season_Code);
+        dropdown_location = view.findViewById(R.id.dropdown_location);
+        if (!loadingDialog.getLoadingState()) {
+            new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.GetUserLocationList + sessionManagement.getUserEmail(), null, "GetLocationList"));
+        }
+        dropdown_location.setOnItemClickListener((adapterView, view1, i, l) -> {
+            selected_Location = location_list.get(i);
+            dropdown_location.setError(null);
+        });
     }
+
+    LocationModel selected_Location = null;
+    List<LocationModel> location_list = new ArrayList<>();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -394,6 +436,18 @@ public class CreateInspectionFragment extends Fragment {
                     if (responseslist.size() > 0 && responseslist.get(0).condition) {
                         inspection_header_line = responseslist;
                         redirect_ToAnother_Page(selected_position);
+                    } else {
+                        Snackbar.make(chip_production_lot_no_submit, responseslist.get(0).message, Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
+                        }).show();
+                    }
+                }
+                if (flagOfAction.equalsIgnoreCase("GetLocationList")) {
+                    List<LocationModel> responseslist = new Gson().fromJson(result.getJsonResponse(), new TypeToken<List<LocationModel>>() {
+                    }.getType());
+                    if (responseslist.size() > 0 && responseslist.get(0).condition) {
+                        location_list = responseslist;
+                        LocationAdapter fruitAdapter = new LocationAdapter(getActivity(), R.layout.drop_down_textview, location_list);
+                        dropdown_location.setAdapter(fruitAdapter);
                     } else {
                         Snackbar.make(chip_production_lot_no_submit, responseslist.get(0).message, Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
                         }).show();

@@ -39,7 +39,8 @@ public class StaticDataForApp {
     public static String insertTravelExpense = globalurl + "/api/Travel/insertTravelExpense";
 
     //todo Inspection Urls
-    public static String scanProductionLotNo = globalurl + "/api/Inspection/scanProductionLotNo?production_lot_no=";
+    public static String GetUserLocationList = globalurl + "/api/User/GetUserLocationList?email_id=";
+    public static String scanProductionLotNo = globalurl + "/api/Inspection/scanProductionLotNo";
     public static String get_inspection_by_lot_arrival_plan_no = globalurl + "/api/Inspection/get_inspection_by_lot_arrival_plan_no?arrival_plan_no=";
     public static String insert_inspection_one_line = globalurl + "/api/Inspection/insert_inspection_one_line";
     public static String Complete_inspection_one = globalurl + "/api/Inspection/Complete_inspection_one?arrival_plan_no=";

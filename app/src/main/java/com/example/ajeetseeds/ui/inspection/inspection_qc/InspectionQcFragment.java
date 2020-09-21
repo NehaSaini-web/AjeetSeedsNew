@@ -313,7 +313,7 @@ public class InspectionQcFragment extends Fragment {
             //  et_crossingEndDate.setEnabled(false);
             if (et_item_crop_type.getText().toString().equalsIgnoreCase("Hybrid")) {
                 et_plants_rouged_male.setEnabled(true);
-                et_plants_rouged_female.setEnabled(true);
+                //et_plants_rouged_female.setEnabled(true);
 
                 et_plantPopulationFemale.setEnabled(true);
                 et_plantPopulationVariety.setEnabled(false);
@@ -325,7 +325,7 @@ public class InspectionQcFragment extends Fragment {
                 et_spacingVarietyPlant.setEnabled(false);
             } else {
                 et_plants_rouged_male.setEnabled(false);
-                et_plants_rouged_female.setEnabled(false);
+                //et_plants_rouged_female.setEnabled(false);
 
                 et_plantPopulationFemale.setEnabled(false);
                 et_plantPopulationVariety.setEnabled(true);
@@ -349,7 +349,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -369,6 +369,10 @@ public class InspectionQcFragment extends Fragment {
                             }
                             float rejection_PLDArea = et_rejection_PLDArea.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_rejection_PLDArea.getText().toString());
                             float GivenArea = inspection_line.GivenArea.equalsIgnoreCase("") ? 0 : Float.parseFloat(inspection_line.GivenArea);
+                            if (rejection_PLDArea != 0) {
+                                actual_area = actual_area - rejection_PLDArea;
+                                et_actualArea.setText(StaticMethods.removeDecimal(actual_area));
+                            }
                             if (actual_area + rejection_PLDArea > GivenArea) {
                                 et_actualArea.setError("Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.");
                                 Snackbar.make(et_rejection_PLDArea, "Sum of Actual & Rejection/Pld area should be less than or equal to Given Area.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
@@ -379,7 +383,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_spacingFemaleRow.addTextChangedListener(new TextWatcher() {
@@ -395,7 +400,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -425,7 +430,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_spacingFemalePlant.addTextChangedListener(new TextWatcher() {
@@ -441,7 +447,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -471,7 +477,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_plantPopulationFemale.addTextChangedListener(new TextWatcher() {
@@ -487,7 +494,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -517,7 +524,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_spacingVarietyRow.addTextChangedListener(new TextWatcher() {
@@ -533,7 +541,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -563,7 +571,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_spacingVarietyPlant.addTextChangedListener(new TextWatcher() {
@@ -579,7 +588,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -609,7 +618,8 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
             et_plantPopulationVariety.addTextChangedListener(new TextWatcher() {
@@ -625,7 +635,7 @@ public class InspectionQcFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    try{
+                    try {
                         et_actualArea.setError(null);
                         if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                             float actual_area = 0;
@@ -655,10 +665,11 @@ public class InspectionQcFragment extends Fragment {
                                 et_actualArea.setEnabled(true);
                             }
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
-            try{
+            try {
                 et_actualArea.setError(null);
                 if (et_crop_code.getText().toString().equalsIgnoreCase("CT") || et_crop_code.getText().toString().equalsIgnoreCase("VEG")) {
                     float actual_area = 0;
@@ -688,7 +699,8 @@ public class InspectionQcFragment extends Fragment {
                         et_actualArea.setEnabled(true);
                     }
                 }
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
             if (flag.equalsIgnoreCase("View")) {
                 et_organizer_or_co_ordinator_name.setText(viewModel.organizer_or_co_ordinator_name);
                 et_organizer_or_co_ordinator_name.setEnabled(false);
