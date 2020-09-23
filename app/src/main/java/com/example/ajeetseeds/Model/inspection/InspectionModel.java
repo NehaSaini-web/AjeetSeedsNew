@@ -20,8 +20,6 @@ public class InspectionModel {
     public String District_Code;
     public String Region_Code;
     public String Taluka_Code;
-    public String location_code;
-    public String location_name;
     public List<Inspection_Line> il;
 
     public class Inspection_Line {
@@ -56,5 +54,8 @@ public class InspectionModel {
         public int inspection_3;
         public int inspection_4;
         public int inspection_qc;
+
+        public String location_code;
+        public String location_name;
     }
 }
