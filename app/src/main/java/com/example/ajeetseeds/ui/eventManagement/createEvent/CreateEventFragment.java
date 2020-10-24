@@ -423,7 +423,6 @@ public class CreateEventFragment extends Fragment {
         } catch (Exception e) {
         }
     }
-
     public void SuccessMessage(String event_code) {
 
         try {
@@ -462,6 +461,7 @@ public class CreateEventFragment extends Fragment {
         } catch (Exception e) {
         }
     }
+
 
     private void loadFragments(int id, String fragmentName) {
         NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);

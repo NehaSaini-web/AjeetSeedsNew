@@ -3,6 +3,7 @@ package com.example.ajeetseeds.Model;
 public class StaticDataForApp {
     // TODO: 11-Sep-19 global Domain name where all hit goes to that domain....
     public static String globalurl = "https://ziv-android.pristinefulfil.com";
+//    public static String globalurl = "https://techteam2.pristinefulfil.com";
 
     public static String androidExceptionLog_UIException = globalurl + "/api/BaseException/UIException";
     public static String notificationSignalR = "/Notification";

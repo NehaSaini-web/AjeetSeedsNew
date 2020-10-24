@@ -205,7 +205,7 @@ public class AddTravelExpanseFragment extends Fragment {
             TextInputEditText et_local_convance = PopupView.findViewById(R.id.et_local_convance);
             TextInputEditText et_other_expenses = PopupView.findViewById(R.id.et_other_expenses);
             TextView tv_totalApplyExpenceAmmount = PopupView.findViewById(R.id.tv_totalApplyExpenceAmmount);
-            TextView tv_travel_modelrate=PopupView.findViewById(R.id.tv_travel_modelrate);
+            TextView tv_travel_modelrate = PopupView.findViewById(R.id.tv_travel_modelrate);
             Button submitPage = PopupView.findViewById(R.id.submitPage);
             et_date.setOnTouchListener((view1, motionEvent) -> {
                 if (!datedialog) {
@@ -249,7 +249,7 @@ public class AddTravelExpanseFragment extends Fragment {
                 modeOfTravelMasterTable.open();
                 selectedModeOfTravelCost = modeOfTravelMasterTable.fetchModeOfTravel(selectedToCity.code, sessionManagement.getModelOfTravel());
                 modeOfTravelMasterTable.close();
-                tv_travel_modelrate.setText("Lodging "+selectedModeOfTravelCost.lodging+"And Half DA "+ selectedModeOfTravelCost.da_half+" AND FULL DA "+selectedModeOfTravelCost.da_full);
+                tv_travel_modelrate.setText("Lodging " + selectedModeOfTravelCost.lodging + "And Half DA " + selectedModeOfTravelCost.da_half + " AND FULL DA " + selectedModeOfTravelCost.da_full);
                 to_city.setError(null);
             });
             et_departure.setOnClickListener(view -> {
@@ -315,7 +315,7 @@ public class AddTravelExpanseFragment extends Fragment {
                         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
-                        float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60*60));
+                        float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
                         if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
                         } else if (difference >= 8) {
@@ -570,26 +570,25 @@ public class AddTravelExpanseFragment extends Fragment {
                 }
             });
             submitPage.setOnClickListener(view -> {
-                if(et_date.getText().toString().equalsIgnoreCase("")){
+                if (et_date.getText().toString().equalsIgnoreCase("")) {
                     et_date.setError("Please Enter Date");
                     return;
-                }else  if(from_city.getText().toString().equalsIgnoreCase("")){
+                } else if (from_city.getText().toString().equalsIgnoreCase("")) {
                     from_city.setError("Please Select From City");
                     return;
-                }else  if(to_city.getText().toString().equalsIgnoreCase("")){
+                } else if (to_city.getText().toString().equalsIgnoreCase("")) {
                     to_city.setError("Please Select To City");
                     return;
-                }
-                else  if(et_departure.getText().toString().equalsIgnoreCase("")){
+                } else if (et_departure.getText().toString().equalsIgnoreCase("")) {
                     et_departure.setError("Please Enter Departure Time");
                     return;
-                }  else  if(et_arrival.getText().toString().equalsIgnoreCase("")){
+                } else if (et_arrival.getText().toString().equalsIgnoreCase("")) {
                     et_arrival.setError("Please Enter Arrival Time");
                     return;
-                } else  if(et_fare.getText().toString().equalsIgnoreCase("")){
+                } else if (et_fare.getText().toString().equalsIgnoreCase("")) {
                     et_fare.setError("Please Enter Fare");
                     return;
-                }else  if(mode_of_travel_drop.getText().toString().equalsIgnoreCase("")){
+                } else if (mode_of_travel_drop.getText().toString().equalsIgnoreCase("")) {
                     mode_of_travel_drop.setError("Please Select Mode Of Travel");
                     return;
                 }

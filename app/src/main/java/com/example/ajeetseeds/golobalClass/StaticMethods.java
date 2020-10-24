@@ -7,10 +7,12 @@ public class StaticMethods {
         DecimalFormat df = new DecimalFormat("###.##");
         return df.format(number);
     }
+
     public static String removeDecimalKG(double number) {
         DecimalFormat df = new DecimalFormat("###.###");
         return df.format(number);
     }
+
     public static String removeDecimal(String number) {
         float decimalvalue = Float.parseFloat(number);
         DecimalFormat df = new DecimalFormat("###.##");
@@ -25,11 +27,12 @@ public class StaticMethods {
             return false;
         }
     }
+
     public static int Int_size(String size) {
         try {
             return Integer.parseInt(size);
         } catch (Exception e) {
-           return  0;
+            return 0;
         }
     }
 }
