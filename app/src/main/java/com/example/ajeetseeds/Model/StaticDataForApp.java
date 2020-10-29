@@ -11,7 +11,7 @@ public class StaticDataForApp {
     public static String syncAllTableData = globalurl + "/api/Version/syncAllTableData";
 
     //todo login urls
-    public static String login = globalurl + "/api/User/lo2566gin";
+    public static String login = globalurl + "/api/User/login";
     public static String Logout = globalurl + "/api/User/Logout";
 
     //todo sync master api
