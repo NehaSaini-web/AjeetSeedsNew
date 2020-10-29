@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +38,8 @@ import com.example.ajeetseeds.sqlLite.masters.crop.CropItemMasterTable;
 import com.example.ajeetseeds.sqlLite.masters.crop.CropMasterTable;
 import com.example.ajeetseeds.sqlLite.masters.crop.CustomerMasterTable;
 import com.example.ajeetseeds.ui.order_creation.orderBook.model.OrderBookModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -47,6 +52,49 @@ public class CropItemFragment extends Fragment {
     ImageView search_button_crop;
     ListView cropItem_List;
     CropItemListViewAdapter cropItemListViewAdapter;
+    public static String globale_crop_item_category = "";
+    ChipGroup selected_category_data;
+
+    int getDpValue(int dpValue){
+        int paddingDp = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, dpValue,
+                getResources().getDisplayMetrics()
+        );
+        return paddingDp;
+    }
+    private void bindCategoryFilterList() {
+        selected_category_data.removeAllViews();
+        for(String categoriName:categories_list){
+            final String chip_name=categoriName;
+            final Chip chip = new Chip(getActivity());
+          //  chip.setPadding(getDpValue(10), getDpValue(10), getDpValue(10), getDpValue(10));
+            chip.setText(chip_name);
+            chip.setElevation(getDpValue(2));
+            chip.setChipStrokeWidth(getDpValue(1));
+            if(globale_crop_item_category.equalsIgnoreCase(chip_name)){
+                chip.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+                chip.setChipBackgroundColorResource(R.color.colorPrimary);
+                chip.setChipStrokeColorResource(R.color.colorPrimary);
+            }else{
+                chip.setTextColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
+                chip.setChipBackgroundColorResource(R.color.white);
+                chip.setChipStrokeColorResource(R.color.chipripple);
+                chip.setRippleColorResource(R.color.chipripple);
+            }
+            chip.setCloseIconEnabled(false);
+            chip.setOnClickListener(v -> {
+                if(globale_crop_item_category.equalsIgnoreCase(chip_name)){
+                    globale_crop_item_category="";
+                }else{
+                    globale_crop_item_category=chip_name;
+                }
+                bindCategoryFilterList();
+                cropItemListViewAdapter.getFilter().filter(search_crop_item.getText().toString());
+            });
+            chip.setChipIconTintResource(R.color.colorPrimary);
+            selected_category_data.addView(chip);
+        }
+    }
 
     public static CropItemFragment newInstance() {
         return new CropItemFragment();
@@ -66,10 +114,36 @@ public class CropItemFragment extends Fragment {
     }
 
     CropMasterTable.CropMasterModel select_crop = null;
+    List<String> categories_list = new ArrayList<>();
 
-    void bindData() {
+    void bindData(View view) {
         try {
-            select_crop = new Gson().fromJson(getArguments().getString("dataPass", ""), CropMasterTable.CropMasterModel.class);
+            if (getArguments() != null) {
+                select_crop = new Gson().fromJson(getArguments().getString("dataPass", ""), CropMasterTable.CropMasterModel.class);
+                if (crop_list == null || crop_list.size() == 0) {
+                    CropItemMasterTable cropItemMasterTable = new CropItemMasterTable(getActivity());
+                    cropItemMasterTable.open();
+                    crop_list = cropItemMasterTable.fetch(select_crop.code);
+                    cropItemMasterTable.close();
+                }
+                //todo get Category
+                selected_category_data = view.findViewById(R.id.selected_category_data);
+                if (categories_list != null && !categories_list.isEmpty())
+                    categories_list.clear();
+                for (int i = 0; i < crop_list.size(); i++) {
+                    boolean verify = false;
+                    for (String categori : categories_list) {
+                        if (categori.equalsIgnoreCase(crop_list.get(i).crop)) {
+                            verify = true;
+                            break;
+                        }
+                    }
+                    if (!verify) {
+                        categories_list.add(crop_list.get(i).crop);
+                    }
+                }
+                bindCategoryFilterList();
+            }
         } catch (Exception e) {
         }
     }
@@ -79,14 +153,8 @@ public class CropItemFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        bindData();
+        bindData(view);
         try {
-            if (crop_list == null || crop_list.size() == 0) {
-                CropItemMasterTable cropItemMasterTable = new CropItemMasterTable(getActivity());
-                cropItemMasterTable.open();
-                crop_list = cropItemMasterTable.fetch(select_crop.code);
-                cropItemMasterTable.close();
-            }
             //todo update cart qty from list
             for (int i = 0; i < MainActivity.orderBookGlobalModel.selectedCropItem.size(); i++) {
                 for (int j = 0; j < this.crop_list.size(); j++) {
@@ -181,7 +249,7 @@ public class CropItemFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        bindData();
+        bindData(getView());
         getActivity().setTitle("Crop Item");
     }
 

@@ -31,6 +31,8 @@ public class CropItemMasterTable {
     public static final String class_of_variety = "class_of_variety";
     public static final String image_url = "image_url";
     public static final String active = "active";
+    public static final String crop_category ="crop_category";
+    public static final String  crop="crop";
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             item_no + " TEXT PRIMARY KEY," +
@@ -48,7 +50,9 @@ public class CropItemMasterTable {
             crop_type + " TEXT," +
             class_of_variety + " TEXT," +
             image_url + " TEXT," +
-            active + " INTEGER" +
+            active + " INTEGER," +
+            crop_category + " TEXT," +
+            crop + " TEXT" +
             ");";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -98,6 +102,8 @@ public class CropItemMasterTable {
                 contentValue.put(this.class_of_variety, data.class_of_variety);
                 contentValue.put(this.image_url, data.image_url);
                 contentValue.put(this.active, data.active);
+                contentValue.put(this.crop_category, data.crop_category);
+                contentValue.put(this.crop, data.crop);
                 database.replace(TABLE_NAME, null, contentValue);
             }
             database.setTransactionSuccessful();
@@ -109,7 +115,7 @@ public class CropItemMasterTable {
     public List<CropItemMasterModel> fetch(String cropcode) {
         List<CropItemMasterModel> returnData = new ArrayList<>();
         String[] columns = new String[]{item_no, name, item_desc, base_unit_of_measure, inventory_posting_group, crop_code, class_of_seeds, item_type,
-                fg_pack_size, production_code, marketing_code, item_group, crop_type, class_of_variety, image_url, active};
+                fg_pack_size, production_code, marketing_code, item_group, crop_type, class_of_variety, image_url, active,crop_category,crop};
         Cursor cursor = database.query(TABLE_NAME, columns, crop_code + "='" + cropcode + "'", null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -130,7 +136,9 @@ public class CropItemMasterTable {
                         cursor.getString(cursor.getColumnIndex(this.crop_type)),
                         cursor.getString(cursor.getColumnIndex(this.class_of_variety)),
                         cursor.getString(cursor.getColumnIndex(this.image_url)),
-                        cursor.getInt(cursor.getColumnIndex(this.active))
+                        cursor.getInt(cursor.getColumnIndex(this.active)),
+                        cursor.getString(cursor.getColumnIndex(this.crop_category)),
+                        cursor.getString(cursor.getColumnIndex(this.crop))
                 ));
             } while (cursor.moveToNext());
         }
@@ -169,6 +177,8 @@ public class CropItemMasterTable {
         public String crop_type;
         public String class_of_variety;
         public String image_url;
+        public String crop_category;
+        public String crop;
         public int active;
         //todo use in add tocart
         public int total_buy_qty = 0;
@@ -176,7 +186,7 @@ public class CropItemMasterTable {
         public CropItemMasterModel(String item_no, String name, String item_desc, String base_unit_of_measure, String inventory_posting_group, String crop_code,
                                    String class_of_seeds, String item_type, String fg_pack_size,
                                    String production_code, String marketing_code, String item_group,
-                                   String crop_type, String class_of_variety, String image_url, int active) {
+                                   String crop_type, String class_of_variety, String image_url, int active,String crop_category,String crop) {
             this.item_no = item_no;
             this.name = name;
             this.item_desc = item_desc;
@@ -194,6 +204,8 @@ public class CropItemMasterTable {
             this.class_of_variety = class_of_variety;
             this.image_url = image_url;
             this.active = active;
+            this.crop_category=crop_category;
+            this.crop=crop;
         }
     }
 }

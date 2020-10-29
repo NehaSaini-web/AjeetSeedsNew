@@ -34,22 +34,32 @@ public class CropItemListViewAdapter extends BaseAdapter implements Filterable {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-
-            if (constraint != null && constraint.length() > 0) {
+            if (constraint == null || constraint.length() <= 0) {
+                constraint="";
+            }
+           // if (constraint != null && constraint.length() > 0) {
                 List<CropItemMasterTable.CropItemMasterModel> filterList = new ArrayList<>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
-                    if ((mStringFilterList.get(i).item_no.toUpperCase())
-                            .contains(constraint.toString().toUpperCase()) || (mStringFilterList.get(i).item_desc.toUpperCase())
-                            .contains(constraint.toString().toUpperCase())) {
-                        filterList.add(mStringFilterList.get(i));
+                    if(CropItemFragment.globale_crop_item_category==null ||CropItemFragment.globale_crop_item_category.equalsIgnoreCase("")){
+                        if ((mStringFilterList.get(i).item_no.toUpperCase())
+                                .contains(constraint.toString().toUpperCase()) || (mStringFilterList.get(i).item_desc.toUpperCase())
+                                .contains(constraint.toString().toUpperCase())) {
+                            filterList.add(mStringFilterList.get(i));
+                        }
+                    }else{
+                        if (((mStringFilterList.get(i).item_no.toUpperCase())
+                                .contains(constraint.toString().toUpperCase()) || (mStringFilterList.get(i).item_desc.toUpperCase())
+                                .contains(constraint.toString().toUpperCase()))&&mStringFilterList.get(i).crop.equalsIgnoreCase(CropItemFragment.globale_crop_item_category)) {
+                            filterList.add(mStringFilterList.get(i));
+                        }
                     }
                 }
                 results.count = filterList.size();
                 results.values = filterList;
-            } else {
-                results.count = mStringFilterList.size();
-                results.values = mStringFilterList;
-            }
+//            } else {
+//                results.count = mStringFilterList.size();
+//                results.values = mStringFilterList;
+//            }
             return results;
 
         }
@@ -126,7 +136,7 @@ public class CropItemListViewAdapter extends BaseAdapter implements Filterable {
                 .placeholder(R.color.gray3)
                 .into(cardImageView);
         titleTextView.setText(dataModel.item_desc);
-        subTitleTextView.setText(dataModel.item_no);
+        subTitleTextView.setText(dataModel.item_no+" ( "+dataModel.crop+" )");
         add_qty_button.setOnClickListener(view -> {
             listener.onItemClick(dataModel.item_no, "Add");
         });

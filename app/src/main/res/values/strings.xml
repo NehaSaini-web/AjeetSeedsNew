@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pristine WMS</string>
+    <string name="app_name">Pristine Seed Test</string>
 
     <!--string for modern ui-->
     <string name="login_email_hint">Enter Email</string>

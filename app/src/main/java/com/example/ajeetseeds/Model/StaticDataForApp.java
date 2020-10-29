@@ -2,8 +2,8 @@ package com.example.ajeetseeds.Model;
 
 public class StaticDataForApp {
     // TODO: 11-Sep-19 global Domain name where all hit goes to that domain....
-    public static String globalurl = "https://ziv-android.pristinefulfil.com";
-//    public static String globalurl = "https://techteam2.pristinefulfil.com";
+//    public static String globalurl = "https://ziv-android.pristinefulfil.com";
+    public static String globalurl = "https://techteam2.pristinefulfil.com";
 
     public static String androidExceptionLog_UIException = globalurl + "/api/BaseException/UIException";
     public static String notificationSignalR = "/Notification";
@@ -11,7 +11,7 @@ public class StaticDataForApp {
     public static String syncAllTableData = globalurl + "/api/Version/syncAllTableData";
 
     //todo login urls
-    public static String login = globalurl + "/api/User/login";
+    public static String login = globalurl + "/api/User/lo2566gin";
     public static String Logout = globalurl + "/api/User/Logout";
 
     //todo sync master api
