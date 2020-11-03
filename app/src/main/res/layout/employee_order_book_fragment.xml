@@ -34,8 +34,7 @@
                         <AutoCompleteTextView
                             android:id="@+id/selected_distributer_dropdown"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:editable="false" />
+                            android:layout_height="wrap_content"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>

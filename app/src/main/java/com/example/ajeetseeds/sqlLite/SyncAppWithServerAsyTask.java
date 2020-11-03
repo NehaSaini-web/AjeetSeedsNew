@@ -1,6 +1,7 @@
 package com.example.ajeetseeds.sqlLite;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -628,8 +629,7 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                     }
                     travelHeaderTable.close();
                 }
-            }
-            else if (flag.equalsIgnoreCase("OutDataFromServer")) {
+            } else if (flag.equalsIgnoreCase("OutDataFromServer")) {
                 TravelHeaderTable travelHeaderTable = new TravelHeaderTable(activity);
                 travelHeaderTable.open();
                 List<TravelHeaderTable.TravelHeaderModel> tempTravelList = travelHeaderTable.fetchUnsendData();
@@ -723,29 +723,62 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
     int PROGRESS_MAX = 100;
     int PROGRESS_CURRENT = 0;
     int notificationId = 1;
-    static NotificationCompat.Builder builder;
+    static NotificationCompat.Builder mBuilder;
     static NotificationManager manager;
 
     void NotificationSyncDataStart() {
-        builder = new NotificationCompat.Builder(activity, "Offline Data Sync")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setLargeIcon(BitmapFactory.decodeResource(activity.getResources(),
-                        R.mipmap.ic_launcher))
-                .setContentTitle("Offline Data Sync")
-                .setContentText("Sync Action")
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("Sync Action"))
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+//        builder = new NotificationCompat.Builder(activity, "Offline Data Sync")
+//                .setSmallIcon(R.mipmap.ic_launcher)
+//                .setLargeIcon(BitmapFactory.decodeResource(activity.getResources(),
+//                        R.mipmap.ic_launcher))
+//                .setContentTitle("Offline Data Sync")
+//                .setContentText("Sync Action")
+//                .setStyle(new NotificationCompat.BigTextStyle()
+//                        .bigText("Sync Action"))
+//                .setPriority(NotificationCompat.PRIORITY_HIGH);
+//        manager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+//        builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, true);
+//        manager.notify(notificationId, builder.build());
+
+        //todo fix notification show
+       mBuilder =
+                new NotificationCompat.Builder(activity.getApplicationContext(), "Offline Data Sync");
+        NotificationCompat.BigTextStyle bigText = new NotificationCompat.BigTextStyle();
+
+        bigText.bigText("Sync Action");
+        bigText.setBigContentTitle("Offline Data Sync");
+        bigText.setSummaryText("Background Sync");
+
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(activity.getResources(),
+                R.mipmap.ic_launcher));
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        mBuilder.setContentTitle("Offline Data Sync");
+        mBuilder.setContentText("Sync Action");
+        mBuilder.setPriority(Notification.PRIORITY_MAX);
+        mBuilder.setStyle(bigText);
+
         manager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-        builder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, true);
-        manager.notify(notificationId, builder.build());
+
+// === Removed some obsoletes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "Offline Data Sync";
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Offline Data Sync",
+                    NotificationManager.IMPORTANCE_LOW);
+            manager.createNotificationChannel(channel);
+            mBuilder.setChannelId(channelId);
+        }
+        mBuilder.setProgress(PROGRESS_MAX, PROGRESS_CURRENT, true);
+        manager.notify(notificationId, mBuilder.build());
     }
 
     void NotificationSyncDataStop() {
         try {
-            builder.setContentText("Sync complete")
+            mBuilder.setContentText("Sync complete")
                     .setProgress(0, 0, false);
-            manager.notify(notificationId, builder.build());
+            manager.notify(notificationId, mBuilder.build());
+            Thread.sleep(1000);
             manager.cancel(notificationId);
         } catch (Exception e) {
         }

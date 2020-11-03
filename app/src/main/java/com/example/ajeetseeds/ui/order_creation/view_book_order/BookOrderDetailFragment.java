@@ -116,7 +116,7 @@ public class BookOrderDetailFragment extends Fragment {
                         .into(imageView);
 
                 TextView orderItemDetail = new TextView(getActivity());
-                orderItemDetail.setText(selectedOrderLine.get(i).item_name + " Qty : " + selectedOrderLine.get(i).qty);
+                orderItemDetail.setText(selectedOrderLine.get(i).item_name + " , Pack Size : " + selectedOrderLine.get(i).qty);
                 orderItemDetail.setTextSize(16);
                 orderItemDetail.setTextColor(Color.BLACK);
                 orderItemDetail.setPadding(20, 60, 10, 10);
