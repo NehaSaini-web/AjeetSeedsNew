@@ -38,15 +38,21 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.backup.AndroidExceptionHandel;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.example.ajeetseeds.golobalClass.CustomDatePicker;
+import com.example.ajeetseeds.golobalClass.CustomTimePicker;
 import com.example.ajeetseeds.sqlLite.AllTablesName;
 import com.example.ajeetseeds.sqlLite.Database.SyncDataTable;
+import com.example.ajeetseeds.sqlLite.masters.Geographical_Setup.TalukaMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.CityMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.ModeOfTravelMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.TravelHeaderTable;
 import com.example.ajeetseeds.sqlLite.travel.TravelLineExpenseModel;
 import com.example.ajeetseeds.sqlLite.travel.TravelLineExpenseTable;
+import com.example.ajeetseeds.ui.eventManagement.createEvent.TalukaAdapter;
+import com.example.ajeetseeds.ui.inspection.inspectiontwo.InspectionTwoFragment;
 import com.example.ajeetseeds.ui.travel.createTravel.CityAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -111,13 +117,34 @@ public class AddTravelExpanseFragment extends Fragment {
             try {
                 TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(getActivity());
                 travelLineExpenseTable.open();
-                travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode);
+                travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode, submitTravelData.android_travelcode);
                 travelLineExpenseTable.close();
             } catch (Exception e) {
-                e.printStackTrace();
             }
             travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
             expense_List.setAdapter(travelExpenseListAdapter);
+            expense_List.setOnItemClickListener((adapterView, view1, position, l) -> {
+                new MaterialAlertDialogBuilder(getActivity())
+                        .setTitle("Confirm...")
+                        .setMessage("Do you really want to delete this line?")
+                        .setIcon(R.drawable.approve_order_icon)
+                        .setPositiveButton("Confirm", (dialogInterface, i1) -> {
+                            try {
+                                TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(getActivity());
+                                travelLineExpenseTable.open();
+                                travelLineExpenseTable.delete(travelLineExpenseList.get(position).travelcode, travelLineExpenseList.get(position).android_travelcode, travelLineExpenseList.get(position).line_no);
+                                travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode, submitTravelData.android_travelcode);
+                                travelLineExpenseTable.close();
+                                travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
+                                expense_List.setAdapter(travelExpenseListAdapter);
+                            }catch (Exception e){}
+                        })
+                        .setNegativeButton("Cancel", (dialogInterface, i1) -> {
+
+                        })
+                        .show();
+            });
+
             submitPage.setOnClickListener(view1 -> {
                 try {
                     if (!loadingDialog.getLoadingState()) {
@@ -144,6 +171,13 @@ public class AddTravelExpanseFragment extends Fragment {
                                 temp_json.put("local_convance", data.local_convance);
                                 temp_json.put("other_expenses", data.other_expenses);
                                 temp_json.put("total_amount_calulated", data.total_amount_calulated);
+
+                                temp_json.put("mod_city", data.mod_city);
+                                temp_json.put("mod_lodging", data.mod_lodging);
+                                temp_json.put("mod_da_half", data.mod_da_half);
+                                temp_json.put("mode_da_full", data.mode_da_full);
+                                temp_json.put("mod_ope_max", data.mod_ope_max);
+                                temp_json.put("user_grade", data.user_grade);
                                 postedJason.put(temp_json);
                             }
                             new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
@@ -176,9 +210,9 @@ public class AddTravelExpanseFragment extends Fragment {
 
     LoadingDialog loadingDialog = new LoadingDialog();
     boolean datedialog = false;
-    List<CityMasterTable.CityMasterModel> cityList = new ArrayList<>();
-    CityMasterTable.CityMasterModel selectedFromCity = null;
-    CityMasterTable.CityMasterModel selectedToCity = null;
+    List<TalukaMasterTable.TalukaMaster> cityList = new ArrayList<>();
+    TalukaMasterTable.TalukaMaster selectedFromCity = null;
+    TalukaMasterTable.TalukaMaster selectedToCity = null;
     ModeOfTravelMasterTable.ModeOfTravelModel selectedModeOfTravelCost = null;
 
     public void AddExpense() {
@@ -205,38 +239,37 @@ public class AddTravelExpanseFragment extends Fragment {
             TextInputEditText et_local_convance = PopupView.findViewById(R.id.et_local_convance);
             TextInputEditText et_other_expenses = PopupView.findViewById(R.id.et_other_expenses);
             TextView tv_totalApplyExpenceAmmount = PopupView.findViewById(R.id.tv_totalApplyExpenceAmmount);
-            TextView tv_travel_modelrate = PopupView.findViewById(R.id.tv_travel_modelrate);
+
+            TextView tv_maximum_Lodging = PopupView.findViewById(R.id.tv_maximum_Lodging);
+            TextView tv_full_da_amount = PopupView.findViewById(R.id.tv_full_da_amount);
+            TextView tv_half_da_amount = PopupView.findViewById(R.id.tv_half_da_amount);
+            TextView tv_time_diffrence = PopupView.findViewById(R.id.tv_time_diffrence);
+            TextInputEditText et_lodging_cost = PopupView.findViewById(R.id.et_lodging_cost);
             Button submitPage = PopupView.findViewById(R.id.submitPage);
+            Button clear_data = PopupView.findViewById(R.id.clear_data);
+            ImageView close_dilog_bt = PopupView.findViewById(R.id.close_dilog_bt);
+            close_dilog_bt.setOnClickListener(view -> {
+                dialog.dismiss();
+            });
+            clear_data.setOnClickListener(view -> {
+                dialog.dismiss();
+            });
             et_date.setOnTouchListener((view1, motionEvent) -> {
-                if (!datedialog) {
-                    datedialog = true;
-                    MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                    MaterialDatePicker picker = builder.build();
-                    if (!picker.isVisible()) {
-                        picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                        picker.addOnPositiveButtonClickListener(selection -> {
-                            et_date.setText(picker.getHeaderText());
-                            et_date.setError(null);
-                        });
-                        picker.addOnDismissListener(dialogInterface -> {
-                            datedialog = false;
-                        });
-                    }
-                }
+                new CustomDatePicker(getActivity()).showDatePickerDialog(et_date);
                 return true;
             });
             if (cityList.size() <= 0) {
                 try {
-                    CityMasterTable cityMasterTable = new CityMasterTable(getActivity());
-                    cityMasterTable.open();
-                    cityList = cityMasterTable.fetch();
-                    cityMasterTable.close();
+                    TalukaMasterTable talukaMasterTable = new TalukaMasterTable(getActivity());
+                    talukaMasterTable.open();
+                    cityList = talukaMasterTable.fetchBydistrictNo(submitTravelData.to_loc);
+                    talukaMasterTable.close();
                 } catch (Exception e) {
                 }
             }
-            CityAdapter from_cityAdapter = new CityAdapter(getActivity(), R.layout.drop_down_textview, cityList);
+            TalukaAdapter from_cityAdapter = new TalukaAdapter(getActivity(), R.layout.drop_down_textview, cityList);
             from_city.setAdapter(from_cityAdapter);
-            CityAdapter to_cityAdapter = new CityAdapter(getActivity(), R.layout.drop_down_textview, cityList);
+            TalukaAdapter to_cityAdapter = new TalukaAdapter(getActivity(), R.layout.drop_down_textview, cityList);
             to_city.setAdapter(to_cityAdapter);
 
             from_city.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -247,34 +280,172 @@ public class AddTravelExpanseFragment extends Fragment {
                 selectedToCity = cityList.get(i);
                 ModeOfTravelMasterTable modeOfTravelMasterTable = new ModeOfTravelMasterTable(getActivity());
                 modeOfTravelMasterTable.open();
-                selectedModeOfTravelCost = modeOfTravelMasterTable.fetchModeOfTravel(selectedToCity.code, sessionManagement.getModelOfTravel());
+                selectedModeOfTravelCost = modeOfTravelMasterTable.fetchModeOfTravel(submitTravelData.to_loc, sessionManagement.getModelOfTravel());
                 modeOfTravelMasterTable.close();
-                tv_travel_modelrate.setText("Lodging " + selectedModeOfTravelCost.lodging + "And Half DA " + selectedModeOfTravelCost.da_half + " AND FULL DA " + selectedModeOfTravelCost.da_full);
+                tv_maximum_Lodging.setText(String.valueOf(selectedModeOfTravelCost.lodging));
+                tv_full_da_amount.setText(String.valueOf(selectedModeOfTravelCost.da_full));
+                tv_half_da_amount.setText(String.valueOf(selectedModeOfTravelCost.da_half));
+                try {
+                    String time1 = et_departure.getText().toString();
+                    String time2 = et_arrival.getText().toString();
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                    Date date1 = format.parse(time1);
+                    Date date2 = format.parse(time2);
+                    float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
+                    if (difference >= 12) {
+                        tv_time_diffrence.setText(difference + " >= 12 Full DA Apply");
+                    } else if (difference >= 0) {
+                        tv_time_diffrence.setText(difference + " < 12 Half DA Apply");
+                    }
+                } catch (Exception e) {
+                }
                 to_city.setError(null);
             });
-            et_departure.setOnClickListener(view -> {
-                final Calendar c = Calendar.getInstance();
-                int mHour = c.get(Calendar.HOUR_OF_DAY);
-                int mMinute = c.get(Calendar.MINUTE);
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
-                        (timePicker, hourOfDay, minute) -> {
-                            et_departure.setText(hourOfDay + ":" + minute);
-                            et_departure.setError(null);
-                        }, mHour, mMinute, false);
-                timePickerDialog.show();
+
+            et_departure.setOnTouchListener((view, motionEvent) -> {
+                new CustomTimePicker(getActivity()).showDialog(et_departure);
+                return true;
             });
-            et_arrival.setOnClickListener(view -> {
-                final Calendar c = Calendar.getInstance();
-                int mHour = c.get(Calendar.HOUR_OF_DAY);
-                int mMinute = c.get(Calendar.MINUTE);
-                // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
-                        (timePicker, hourOfDay, minute) -> {
-                            et_arrival.setText(hourOfDay + ":" + minute);
-                            et_arrival.setError(null);
-                        }, mHour, mMinute, false);
-                timePickerDialog.show();
+            et_arrival.setOnTouchListener((view, motionEvent) -> {
+                new CustomTimePicker(getActivity()).showDialog(et_arrival);
+                return true;
+            });
+            et_departure.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
+                        String time1 = et_departure.getText().toString();
+                        String time2 = et_arrival.getText().toString();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        Date date1 = format.parse(time1);
+                        Date date2 = format.parse(time2);
+                        float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
+                        if (difference >= 12) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
+                            tv_time_diffrence.setText(difference + " >= 12 Full DA Apply");
+                        } else if (difference >= 0) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
+                            tv_time_diffrence.setText(difference + " < 12 Half DA Apply");
+                        }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
+                    } catch (Exception e) {
+                    }
+                }
+            });
+            et_arrival.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
+                        String time1 = et_departure.getText().toString();
+                        String time2 = et_arrival.getText().toString();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        Date date1 = format.parse(time1);
+                        Date date2 = format.parse(time2);
+                        float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
+                        if (difference >= 12) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
+                            tv_time_diffrence.setText(difference + " >= 12 Full DA Apply");
+                        } else if (difference >= 0) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
+                            tv_time_diffrence.setText(difference + " < 12 Half DA Apply");
+                        }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
+                    } catch (Exception e) {
+                    }
+                }
+            });
+            et_lodging_cost.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float user_input_lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                    if (user_input_lodging_cost > selectedModeOfTravelCost.lodging) {
+                        et_lodging_cost.setText(String.valueOf(selectedModeOfTravelCost.lodging));
+                    }
+                    try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
+                        String time1 = et_departure.getText().toString();
+                        String time2 = et_arrival.getText().toString();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        Date date1 = format.parse(time1);
+                        Date date2 = format.parse(time2);
+                        float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
+                        if (difference >= 12) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
+                        } else if (difference >= 0) {
+                            appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
+                        }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
+                    } catch (Exception e) {
+                    }
+                }
             });
             try {
                 ModeOfTravelMasterTable modeOfTravelMasterTable = new ModeOfTravelMasterTable(getActivity());
@@ -301,15 +472,17 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
                         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
@@ -318,15 +491,16 @@ public class AddTravelExpanseFragment extends Fragment {
                         float difference = Math.abs((date2.getTime() - date1.getTime()) / (1000 * 60 * 60));
                         if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference >= 8) {
+                        } else if (difference >= 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
-                    } catch (Exception e) {
 
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
+                    } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
+
                 }
             });
             et_loading_in_any.addTextChangedListener(new TextWatcher() {
@@ -342,31 +516,36 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
                     } catch (Exception e) {
+
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
+
                 }
             });
             et_fuel_vehicle_expance.addTextChangedListener(new TextWatcher() {
@@ -382,31 +561,34 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
                         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                lodging_cost + appy_full_And_Half_DA));
                     } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
+
                 }
             });
             et_daily_express.addTextChangedListener(new TextWatcher() {
@@ -422,31 +604,33 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
                     } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
                 }
             });
             et_vehicle_repairing.addTextChangedListener(new TextWatcher() {
@@ -462,31 +646,35 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
                     } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
+
                 }
             });
             et_local_convance.addTextChangedListener(new TextWatcher() {
@@ -502,31 +690,33 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
                     } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
                 }
             });
             et_other_expenses.addTextChangedListener(new TextWatcher() {
@@ -542,72 +732,102 @@ public class AddTravelExpanseFragment extends Fragment {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
-                    float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
-                    float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
-                    float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
-                    float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
-                    float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
-                    float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
-                    float appy_full_And_Half_DA = 0;
                     try {
+                        float fare = Float.parseFloat(et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString());
+                        float loadging_in_any = Float.parseFloat(et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString());
+                        float fuel_vehicle_expance = Float.parseFloat(et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString());
+                        float daily_express = Float.parseFloat(et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString());
+                        float vehicle_repairing = Float.parseFloat(et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString());
+                        float local_convance = Float.parseFloat(et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString());
+                        float other_expenses = Float.parseFloat(et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString());
+                        float lodging_cost = et_lodging_cost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_lodging_cost.getText().toString());
+                        float appy_full_And_Half_DA = 0;
+
                         String time1 = et_departure.getText().toString();
                         String time2 = et_arrival.getText().toString();
-                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                         Date date1 = format.parse(time1);
                         Date date2 = format.parse(time2);
                         float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
-                        if (difference > 12) {
+                        if (difference >= 12) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_full;
-                        } else if (difference > 8) {
+                        } else if (difference > 0) {
                             appy_full_And_Half_DA = selectedModeOfTravelCost.da_half;
                         }
+
+                        tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
+                                daily_express + vehicle_repairing + local_convance + other_expenses +
+                                lodging_cost + appy_full_And_Half_DA));
+
                     } catch (Exception e) {
                     }
-                    tv_totalApplyExpenceAmmount.setText(String.valueOf(fare + loadging_in_any + fuel_vehicle_expance +
-                            daily_express + vehicle_repairing + local_convance + other_expenses +
-                            selectedModeOfTravelCost.lodging + appy_full_And_Half_DA));
+
                 }
             });
             submitPage.setOnClickListener(view -> {
-                if (et_date.getText().toString().equalsIgnoreCase("")) {
-                    et_date.setError("Please Enter Date");
-                    return;
-                } else if (from_city.getText().toString().equalsIgnoreCase("")) {
-                    from_city.setError("Please Select From City");
-                    return;
-                } else if (to_city.getText().toString().equalsIgnoreCase("")) {
-                    to_city.setError("Please Select To City");
-                    return;
-                } else if (et_departure.getText().toString().equalsIgnoreCase("")) {
-                    et_departure.setError("Please Enter Departure Time");
-                    return;
-                } else if (et_arrival.getText().toString().equalsIgnoreCase("")) {
-                    et_arrival.setError("Please Enter Arrival Time");
-                    return;
-                } else if (et_fare.getText().toString().equalsIgnoreCase("")) {
-                    et_fare.setError("Please Enter Fare");
-                    return;
-                } else if (mode_of_travel_drop.getText().toString().equalsIgnoreCase("")) {
-                    mode_of_travel_drop.setError("Please Select Mode Of Travel");
-                    return;
+                try {
+                    if (et_date.getText().toString().equalsIgnoreCase("")) {
+                        et_date.setError("Please Enter Date");
+                        return;
+                    } else if (from_city.getText().toString().equalsIgnoreCase("")) {
+                        from_city.setError("Please Select From City");
+                        return;
+                    } else if (to_city.getText().toString().equalsIgnoreCase("")) {
+                        to_city.setError("Please Select To City");
+                        return;
+                    } else if (et_departure.getText().toString().equalsIgnoreCase("")) {
+                        et_departure.setError("Please Enter Departure Time");
+                        return;
+                    } else if (et_arrival.getText().toString().equalsIgnoreCase("")) {
+                        et_arrival.setError("Please Enter Arrival Time");
+                        return;
+                    } else if (et_fare.getText().toString().equalsIgnoreCase("")) {
+                        et_fare.setError("Please Enter Fare");
+                        return;
+                    } else if (mode_of_travel_drop.getText().toString().equalsIgnoreCase("")) {
+                        mode_of_travel_drop.setError("Please Select Mode Of Travel");
+                        return;
+                    }
+                    //todo bind submit
+                    String time1 = et_departure.getText().toString();
+                    String time2 = et_arrival.getText().toString();
+                    float da_full = 0, da_half = 0;
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                    Date date1 = format.parse(time1);
+                    Date date2 = format.parse(time2);
+                    float difference = (date2.getTime() - date1.getTime()) / (1000 * 60);
+                    if (difference >= 12) {
+                        da_full = selectedModeOfTravelCost.da_full;
+                    } else {
+                        da_half = selectedModeOfTravelCost.da_half;
+                    }
+
+                    TravelLineExpenseModel travelLineExpensedata = new TravelLineExpenseModel(
+                            submitTravelData.android_travelcode, submitTravelData.travelcode, String.valueOf(travelLineExpenseList.size() + 1),
+                            et_date.getText().toString(), selectedFromCity.code, selectedToCity.code, et_departure.getText().toString(),
+                            et_arrival.getText().toString(), et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString(),
+                            mode_of_travel_drop.getText().toString(), et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString()
+                            , et_distance_km.getText().toString().equalsIgnoreCase("") ? "0" : et_distance_km.getText().toString(),
+                            et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString(),
+                            et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString(),
+                            et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString(),
+                            et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString(),
+                            et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString(),
+                            tv_totalApplyExpenceAmmount.getText().toString(), null,
+                            selectedModeOfTravelCost.cities, et_lodging_cost.getText().toString(), String.valueOf(da_half),
+                            String.valueOf(da_full), String.valueOf(selectedModeOfTravelCost.ope_max), selectedModeOfTravelCost.grade);
+
+                    TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(getActivity());
+                    travelLineExpenseTable.open();
+                    travelLineExpenseTable.insert(travelLineExpensedata);
+                    travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode, submitTravelData.android_travelcode);
+                    travelLineExpenseTable.close();
+
+                    travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
+                    expense_List.setAdapter(travelExpenseListAdapter);
+                    dialog.dismiss();
+                } catch (Exception e) {
                 }
-                //todo bind submit
-                TravelLineExpenseModel travelLineExpensedata = new TravelLineExpenseModel(
-                        submitTravelData.android_travelcode, submitTravelData.travelcode, String.valueOf(travelLineExpenseList.size() + 1),
-                        et_date.getText().toString(), selectedFromCity.code, selectedToCity.code, et_departure.getText().toString(),
-                        et_arrival.getText().toString(), et_fare.getText().toString().equalsIgnoreCase("") ? "0" : et_fare.getText().toString(),
-                        mode_of_travel_drop.getText().toString(), et_loading_in_any.getText().toString().equalsIgnoreCase("") ? "0" : et_loading_in_any.getText().toString()
-                        , et_distance_km.getText().toString().equalsIgnoreCase("") ? "0" : et_distance_km.getText().toString(),
-                        et_fuel_vehicle_expance.getText().toString().equalsIgnoreCase("") ? "0" : et_fuel_vehicle_expance.getText().toString(),
-                        et_daily_express.getText().toString().equalsIgnoreCase("") ? "0" : et_daily_express.getText().toString(),
-                        et_vehicle_repairing.getText().toString().equalsIgnoreCase("") ? "0" : et_vehicle_repairing.getText().toString(),
-                        et_local_convance.getText().toString().equalsIgnoreCase("") ? "0" : et_local_convance.getText().toString(),
-                        et_other_expenses.getText().toString().equalsIgnoreCase("") ? "0" : et_other_expenses.getText().toString(),
-                        tv_totalApplyExpenceAmmount.getText().toString(), null);
-                travelLineExpenseList.add(travelLineExpensedata);
-                travelExpenseListAdapter.notifyDataSetChanged();
-                dialog.dismiss();
             });
             //You need to add the following line for this solution to work; thanks skayred
             PopupView.setFocusableInTouchMode(true);
@@ -690,7 +910,6 @@ public class AddTravelExpanseFragment extends Fragment {
             travelLineExpenseTable.close();
             loadFragments(R.id.nav_view_travel, "View TA/DA List");
         } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 

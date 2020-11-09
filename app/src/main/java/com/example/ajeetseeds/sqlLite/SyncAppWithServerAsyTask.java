@@ -605,7 +605,7 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                         travelHeaderTable.insert(travelHeaderTable.new TravelHeaderModel(android_travel_code,
                                 responseobject.travelcode, responseobject.from_loc, responseobject.to_loc, responseobject.start_date,
                                 responseobject.end_date, responseobject.travel_reson, responseobject.expense_budget,
-                                responseobject.approve_budget, responseobject.created_on, responseobject.created_by, responseobject.STATUS, responseobject.approver_id,
+                                responseobject.approve_budget, responseobject.created_on,responseobject.user_type, responseobject.created_by, responseobject.STATUS, responseobject.approver_id,
                                 responseobject.approve_on, responseobject.reason));
                         if (responseobject.travel_line_expense.size() > 0 && responseobject.travel_line_expense.get(0).travelcode != null) {
                             ArrayList<TravelLineExpenseModel> insertlinedataLiset = new ArrayList<>();
@@ -618,7 +618,9 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                                         responseobject.travel_line_expense.get(i).distance_km, responseobject.travel_line_expense.get(i).fuel_vehicle_expance,
                                         responseobject.travel_line_expense.get(i).daily_express, responseobject.travel_line_expense.get(i).vehicle_repairing,
                                         responseobject.travel_line_expense.get(i).local_convance, responseobject.travel_line_expense.get(i).other_expenses,
-                                        responseobject.travel_line_expense.get(i).total_amount_calulated, responseobject.travel_line_expense.get(i).created_on);
+                                        responseobject.travel_line_expense.get(i).total_amount_calulated, responseobject.travel_line_expense.get(i).created_on,
+                                        responseobject.travel_line_expense.get(i).mod_city,responseobject.travel_line_expense.get(i).mod_lodging,responseobject.travel_line_expense.get(i).mod_da_half,
+                                        responseobject.travel_line_expense.get(i).mode_da_full,responseobject.travel_line_expense.get(i).mod_ope_max,responseobject.travel_line_expense.get(i).user_grade);
                                 insertlinedataLiset.add(insertdata);
                             }
                             TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(activity);
@@ -643,6 +645,7 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                     postedJson.put("travel_reson", temptravel.travel_reson);
                     postedJson.put("expense_budget", temptravel.expense_budget);
                     postedJson.put("approver_id", sessionManagement.getApprover_id());
+                    postedJson.put("user_type", sessionManagement.getUser_type());
                     List<TravelHeaderResponse> responseslist = new Gson().fromJson(globalPostingMethod.postHttpRequest(globalPostingMethod.createUrl(StaticDataForApp.insertTravelHeader), postedJson).getJsonResponse(), new TypeToken<List<TravelHeaderResponse>>() {
                     }.getType());
                     if (responseslist.size() > 0 && responseslist.get(0).condition)
@@ -675,6 +678,13 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                     temp_json.put("local_convance", data.local_convance);
                     temp_json.put("other_expenses", data.other_expenses);
                     temp_json.put("total_amount_calulated", data.total_amount_calulated);
+
+                    temp_json.put("mod_city", data.mod_city);
+                    temp_json.put("mod_lodging", data.mod_lodging);
+                    temp_json.put("mod_da_half", data.mod_da_half);
+                    temp_json.put("mode_da_full", data.mode_da_full);
+                    temp_json.put("mod_ope_max", data.mod_ope_max);
+                    temp_json.put("user_grade", data.user_grade);
                     postedJasonArray.put(temp_json);
                 }
                 List<TravelExpenseResponseModel> responseslist = new Gson().fromJson(globalPostingMethod.postArrayHttpRequest

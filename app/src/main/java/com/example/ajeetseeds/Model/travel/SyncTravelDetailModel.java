@@ -14,6 +14,7 @@ public class SyncTravelDetailModel {
     public String expense_budget;
     public String approve_budget;
     public String created_on;
+    public String user_type;
     public String created_by;
     public String STATUS;
     public String approver_id;
@@ -42,6 +43,13 @@ public class SyncTravelDetailModel {
         public String other_expenses;
         public String total_amount_calulated;
         public String created_on;
+
+        public String mod_city;
+        public String mod_lodging;
+        public String mod_da_half;
+        public String mode_da_full;
+        public String mod_ope_max;
+        public String user_grade;
     }
 
 }

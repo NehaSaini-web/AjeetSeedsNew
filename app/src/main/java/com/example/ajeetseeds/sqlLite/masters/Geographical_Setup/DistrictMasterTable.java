@@ -17,12 +17,14 @@ public class DistrictMasterTable {
     // Table columns
     public static final String code = "code";
     public static final String name = "name";
+    public static final String class_of_city="class_of_city";
     public static final String active = "active";
 
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             code + " TEXT PRIMARY KEY, " +
             name + " TEXT NOT NULL, " +
+            class_of_city + " TEXT NULL, " +
             active + " INTEGER" +
             ");";
 
@@ -56,6 +58,7 @@ public class DistrictMasterTable {
         ContentValues contentValue = new ContentValues();
         contentValue.put(this.code, districtMaster.code);
         contentValue.put(this.name, districtMaster.name);
+        contentValue.put(this.class_of_city, districtMaster.class_of_city);
         contentValue.put(this.active, districtMaster.active);
         return database.replace(TABLE_NAME, null, contentValue);
     }
@@ -67,6 +70,7 @@ public class DistrictMasterTable {
                 ContentValues contentValue = new ContentValues();
                 contentValue.put(this.code, districtMaster.code);
                 contentValue.put(this.name, districtMaster.name);
+                contentValue.put(this.class_of_city, districtMaster.class_of_city);
                 contentValue.put(this.active, districtMaster.active);
                 database.replace(TABLE_NAME, null, contentValue);
             }
@@ -78,7 +82,7 @@ public class DistrictMasterTable {
 
     public List<DistrictMaster> fetch() {
         List<DistrictMaster> returnData = new ArrayList<>();
-        String[] columns = new String[]{this.code, this.name, this.active};
+        String[] columns = new String[]{this.code, this.name,this.class_of_city, this.active};
         Cursor cursor = database.query(TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -86,7 +90,8 @@ public class DistrictMasterTable {
                 returnData.add(new DistrictMaster(
                         cursor.getString(cursor.getColumnIndex(this.code)),
                         cursor.getString(cursor.getColumnIndex(this.name)),
-                        cursor.getInt(cursor.getColumnIndex(this.active))
+                        cursor.getInt(cursor.getColumnIndex(this.active)),
+                        cursor.getString(cursor.getColumnIndex(class_of_city))
                 ));
             } while (cursor.moveToNext());
         }
@@ -112,7 +117,8 @@ public class DistrictMasterTable {
                 returnData.add(new DistrictMaster(
                         cursor.getString(cursor.getColumnIndex(code)),
                         cursor.getString(cursor.getColumnIndex(name)),
-                        cursor.getInt(cursor.getColumnIndex(active))
+                        cursor.getInt(cursor.getColumnIndex(active)),
+                        cursor.getString(cursor.getColumnIndex(class_of_city))
                 ));
             } while (cursor.moveToNext());
         }
@@ -134,11 +140,13 @@ public class DistrictMasterTable {
         public String code;
         public String name;
         public int active;
+        public String class_of_city;
 
-        public DistrictMaster(String code, String name, int active) {
+        public DistrictMaster(String code, String name, int active,String class_of_city) {
             this.code = code;
             this.name = name;
             this.active = active;
+            this.class_of_city=class_of_city;
         }
     }
 }

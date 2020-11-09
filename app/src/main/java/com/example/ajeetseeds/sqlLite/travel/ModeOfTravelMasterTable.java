@@ -128,9 +128,9 @@ public class ModeOfTravelMasterTable {
         return returnData;
     }
 
-    public ModeOfTravelModel fetchModeOfTravel(String cityCode, String grade) {
+    public ModeOfTravelModel fetchModeOfTravel(String district_Code, String grade) {
         Cursor cursor = database.rawQuery("select * from mode_of_travel WHERE grade='" + grade + "' AND " +
-                "cities=(select cm.class_of_city from city_master cm WHERE code='" + cityCode + "') LIMIT 1", null);
+                "cities=(select dm.class_of_city from district_master dm WHERE dm.code='" + district_Code + "') LIMIT 1", null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             do {

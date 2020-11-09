@@ -79,11 +79,13 @@ public class TravelListAdapter extends BaseAdapter {
 
         travel_code.setText(listdata.get(position).travelcode.equalsIgnoreCase("0") ? "Local-" + listdata.get(position).android_travelcode : listdata.get(position).travelcode);
         try {
-            CityMasterTable cityMasterTable = new CityMasterTable(activity);
-            cityMasterTable.open();
-            listdata.get(position).from_loc_name = cityMasterTable.fetchCityName(listdata.get(position).from_loc);
-            listdata.get(position).to_loc_name = cityMasterTable.fetchCityName(listdata.get(position).to_loc);
-            cityMasterTable.close();
+            if(listdata.get(position).from_loc_name==null ||listdata.get(position).from_loc_name.equalsIgnoreCase("")) {
+                DistrictMasterTable districtMasterTable = new DistrictMasterTable(activity);
+                districtMasterTable.open();
+                listdata.get(position).from_loc_name = districtMasterTable.fetchDistrictName(listdata.get(position).from_loc);
+                listdata.get(position).to_loc_name = districtMasterTable.fetchDistrictName(listdata.get(position).to_loc);
+                districtMasterTable.close();
+            }
         } catch (Exception e) {
         }
         tv_from_loc.setText(listdata.get(position).from_loc_name);

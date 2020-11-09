@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.ajeetseeds.Model.travel.SyncTravelDetailModel;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
+import com.example.ajeetseeds.sqlLite.masters.Geographical_Setup.DistrictMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.CityMasterTable;
 
 import java.util.List;
@@ -67,11 +68,11 @@ public class TravelListAdapter extends BaseAdapter {
 
         travel_code.setText(listdata.get(position).travelcode);
         try {
-            CityMasterTable cityMasterTable = new CityMasterTable(activity);
-            cityMasterTable.open();
-            listdata.get(position).from_loc_name = cityMasterTable.fetchCityName(listdata.get(position).from_loc);
-            listdata.get(position).to_loc_name = cityMasterTable.fetchCityName(listdata.get(position).to_loc);
-            cityMasterTable.close();
+            DistrictMasterTable districtMasterTable = new DistrictMasterTable(activity);
+            districtMasterTable.open();
+            listdata.get(position).from_loc_name = districtMasterTable.fetchDistrictName(listdata.get(position).from_loc);
+            listdata.get(position).to_loc_name = districtMasterTable.fetchDistrictName(listdata.get(position).to_loc);
+            districtMasterTable.close();
         } catch (Exception e) {
         }
         tv_from_loc.setText(listdata.get(position).from_loc_name);

@@ -23,7 +23,6 @@ import com.example.ajeetseeds.Http_Hanler.HttpHandlerModel;
 import com.example.ajeetseeds.Model.AsyModel;
 import com.example.ajeetseeds.Model.StaticDataForApp;
 import com.example.ajeetseeds.Model.event.EventCreateResponseModel;
-import com.example.ajeetseeds.Model.event.SyncEventDetailModel;
 import com.example.ajeetseeds.Model.travel.SyncTravelDetailModel;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
@@ -164,35 +163,60 @@ public class ApproveTravelDetailFragment extends Fragment {
         if (flag.equalsIgnoreCase("approve")) {
             if (selectedeventData.STATUS.equalsIgnoreCase("PENDING")) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
-                builder.setTitle("Confirm " + selectedeventData.travelcode);
+                builder.setTitle("Approve Confirm " + selectedeventData.travelcode);
                 builder.setIcon(R.drawable.approve_order_icon);
                 LinearLayout parentVertical = new LinearLayout(getActivity());
                 LinearLayout.LayoutParams parentVerticalParams = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
                 parentVertical.setLayoutParams(parentVerticalParams);
                 parentVertical.setOrientation(LinearLayout.VERTICAL);
-                TextView messageSession = new TextView(getActivity());
-                messageSession.setText("Do you really want to approve?");
-                messageSession.setTextColor(Color.BLACK);
                 TextView enterReson_tv = new TextView(getActivity());
                 enterReson_tv.setText("Enter Approve Budget");
                 enterReson_tv.setTextColor(getResources().getColor(R.color.colorAccent));
-                enterReson_tv.setPadding(0, 10, 0, 0);
+                enterReson_tv.setPadding(10, 30, 0, 0);
                 EditText approvebudget = new EditText(getActivity());
                 approvebudget.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL); //for decimal numbers
-                parentVertical.addView(messageSession);
                 parentVertical.addView(enterReson_tv);
                 parentVertical.addView(approvebudget);
+
+                TextView enterAdvance_tv = new TextView(getActivity());
+                enterAdvance_tv.setText("Enter Advance Amount");
+                enterAdvance_tv.setTextColor(getResources().getColor(R.color.colorAccent));
+                enterAdvance_tv.setPadding(10, 10, 0, 0);
+                EditText Advancebudget = new EditText(getActivity());
+                Advancebudget.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL); //for decimal numbers
+
+                parentVertical.addView(enterAdvance_tv);
+                parentVertical.addView(Advancebudget);
+
                 parentVertical.setPadding(40, 20, 40, 10);
                 builder.setView(parentVertical);
+
                 builder.setPositiveButton("Confirm", (dialogInterface, i) -> {
                     try {
-                        JSONObject postedjson = new JSONObject();
-                        postedjson.put("email", sessionManagement.getUserEmail());
-                        postedjson.put("travel_code", selectedeventData.travelcode);
-                        postedjson.put("approve_budget", approvebudget.getText().toString());
-                        postedjson.put("travel_status", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
-                        postedjson.put("reson", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
-                        new CommanHitToServer(position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.approveRejectTravel, postedjson, "approveRejectHit"));
+                        float budget_needed=Float.parseFloat(selectedeventData.expense_budget);
+                        float approvebudget_by_approver=approvebudget.getText().toString().equalsIgnoreCase("")?0:Float.parseFloat(approvebudget.getText().toString());
+                        float Advancebudget_by_approver=Advancebudget.getText().toString().equalsIgnoreCase("")?0:Float.parseFloat(Advancebudget.getText().toString());
+
+                        if(approvebudget_by_approver>budget_needed)
+                        {
+                            Snackbar.make(travel_List,"Please Enter Approve Budget < "+selectedeventData.expense_budget,Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(Advancebudget_by_approver>approvebudget_by_approver)
+                        {
+                            Snackbar.make(travel_List,"Please Enter Advance Budget < "+approvebudget.getText().toString(),Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(!loadingDialog.getLoadingState()) {
+                            JSONObject postedjson = new JSONObject();
+                            postedjson.put("email", sessionManagement.getUserEmail());
+                            postedjson.put("travel_code", selectedeventData.travelcode);
+                            postedjson.put("approve_budget", approvebudget.getText().toString());
+                            postedjson.put("advance_budget", Advancebudget.getText().toString());
+                            postedjson.put("travel_status", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
+                            postedjson.put("reson", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
+                            new CommanHitToServer(position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.approveRejectTravel, postedjson, "approveRejectHit"));
+                        }
                     } catch (Exception e) {
                     }
                 });
@@ -209,6 +233,7 @@ public class ApproveTravelDetailFragment extends Fragment {
                                 postedjson.put("email", sessionManagement.getUserEmail());
                                 postedjson.put("travel_code", selectedeventData.travelcode);
                                 postedjson.put("approve_budget", "0");
+                                postedjson.put("advance_budget","0");
                                 postedjson.put("travel_status", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
                                 postedjson.put("reson", selectedeventData.STATUS.equalsIgnoreCase("PENDING") ? "CREATE APPROVED" : "APPROVED");
                                 new CommanHitToServer(position).executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.approveRejectTravel, postedjson, "approveRejectHit"));

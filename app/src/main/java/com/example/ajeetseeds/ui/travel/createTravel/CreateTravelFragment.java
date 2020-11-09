@@ -34,11 +34,14 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.backup.AndroidExceptionHandel;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.example.ajeetseeds.golobalClass.CustomDatePicker;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.sqlLite.AllTablesName;
 import com.example.ajeetseeds.sqlLite.Database.SyncDataTable;
+import com.example.ajeetseeds.sqlLite.masters.Geographical_Setup.DistrictMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.CityMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.TravelHeaderTable;
+import com.example.ajeetseeds.ui.dailyActivity.addLine.DistrictAdapter;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -55,7 +58,7 @@ import java.util.List;
 public class CreateTravelFragment extends Fragment {
 
     private CreateTravelViewModel mViewModel;
-    AppCompatEditText et_start_date, et_end_date;
+    TextInputEditText et_start_date, et_end_date;
     Button submitPage, add_eventExpense;
     AutoCompleteTextView from_city, to_city;
     TextInputEditText et_reason, et_expense_budget;
@@ -94,38 +97,12 @@ public class CreateTravelFragment extends Fragment {
         submitPage = view.findViewById(R.id.submitPage);
         add_eventExpense = view.findViewById(R.id.add_eventExpense);
         et_start_date.setOnTouchListener((view1, motionEvent) -> {
-            if (!datedialog) {
-                datedialog = true;
-                MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                MaterialDatePicker picker = builder.build();
-                if (!picker.isVisible()) {
-                    picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                    picker.addOnPositiveButtonClickListener(selection -> {
-                        et_start_date.setText(picker.getHeaderText());
-                    });
-                    picker.addOnDismissListener(dialogInterface -> {
-                        datedialog = false;
-                    });
-                }
-            }
+            new CustomDatePicker(getActivity()).showDatePickerDialog(et_start_date);
             return true;
         });
 
         et_end_date.setOnTouchListener((view1, motionEvent) -> {
-            if (!datedialog) {
-                datedialog = true;
-                MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                MaterialDatePicker picker = builder.build();
-                if (!picker.isVisible()) {
-                    picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                    picker.addOnPositiveButtonClickListener(selection -> {
-                        et_end_date.setText(picker.getHeaderText());
-                    });
-                    picker.addOnDismissListener(dialogInterface -> {
-                        datedialog = false;
-                    });
-                }
-            }
+            new CustomDatePicker(getActivity()).showDatePickerDialog(et_end_date);
             return true;
         });
         checkBackFragmentData();
@@ -137,13 +114,14 @@ public class CreateTravelFragment extends Fragment {
                     if (networkUtil) {
                         JSONObject postedJson = new JSONObject();
                         postedJson.put("email", sessionManagement.getUserEmail());
-                        postedJson.put("from_loc", selectedFromCity.code);
-                        postedJson.put("to_loc", selectedToCity.code);
+                        postedJson.put("from_loc", selectedFromDistrict.code);
+                        postedJson.put("to_loc", selectedToDistrict.code);
                         postedJson.put("start_date", et_start_date.getText().toString());
                         postedJson.put("end_date", et_end_date.getText().toString());
                         postedJson.put("travel_reson", et_reason.getText().toString());
                         postedJson.put("expense_budget", et_expense_budget.getText().toString());
                         postedJson.put("approver_id", sessionManagement.getApprover_id());
+                        postedJson.put("user_type", sessionManagement.getUser_type());
 
                         new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR,
                                 new AsyModel(StaticDataForApp.insertTravelHeader, postedJson, "insertTravelHeader"));
@@ -273,9 +251,9 @@ public class CreateTravelFragment extends Fragment {
             travelHeaderTable.open();
             String android_travel_code = travelHeaderTable.getTableSequenceNo();
             TravelHeaderTable.TravelHeaderModel insertObject = travelHeaderTable.new TravelHeaderModel(android_travel_code,
-                    travelcode, selectedFromCity.code, selectedToCity.code, et_start_date.getText().toString(),
+                    travelcode, selectedFromDistrict.code, selectedToDistrict.code, et_start_date.getText().toString(),
                     et_end_date.getText().toString(), et_reason.getText().toString(), et_expense_budget.getText().toString(),
-                    "0", created_on, sessionManagement.getUserEmail(), "PENDING", sessionManagement.getApprover_id(),
+                    "0", created_on, sessionManagement.getUser_type(),sessionManagement.getUserEmail(), "PENDING", sessionManagement.getApprover_id(),
                     null, null);
             travelHeaderTable.insert(insertObject);
             travelHeaderTable.close();
@@ -338,26 +316,26 @@ public class CreateTravelFragment extends Fragment {
         getActivity().setTitle(fragmentName);
     }
 
-    List<CityMasterTable.CityMasterModel> fromcityList = new ArrayList<>();
-    List<CityMasterTable.CityMasterModel> tocityList = new ArrayList<>();
-    CityMasterTable.CityMasterModel selectedFromCity = null;
-    CityMasterTable.CityMasterModel selectedToCity = null;
+    List<DistrictMasterTable.DistrictMaster> fromDistrictList = new ArrayList<>();
+    List<DistrictMasterTable.DistrictMaster> toDistrictList = new ArrayList<>();
+    DistrictMasterTable.DistrictMaster selectedFromDistrict = null;
+    DistrictMasterTable.DistrictMaster selectedToDistrict = null;
 
     void bindEventDropDown() {
-        CityMasterTable cityMasterTable = new CityMasterTable(getActivity());
-        cityMasterTable.open();
-        fromcityList = cityMasterTable.fetch();
-        tocityList = cityMasterTable.fetch();
-        cityMasterTable.close();
-        CityAdapter from_cityAdapter = new CityAdapter(getActivity(), R.layout.drop_down_textview, fromcityList);
+        DistrictMasterTable districtMasterTable = new DistrictMasterTable(getActivity());
+        districtMasterTable.open();
+        fromDistrictList = districtMasterTable.fetch();
+        toDistrictList = districtMasterTable.fetch();
+        districtMasterTable.close();
+        DistrictAdapter from_cityAdapter = new DistrictAdapter(getActivity(), R.layout.drop_down_textview, fromDistrictList);
         from_city.setAdapter(from_cityAdapter);
-        CityAdapter to_cityAdapter = new CityAdapter(getActivity(), R.layout.drop_down_textview, tocityList);
+        DistrictAdapter to_cityAdapter = new DistrictAdapter(getActivity(), R.layout.drop_down_textview, toDistrictList);
         to_city.setAdapter(to_cityAdapter);
         from_city.setOnItemClickListener((adapterView, view, i, l) -> {
-            selectedFromCity = fromcityList.get(i);
+            selectedFromDistrict = fromDistrictList.get(i);
         });
         to_city.setOnItemClickListener((adapterView, view, i, l) -> {
-            selectedToCity = tocityList.get(i);
+            selectedToDistrict = toDistrictList.get(i);
         });
 
     }

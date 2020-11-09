@@ -25,11 +25,13 @@ public class TravelHeaderTable {
     public static final String expense_budget = "expense_budget";
     public static final String approve_budget = "approve_budget";
     public static final String created_on = "created_on";
+    public static final String user_type ="user_type";
     public static final String created_by = "created_by";
     public static final String status = "status";
     public static final String approver_id = "approver_id";
     public static final String approve_on = "approve_on";
     public static final String reason = "reason";
+
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             android_travelcode+ " TEXT PRIMARY KEY, "+
@@ -42,6 +44,7 @@ public class TravelHeaderTable {
             expense_budget+ " TEXT NOT NULL, "+
             approve_budget+ " TEXT NULL, "+
             created_on+ " TEXT NOT NULL, "+
+            user_type+ " TEXT NOT NULL, "+
             created_by+ " TEXT NOT NULL, "+
             status+ " TEXT NOT NULL, "+
             approver_id+ " TEXT NOT NULL, "+
@@ -92,6 +95,7 @@ public class TravelHeaderTable {
             contentValue.put(this.travel_reson,data.travel_reson);
             contentValue.put(this.expense_budget,data.expense_budget);
             contentValue.put(this.created_on,data.created_on);
+            contentValue.put(this.user_type,data.user_type);
             contentValue.put(this.created_by,data.created_by);
             contentValue.put(this.status,data.status);
             contentValue.put(this.approver_id,data.approver_id);
@@ -144,7 +148,7 @@ public class TravelHeaderTable {
     }
     public List<TravelHeaderModel> fetch() {
         List<TravelHeaderModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
+        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.user_type,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
         Cursor cursor = database.query(TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -160,6 +164,7 @@ public class TravelHeaderTable {
                         cursor.getString(cursor.getColumnIndex(this.expense_budget)),
                         cursor.getString(cursor.getColumnIndex(this.approve_budget)),
                         cursor.getString(cursor.getColumnIndex(this.created_on)),
+                        cursor.getString(cursor.getColumnIndex(this.user_type)),
                         cursor.getString(cursor.getColumnIndex(this.created_by)),
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.approver_id)),
@@ -172,7 +177,7 @@ public class TravelHeaderTable {
     }
     public List<TravelHeaderModel> fetchUnsendData() {
         List<TravelHeaderModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
+        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.user_type,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
         Cursor cursor = database.query(TABLE_NAME, columns, travelcode + "=?", new String[]{"0"}, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -188,6 +193,7 @@ public class TravelHeaderTable {
                         cursor.getString(cursor.getColumnIndex(this.expense_budget)),
                         cursor.getString(cursor.getColumnIndex(this.approve_budget)),
                         cursor.getString(cursor.getColumnIndex(this.created_on)),
+                        cursor.getString(cursor.getColumnIndex(this.user_type)),
                         cursor.getString(cursor.getColumnIndex(this.created_by)),
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.approver_id)),
@@ -215,6 +221,7 @@ public class TravelHeaderTable {
         public String expense_budget;
         public String approve_budget;
         public String created_on;
+        public String user_type;
         public String created_by;
         public String status;
         public String approver_id;
@@ -223,7 +230,7 @@ public class TravelHeaderTable {
 
         public String from_loc_name;
         public String to_loc_name;
-        public TravelHeaderModel(String android_travelcode,String travelcode, String from_loc, String to_loc, String start_date, String end_date, String travel_reson, String expense_budget, String approve_budget, String created_on, String created_by, String status, String approver_id, String approve_on, String reason) {
+        public TravelHeaderModel(String android_travelcode,String travelcode, String from_loc, String to_loc, String start_date, String end_date, String travel_reson, String expense_budget, String approve_budget, String created_on,String user_type, String created_by, String status, String approver_id, String approve_on, String reason) {
           this.android_travelcode=android_travelcode;
             this.travelcode=travelcode;
             this.from_loc=from_loc;
@@ -234,6 +241,7 @@ public class TravelHeaderTable {
             this.expense_budget=expense_budget;
             this.approve_budget=approve_budget;
             this.created_on=created_on;
+            this.user_type=user_type;
             this.created_by=created_by;
             this.status=status;
             this.approver_id=approver_id;

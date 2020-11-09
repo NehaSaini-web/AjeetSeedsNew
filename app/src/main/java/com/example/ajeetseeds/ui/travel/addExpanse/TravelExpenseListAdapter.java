@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.sqlLite.masters.Geographical_Setup.TalukaMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.CityMasterTable;
 import com.example.ajeetseeds.sqlLite.travel.TravelLineExpenseModel;
 
@@ -63,11 +64,11 @@ public class TravelExpenseListAdapter extends BaseAdapter {
 
         tv_date.setText(listdata.get(position).date);
         try {
-            CityMasterTable cityMasterTable = new CityMasterTable(activity);
-            cityMasterTable.open();
-            listdata.get(position).from_loc_name = cityMasterTable.fetchCityName(listdata.get(position).from_loc);
-            listdata.get(position).to_loc_name = cityMasterTable.fetchCityName(listdata.get(position).to_loc);
-            cityMasterTable.close();
+            TalukaMasterTable talukaMasterTable = new TalukaMasterTable(activity);
+            talukaMasterTable.open();
+            listdata.get(position).from_loc_name = talukaMasterTable.getTalukaName(listdata.get(position).from_loc);
+            listdata.get(position).to_loc_name = talukaMasterTable.getTalukaName(listdata.get(position).to_loc);
+            talukaMasterTable.close();
         } catch (Exception e) {
 
         } finally {
