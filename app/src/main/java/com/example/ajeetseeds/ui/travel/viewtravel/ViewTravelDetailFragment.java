@@ -27,6 +27,8 @@ import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
 import com.example.ajeetseeds.sqlLite.event.EventManagementExpenseLineTable;
 import com.example.ajeetseeds.sqlLite.event.EventManagementTable;
 import com.example.ajeetseeds.sqlLite.travel.TravelHeaderTable;
+import com.example.ajeetseeds.sqlLite.travel.TravelLineExpenseModel;
+import com.example.ajeetseeds.sqlLite.travel.TravelLineExpenseTable;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -115,7 +117,7 @@ public class ViewTravelDetailFragment extends Fragment {
                 TravelHeaderTable travelHeaderTable = new TravelHeaderTable(getActivity());
                 travelHeaderTable.open();
                 for (SyncTravelDetailModel responseobject : reponse) {
-                    travelHeaderTable.update_travelStatus(responseobject.travelcode, responseobject.STATUS, responseobject.reason,responseobject.approve_budget, responseobject.approve_on);
+                    travelHeaderTable.update_travelStatus(responseobject.travelcode, responseobject.STATUS, responseobject.reason, responseobject.approve_budget, responseobject.approve_on);
                 }
                 travelHeaderTable.close();
             }

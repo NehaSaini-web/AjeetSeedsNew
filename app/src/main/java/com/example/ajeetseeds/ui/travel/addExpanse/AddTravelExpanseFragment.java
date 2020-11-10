@@ -124,25 +124,27 @@ public class AddTravelExpanseFragment extends Fragment {
             travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
             expense_List.setAdapter(travelExpenseListAdapter);
             expense_List.setOnItemClickListener((adapterView, view1, position, l) -> {
-                new MaterialAlertDialogBuilder(getActivity())
-                        .setTitle("Confirm...")
-                        .setMessage("Do you really want to delete this line?")
-                        .setIcon(R.drawable.approve_order_icon)
-                        .setPositiveButton("Confirm", (dialogInterface, i1) -> {
-                            try {
-                                TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(getActivity());
-                                travelLineExpenseTable.open();
-                                travelLineExpenseTable.delete(travelLineExpenseList.get(position).travelcode, travelLineExpenseList.get(position).android_travelcode, travelLineExpenseList.get(position).line_no);
-                                travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode, submitTravelData.android_travelcode);
-                                travelLineExpenseTable.close();
-                                travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
-                                expense_List.setAdapter(travelExpenseListAdapter);
-                            }catch (Exception e){}
-                        })
-                        .setNegativeButton("Cancel", (dialogInterface, i1) -> {
+                if (!submitTravelData.status.equalsIgnoreCase("INSERT EXPENSE") && !submitTravelData.status.equalsIgnoreCase("APPROVED")) {
+                    new MaterialAlertDialogBuilder(getActivity())
+                            .setTitle("Confirm...")
+                            .setMessage("Do you really want to delete this line?")
+                            .setIcon(R.drawable.approve_order_icon)
+                            .setPositiveButton("Confirm", (dialogInterface, i1) -> {
+                                try {
+                                    TravelLineExpenseTable travelLineExpenseTable = new TravelLineExpenseTable(getActivity());
+                                    travelLineExpenseTable.open();
+                                    travelLineExpenseTable.delete(travelLineExpenseList.get(position).travelcode, travelLineExpenseList.get(position).android_travelcode, travelLineExpenseList.get(position).line_no);
+                                    travelLineExpenseList = travelLineExpenseTable.fetch(submitTravelData.travelcode, submitTravelData.android_travelcode);
+                                    travelLineExpenseTable.close();
+                                    travelExpenseListAdapter = new TravelExpenseListAdapter(getActivity(), travelLineExpenseList);
+                                    expense_List.setAdapter(travelExpenseListAdapter);
+                                }catch (Exception e){}
+                            })
+                            .setNegativeButton("Cancel", (dialogInterface, i1) -> {
 
-                        })
-                        .show();
+                            })
+                            .show();
+                }
             });
 
             submitPage.setOnClickListener(view1 -> {

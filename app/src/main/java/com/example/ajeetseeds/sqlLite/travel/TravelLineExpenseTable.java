@@ -99,7 +99,11 @@ public class TravelLineExpenseTable {
         database.close();
         dbHelper.close();
     }
-
+    public int getTravelCodeLineExist(String travelcode,String line_no) {
+        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.line_no};
+        Cursor cursor = database.query(TABLE_NAME, columns, this.travelcode+"='"+travelcode+"' and "+this.line_no+"='"+line_no+"'", null, null, null, null);
+        return cursor.getCount();
+    }
     public void insert(TravelLineExpenseModel data) {
         database.beginTransaction();
         try {

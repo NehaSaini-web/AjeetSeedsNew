@@ -262,19 +262,23 @@ public class MainActivity extends AppCompatActivity implements OrderBookCartBott
         // Handle item selection
         if (item.getItemId() == R.id.action_Logout) {
             //todo check all data sync to server
-            SyncDataTable syncDataTable = new SyncDataTable(this.getApplicationContext());
-            syncDataTable.open();
-            boolean checkststus = syncDataTable.fetchWhoNotPostToServer();
-            if (checkststus) {
-                Snackbar.make(toolbar, "Device Data Not Sync Two the server.", Snackbar.LENGTH_LONG).show();
-            } else {
-                try {
-                    JSONObject postedJason = new JSONObject();
-                    postedJason.put("Email", sessionManagement.getUserEmail());
-                    new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.Logout,
-                            postedJason, "LogoutHit"));
-                } catch (Exception e) {
+            try {
+                SyncDataTable syncDataTable = new SyncDataTable(this.getApplicationContext());
+                syncDataTable.open();
+                boolean checkststus = syncDataTable.fetchWhoNotPostToServer();
+                if (checkststus) {
+                    Snackbar.make(toolbar, "Device Data Not Sync Two the server.", Snackbar.LENGTH_LONG).show();
+                } else {
+                    try {
+                        JSONObject postedJason = new JSONObject();
+                        postedJason.put("Email", sessionManagement.getUserEmail());
+                        new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.Logout,
+                                postedJason, "LogoutHit"));
+                    } catch (Exception e) {
+                    }
                 }
+            }catch (Exception e){
+
             }
             return true;
         }

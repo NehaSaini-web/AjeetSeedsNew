@@ -15,6 +15,7 @@ public class SyncTravelDetailModel {
     public String approve_budget;
     public String created_on;
     public String user_type;
+    public String advance_amount;
     public String created_by;
     public String STATUS;
     public String approver_id;

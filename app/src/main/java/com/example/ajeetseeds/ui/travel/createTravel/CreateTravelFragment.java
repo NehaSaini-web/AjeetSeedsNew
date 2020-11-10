@@ -254,7 +254,7 @@ public class CreateTravelFragment extends Fragment {
                     travelcode, selectedFromDistrict.code, selectedToDistrict.code, et_start_date.getText().toString(),
                     et_end_date.getText().toString(), et_reason.getText().toString(), et_expense_budget.getText().toString(),
                     "0", created_on, sessionManagement.getUser_type(),sessionManagement.getUserEmail(), "PENDING", sessionManagement.getApprover_id(),
-                    null, null);
+                    null, null,"0");
             travelHeaderTable.insert(insertObject);
             travelHeaderTable.close();
             //todo master entry Table out redy is going to be 1 so that data uploaded to the server

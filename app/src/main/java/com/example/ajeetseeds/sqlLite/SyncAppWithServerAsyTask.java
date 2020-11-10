@@ -606,7 +606,7 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                                 responseobject.travelcode, responseobject.from_loc, responseobject.to_loc, responseobject.start_date,
                                 responseobject.end_date, responseobject.travel_reson, responseobject.expense_budget,
                                 responseobject.approve_budget, responseobject.created_on,responseobject.user_type, responseobject.created_by, responseobject.STATUS, responseobject.approver_id,
-                                responseobject.approve_on, responseobject.reason));
+                                responseobject.approve_on, responseobject.reason,responseobject.advance_amount));
                         if (responseobject.travel_line_expense.size() > 0 && responseobject.travel_line_expense.get(0).travelcode != null) {
                             ArrayList<TravelLineExpenseModel> insertlinedataLiset = new ArrayList<>();
                             for (int i = 0; i < responseobject.travel_line_expense.size(); i++) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.ajeetseeds.sqlLite.Database.DatabaseHelper;
 
@@ -25,31 +26,33 @@ public class TravelHeaderTable {
     public static final String expense_budget = "expense_budget";
     public static final String approve_budget = "approve_budget";
     public static final String created_on = "created_on";
-    public static final String user_type ="user_type";
+    public static final String user_type = "user_type";
     public static final String created_by = "created_by";
     public static final String status = "status";
     public static final String approver_id = "approver_id";
     public static final String approve_on = "approve_on";
     public static final String reason = "reason";
+    public static final String advance_amount = "advance_amount";
 
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
-            android_travelcode+ " TEXT PRIMARY KEY, "+
-            travelcode+ " TEXT NOT NULL, "+
-            from_loc+ " TEXT NOT NULL, "+
-            to_loc+ " TEXT NOT NULL, "+
-            start_date+ " TEXT NOT NULL, "+
-            end_date+ " TEXT NOT NULL, "+
-            travel_reson+ " TEXT NOT NULL, "+
-            expense_budget+ " TEXT NOT NULL, "+
-            approve_budget+ " TEXT NULL, "+
-            created_on+ " TEXT NOT NULL, "+
-            user_type+ " TEXT NOT NULL, "+
-            created_by+ " TEXT NOT NULL, "+
-            status+ " TEXT NOT NULL, "+
-            approver_id+ " TEXT NOT NULL, "+
-            approve_on+ " TEXT NULL, "+
-            reason+ " TEXT NULL "+
+            android_travelcode + " TEXT PRIMARY KEY, " +
+            travelcode + " TEXT NOT NULL, " +
+            from_loc + " TEXT NOT NULL, " +
+            to_loc + " TEXT NOT NULL, " +
+            start_date + " TEXT NOT NULL, " +
+            end_date + " TEXT NOT NULL, " +
+            travel_reson + " TEXT NOT NULL, " +
+            expense_budget + " TEXT NOT NULL, " +
+            approve_budget + " TEXT NULL, " +
+            created_on + " TEXT NOT NULL, " +
+            user_type + " TEXT NOT NULL, " +
+            created_by + " TEXT NOT NULL, " +
+            status + " TEXT NOT NULL, " +
+            approver_id + " TEXT NOT NULL, " +
+            approve_on + " TEXT NULL, " +
+            reason + " TEXT NULL ," +
+            advance_amount + " TEXT NULL " +
             ");";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -77,48 +80,60 @@ public class TravelHeaderTable {
         database.close();
         dbHelper.close();
     }
+
     public String getTableSequenceNo() {
         String[] columns = new String[]{android_travelcode};
         Cursor cursor = database.query(TABLE_NAME, columns, null, null, null, null, null);
         return String.valueOf((cursor.getCount() + 1));
     }
+
+    public int getTravelCodeExist(String travelcode) {
+        String[] columns = new String[]{android_travelcode};
+        Cursor cursor = database.query(TABLE_NAME, columns, this.travelcode + "='" + travelcode + "'", null, null, null, null);
+        return cursor.getCount();
+    }
+
     public void insert(TravelHeaderModel data) {
         database.beginTransaction();
         try {
             ContentValues contentValue = new ContentValues();
-            contentValue.put(this.android_travelcode,data.android_travelcode);
-            contentValue.put(this.travelcode,data.travelcode);
-            contentValue.put(this.from_loc,data.from_loc);
-            contentValue.put(this.to_loc,data.to_loc);
-            contentValue.put(this.start_date,data.start_date);
-            contentValue.put(this.end_date,data.end_date);
-            contentValue.put(this.travel_reson,data.travel_reson);
-            contentValue.put(this.expense_budget,data.expense_budget);
-            contentValue.put(this.created_on,data.created_on);
-            contentValue.put(this.user_type,data.user_type);
-            contentValue.put(this.created_by,data.created_by);
-            contentValue.put(this.status,data.status);
-            contentValue.put(this.approver_id,data.approver_id);
-            database.replace(TABLE_NAME, null, contentValue);
-           database.setTransactionSuccessful();
+            contentValue.put(this.android_travelcode, data.android_travelcode);
+            contentValue.put(this.travelcode, data.travelcode);
+            contentValue.put(this.from_loc, data.from_loc);
+            contentValue.put(this.to_loc, data.to_loc);
+            contentValue.put(this.start_date, data.start_date);
+            contentValue.put(this.end_date, data.end_date);
+            contentValue.put(this.travel_reson, data.travel_reson);
+            contentValue.put(this.expense_budget, data.expense_budget);
+            contentValue.put(this.created_on, data.created_on);
+            contentValue.put(this.user_type, data.user_type);
+            contentValue.put(this.advance_amount, data.advance_amount);
+            contentValue.put(this.created_by, data.created_by);
+            contentValue.put(this.status, data.status);
+            contentValue.put(this.approver_id, data.approver_id);
+            long result = database.replace(TABLE_NAME, null, contentValue);
+            Log.e("aa", result + " ");
+            database.setTransactionSuccessful();
         } finally {
             database.endTransaction();
         }
     }
-    public int updateStatus(String travelcode,String status,String approve_on) {
+
+    public int updateStatus(String travelcode, String status, String approve_on) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.status, status);
             contentValues.put(this.approve_on, approve_on);
-            int i = database.update(TABLE_NAME, contentValues, this.travelcode + " = '" + travelcode+"'", null);
+            int i = database.update(TABLE_NAME, contentValues, this.travelcode + " = '" + travelcode + "'", null);
             database.setTransactionSuccessful();
             return i;
         } finally {
             database.endTransaction();
         }
     }
-  public int update(String android_event_code, String travelcode,String created_on) {
+
+    public int update(String android_event_code, String travelcode, String created_on) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
@@ -131,7 +146,8 @@ public class TravelHeaderTable {
             database.endTransaction();
         }
     }
-    public int update_travelStatus(String travelcode,String status,String reason,String approve_budget,String approve_on) {
+
+    public int update_travelStatus(String travelcode, String status, String reason, String approve_budget, String approve_on) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
@@ -139,16 +155,19 @@ public class TravelHeaderTable {
             contentValues.put(this.reason, reason);
             contentValues.put(this.approve_budget, approve_budget);
             contentValues.put(this.approve_on, approve_on);
-            int i = database.update(TABLE_NAME, contentValues, this.travelcode + " = '" + travelcode+"'", null);
+            int i = database.update(TABLE_NAME, contentValues, this.travelcode + " = '" + travelcode + "'", null);
             database.setTransactionSuccessful();
             return i;
         } finally {
             database.endTransaction();
         }
     }
+
     public List<TravelHeaderModel> fetch() {
         List<TravelHeaderModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.user_type,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
+        String[] columns = new String[]{this.android_travelcode, this.travelcode, this.from_loc, this.to_loc, this.start_date,
+                this.end_date, this.travel_reson, this.expense_budget, this.approve_budget, this.created_on, this.user_type,
+                this.created_by, this.status, this.approver_id, this.approve_on, this.reason,this.advance_amount};
         Cursor cursor = database.query(TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -169,15 +188,19 @@ public class TravelHeaderTable {
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.approver_id)),
                         cursor.getString(cursor.getColumnIndex(this.approve_on)),
-                        cursor.getString(cursor.getColumnIndex(this.reason))
-                        ));
+                        cursor.getString(cursor.getColumnIndex(this.reason)),
+                        cursor.getString(cursor.getColumnIndex(this.advance_amount))
+                ));
             } while (cursor.moveToNext());
         }
         return returnData;
     }
+
     public List<TravelHeaderModel> fetchUnsendData() {
         List<TravelHeaderModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{this.android_travelcode,this.travelcode,this.from_loc,this.to_loc,this.start_date,this.end_date,this.travel_reson,this.expense_budget,this.approve_budget,this.created_on,this.user_type,this.created_by,this.status,this.approver_id,this.approve_on,this.reason};
+        String[] columns = new String[]{this.android_travelcode, this.travelcode, this.from_loc, this.to_loc, this.start_date, this.end_date,
+                this.travel_reson, this.expense_budget, this.approve_budget, this.created_on, this.user_type, this.created_by, this.status,
+                this.approver_id, this.approve_on, this.reason,this.advance_amount};
         Cursor cursor = database.query(TABLE_NAME, columns, travelcode + "=?", new String[]{"0"}, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -198,7 +221,8 @@ public class TravelHeaderTable {
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.approver_id)),
                         cursor.getString(cursor.getColumnIndex(this.approve_on)),
-                        cursor.getString(cursor.getColumnIndex(this.reason))
+                        cursor.getString(cursor.getColumnIndex(this.reason)),
+                        cursor.getString(cursor.getColumnIndex(this.advance_amount))
                 ));
             } while (cursor.moveToNext());
         }
@@ -222,6 +246,7 @@ public class TravelHeaderTable {
         public String approve_budget;
         public String created_on;
         public String user_type;
+        public String advance_amount;
         public String created_by;
         public String status;
         public String approver_id;
@@ -230,23 +255,28 @@ public class TravelHeaderTable {
 
         public String from_loc_name;
         public String to_loc_name;
-        public TravelHeaderModel(String android_travelcode,String travelcode, String from_loc, String to_loc, String start_date, String end_date, String travel_reson, String expense_budget, String approve_budget, String created_on,String user_type, String created_by, String status, String approver_id, String approve_on, String reason) {
-          this.android_travelcode=android_travelcode;
-            this.travelcode=travelcode;
-            this.from_loc=from_loc;
-            this.to_loc=to_loc;
-            this.start_date=start_date;
-            this.end_date=end_date;
-            this.travel_reson=travel_reson;
-            this.expense_budget=expense_budget;
-            this.approve_budget=approve_budget;
-            this.created_on=created_on;
-            this.user_type=user_type;
-            this.created_by=created_by;
-            this.status=status;
-            this.approver_id=approver_id;
-            this.approve_on=approve_on;
-            this.reason=reason;
+
+        public TravelHeaderModel(String android_travelcode, String travelcode, String from_loc, String to_loc, String start_date, String end_date,
+                                 String travel_reson, String expense_budget, String approve_budget, String created_on, String user_type,
+                                 String created_by, String status, String approver_id, String approve_on, String reason,
+                                 String advance_amount) {
+            this.android_travelcode = android_travelcode;
+            this.travelcode = travelcode;
+            this.from_loc = from_loc;
+            this.to_loc = to_loc;
+            this.start_date = start_date;
+            this.end_date = end_date;
+            this.travel_reson = travel_reson;
+            this.expense_budget = expense_budget;
+            this.approve_budget = approve_budget;
+            this.created_on = created_on;
+            this.user_type = user_type;
+            this.created_by = created_by;
+            this.status = status;
+            this.approver_id = approver_id;
+            this.approve_on = approve_on;
+            this.reason = reason;
+            this.advance_amount = advance_amount;
 
         }
     }

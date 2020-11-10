@@ -69,7 +69,7 @@ public class ApproveTravelDetailFragment extends Fragment {
         sessionManagement = new SessionManagement(getActivity());
         travel_List = view.findViewById(R.id.travel_List);
         new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(
-                StaticDataForApp.getTravelDeatil + "getTravelApproveExpense&email=Admin", null, "UpdateOrderStatus"));
+                StaticDataForApp.getTravelDeatil + "getTravelApproveExpense&email="+sessionManagement.getUserEmail(), null, "UpdateOrderStatus"));
         super.onViewCreated(view, savedInstanceState);
     }
 
