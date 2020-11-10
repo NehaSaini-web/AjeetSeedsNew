@@ -17,6 +17,7 @@ public class OrderApprovalModel {
     public class OrderLineModel {
         public String order_no;
         public String item_no;
+        public String pack_size;
         public String item_name;
         public String image_url;
         public String qty;

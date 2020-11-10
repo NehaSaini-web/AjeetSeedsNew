@@ -73,7 +73,7 @@ public class OrderApprovalListAdapter extends BaseAdapter {
             customerMasterTable.close();
         } catch (Exception e) {
         }
-        order_detail.setText("Pack Size : " +  listdata.get(position).sum_of_qty+((customer_name==null || customer_name.equalsIgnoreCase(""))?"":" , Cust. : "+customer_name)
+        order_detail.setText("Packet : " +  listdata.get(position).sum_of_qty+((customer_name==null || customer_name.equalsIgnoreCase(""))?"":" , Cust. : "+customer_name)
         );
         try {
             created_on.setText(DateUtilsCustome.getDate_Time(listdata.get(position).updated_on));

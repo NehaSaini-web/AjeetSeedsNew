@@ -43,6 +43,8 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.backup.AndroidExceptionHandel;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.example.ajeetseeds.sqlLite.masters.crop.CropItemMasterTable;
+import com.example.ajeetseeds.sqlLite.orderBook.OrderBookLine;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -176,7 +178,7 @@ public class OrderApprovalFragment extends Fragment {
         try {
             approvalAdapter = new OrderApprovalListAdapter(getActivity(), list, (selectedOrderLine, position, flag) -> {
                 if (flag.equalsIgnoreCase("ClickOnItem"))
-                    OrderDetailItem(selectedOrderLine);
+                    OrderDetailItem(list.get(position).orderline);
                 else
                     approveRejectOrder(selectedOrderLine, position, flag);
             });
@@ -264,7 +266,7 @@ public class OrderApprovalFragment extends Fragment {
                 rowVertical.setPadding(10, 10, 10, 10);
 
                 ImageView imageView = new ImageView(getActivity());
-                LinearLayout.LayoutParams imageViewPrams = new LinearLayout.LayoutParams(200, 200);
+                LinearLayout.LayoutParams imageViewPrams = new LinearLayout.LayoutParams(160, 160);
                 imageView.setLayoutParams(imageViewPrams);
                 if (selectedOrderLine.get(i).image_url.contains("no_image_placeholder")) {
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -275,12 +277,17 @@ public class OrderApprovalFragment extends Fragment {
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .placeholder(R.color.gray3)
                         .into(imageView);
-
+                try{
+                    CropItemMasterTable cropItemMasterTable=new CropItemMasterTable(getActivity());
+                    cropItemMasterTable.open();
+                    selectedOrderLine.get(i).pack_size=cropItemMasterTable.getFG_pack_size(selectedOrderLine.get(i).item_no);
+                    cropItemMasterTable.close();
+                }catch (Exception e){}
                 TextView orderItemDetail = new TextView(getActivity());
-                orderItemDetail.setText(selectedOrderLine.get(i).item_name + " Qty : " + selectedOrderLine.get(i).qty);
-                orderItemDetail.setTextSize(16);
+                orderItemDetail.setText(selectedOrderLine.get(i).item_name + " ( "+selectedOrderLine.get(i).item_no+" )\nPack Size : "+selectedOrderLine.get(i).pack_size+" , Packet : " + selectedOrderLine.get(i).qty);
+                orderItemDetail.setTextSize(12);
                 orderItemDetail.setTextColor(Color.BLACK);
-                orderItemDetail.setPadding(20, 60, 10, 10);
+                orderItemDetail.setPadding(20, 40, 10, 10);
                 rowVertical.addView(imageView);
                 rowVertical.addView(orderItemDetail);
                 parentVertical.addView(rowVertical, i);
@@ -291,7 +298,7 @@ public class OrderApprovalFragment extends Fragment {
             scrollView.addView(parentVertical);
             relativeLayout.addView(scrollView);
             // Set grid view to alertDialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
             builder.setView(relativeLayout);
             builder.setTitle("Order Items " + selectedOrderLine.get(0).order_no);
             builder.show();

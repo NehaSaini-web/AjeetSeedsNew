@@ -35,6 +35,12 @@ public class CustomerMasterTable {
     public static final String region_code = "region_code";
     public static final String taluka = "taluka";
     public static final String active = "active";
+
+    public static final String zone_code="zone_code";
+    public static final String customer_crop_code="customer_crop_code";
+    public static final String customer_type="customer_type";
+    public static final String bussiness_type="bussiness_type";
+
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             no + " TEXT PRIMARY KEY," +
@@ -56,7 +62,12 @@ public class CustomerMasterTable {
             district_code + " TEXT ," +
             region_code + " TEXT ," +
             taluka + " TEXT ," +
-            active + " INTEGER" +
+            active + " INTEGER," +
+
+            zone_code + " TEXT ," +
+            customer_crop_code + " TEXT ," +
+            customer_type + " TEXT ," +
+            bussiness_type + " TEXT" +
             ");";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -110,6 +121,11 @@ public class CustomerMasterTable {
                 contentValue.put(this.region_code, data.region_code);
                 contentValue.put(this.taluka, data.taluka);
                 contentValue.put(this.active, data.active);
+
+                contentValue.put(this.zone_code, data.zone_code);
+                contentValue.put(this.customer_crop_code, data.customer_crop_code);
+                contentValue.put(this.customer_type, data.customer_type);
+                contentValue.put(this.bussiness_type, data.bussiness_type);
                 database.replace(TABLE_NAME, null, contentValue);
             }
             database.setTransactionSuccessful();
@@ -117,11 +133,51 @@ public class CustomerMasterTable {
             database.endTransaction();
         }
     }
+    public List<CustomerMasterModel> fetch(String select_by_user_crop_code) {
+        List<CustomerMasterModel> returnData = new ArrayList<>();
+        String[] columns = new String[]{no, name, address, city, contact, customer_posting_group, payment_terms_code, country, post_code, email, pan_no, state_code,
+                gst_registration_no, gst_registration_type, gst_customer_type, arn_no, district_code, region_code, taluka, active,
+                this.zone_code,this.customer_crop_code,this.customer_type,this.bussiness_type};
+        Cursor cursor = database.query(TABLE_NAME, columns, this.active+"=0 and "+this.customer_crop_code+"='"+select_by_user_crop_code+"'", null, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                returnData.add(new CustomerMasterModel(
+                        cursor.getString(cursor.getColumnIndex(this.no)),
+                        cursor.getString(cursor.getColumnIndex(this.name)),
+                        cursor.getString(cursor.getColumnIndex(this.address)),
+                        cursor.getString(cursor.getColumnIndex(this.city)),
+                        cursor.getString(cursor.getColumnIndex(this.contact)),
+                        cursor.getString(cursor.getColumnIndex(this.customer_posting_group)),
+                        cursor.getString(cursor.getColumnIndex(this.payment_terms_code)),
+                        cursor.getString(cursor.getColumnIndex(this.country)),
+                        cursor.getString(cursor.getColumnIndex(this.post_code)),
+                        cursor.getString(cursor.getColumnIndex(this.email)),
+                        cursor.getString(cursor.getColumnIndex(this.pan_no)),
+                        cursor.getString(cursor.getColumnIndex(this.state_code)),
+                        cursor.getString(cursor.getColumnIndex(this.gst_registration_no)),
+                        cursor.getString(cursor.getColumnIndex(this.gst_registration_type)),
+                        cursor.getString(cursor.getColumnIndex(this.gst_customer_type)),
+                        cursor.getString(cursor.getColumnIndex(this.arn_no)),
+                        cursor.getString(cursor.getColumnIndex(this.district_code)),
+                        cursor.getString(cursor.getColumnIndex(this.region_code)),
+                        cursor.getString(cursor.getColumnIndex(this.taluka)),
+                        cursor.getInt(cursor.getColumnIndex(this.active)),
 
+                        cursor.getString(cursor.getColumnIndex(this.zone_code)),
+                        cursor.getString(cursor.getColumnIndex(this.customer_crop_code)),
+                        cursor.getString(cursor.getColumnIndex(this.customer_type)),
+                        cursor.getString(cursor.getColumnIndex(this.bussiness_type))
+                ));
+            } while (cursor.moveToNext());
+        }
+        return returnData;
+    }
     public List<CustomerMasterModel> fetch() {
         List<CustomerMasterModel> returnData = new ArrayList<>();
         String[] columns = new String[]{no, name, address, city, contact, customer_posting_group, payment_terms_code, country, post_code, email, pan_no, state_code,
-                gst_registration_no, gst_registration_type, gst_customer_type, arn_no, district_code, region_code, taluka, active};
+                gst_registration_no, gst_registration_type, gst_customer_type, arn_no, district_code, region_code, taluka, active,
+        this.zone_code,this.customer_crop_code,this.customer_type,this.bussiness_type};
         Cursor cursor = database.query(TABLE_NAME, columns, this.active+"=0", null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -146,7 +202,12 @@ public class CustomerMasterTable {
                         cursor.getString(cursor.getColumnIndex(this.district_code)),
                         cursor.getString(cursor.getColumnIndex(this.region_code)),
                         cursor.getString(cursor.getColumnIndex(this.taluka)),
-                        cursor.getInt(cursor.getColumnIndex(this.active))
+                        cursor.getInt(cursor.getColumnIndex(this.active)),
+
+                        cursor.getString(cursor.getColumnIndex(this.zone_code)),
+                        cursor.getString(cursor.getColumnIndex(this.customer_crop_code)),
+                        cursor.getString(cursor.getColumnIndex(this.customer_type)),
+                        cursor.getString(cursor.getColumnIndex(this.bussiness_type))
                 ));
             } while (cursor.moveToNext());
         }
@@ -191,10 +252,16 @@ public class CustomerMasterTable {
         public String taluka;
         public int active;
 
+        public String zone_code;
+        public String customer_crop_code;
+        public String customer_type;
+        public String bussiness_type;
+
         public CustomerMasterModel(String no, String name, String address, String city, String contact, String customer_posting_group, String payment_terms_code,
                                    String country, String post_code, String email, String pan_no, String state_code, String gst_registration_no,
                                    String gst_registration_type, String gst_customer_type, String arn_no, String district_code, String region_code,
-                                   String taluka, int active) {
+                                   String taluka, int active,
+                                   String zone_code, String customer_crop_code,String customer_type,String bussiness_type) {
             this.no = no;
             this.name = name;
             this.address = address;
@@ -215,6 +282,11 @@ public class CustomerMasterTable {
             this.region_code = region_code;
             this.taluka = taluka;
             this.active = active;
+
+            this.zone_code=zone_code;
+            this.customer_crop_code=customer_crop_code;
+            this.customer_type=customer_type;
+            this.bussiness_type=bussiness_type;
         }
     }
 }

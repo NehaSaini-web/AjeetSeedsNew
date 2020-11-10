@@ -64,7 +64,7 @@ public class CartProductDetailListAdapter extends BaseAdapter {
         Button remove_qty_button = convertView.findViewById(R.id.remove_qty_button);
 
         itemDesc.setText(listdata.get(position).item_desc);
-        item_code.setText(listdata.get(position).item_no);
+        item_code.setText("Pack Size : " + listdata.get(position).fg_pack_size);
         if (listdata.get(position).image_url.contains("no_image_placeholder")) {
             itemImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
         }

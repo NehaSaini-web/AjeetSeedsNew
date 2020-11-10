@@ -157,6 +157,18 @@ public class CropItemMasterTable {
         return "";
     }
 
+    public String getFG_pack_size(String item_no) {
+        String[] columns = new String[]{fg_pack_size};
+        Cursor cursor = database.query(TABLE_NAME, columns, this.item_no + "='" + item_no + "'", null, null, null, null);
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                return cursor.getString(cursor.getColumnIndex(this.fg_pack_size));
+            } while (cursor.moveToNext());
+        }
+        return "";
+    }
+
     public void delete(String item_no) {
         database.delete(TABLE_NAME, this.item_no + "=" + item_no, null);
     }

@@ -162,6 +162,7 @@ public class OrderBookLine {
         public String order_no;
         public String item_no;
         public String qty;
+        public String pack_size;
         public String image_url;
         public String item_name;
         public CustomeModel(String order_no,String item_no,String qty,String image_url,String item_name){
