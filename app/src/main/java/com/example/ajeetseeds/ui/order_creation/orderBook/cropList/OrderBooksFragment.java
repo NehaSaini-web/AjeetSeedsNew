@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.ajeetseeds.MainActivity;
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.sqlLite.masters.crop.CropMasterTable;
 import com.example.ajeetseeds.sqlLite.masters.crop.CustomerMasterTable;
 import com.example.ajeetseeds.ui.order_creation.orderBook.model.OrderBookModel;
@@ -49,15 +50,22 @@ public class OrderBooksFragment extends Fragment {
         mViewModel = ViewModelProviders.of(this).get(OrderBooksViewModel.class);
         // TODO: Use the ViewModel
     }
+
     List<CropMasterTable.CropMasterModel> crop_list;
+    SessionManagement sessionManagement;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sessionManagement = new SessionManagement(getActivity());
         try {
             CropMasterTable cropMasterTable = new CropMasterTable(getActivity());
             cropMasterTable.open();
-            crop_list = cropMasterTable.fetch();
+            if (sessionManagement.getUser_type().contentEquals("Employee"))
+                crop_list = cropMasterTable.fetch(MainActivity.orderBookGlobalModel.selectdCustomer.customer_crop_code);
+            else if (sessionManagement.getUser_type().contentEquals("Customer"))
+                crop_list = cropMasterTable.fetch();
+
             cropMasterTable.close();
             mRecyclerView = view.findViewById(R.id.recycler_view);
             mRecyclerView.setHasFixedSize(true);

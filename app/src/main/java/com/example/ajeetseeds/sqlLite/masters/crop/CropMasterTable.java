@@ -105,6 +105,23 @@ public class CropMasterTable {
         }
         return returnData;
     }
+    public List<CropMasterModel> fetch(String crop_code) {
+        List<CropMasterModel> returnData = new ArrayList<>();
+        String[] columns = new String[]{code, description, image_url,active};
+        Cursor cursor = database.query(TABLE_NAME, columns, this.active+"="+0+" and "+this.code+"='"+crop_code+"'", null, null, null, null);
+        if (cursor != null && cursor.getCount()>0) {
+            cursor.moveToFirst();
+            do{
+                returnData.add(new CropMasterModel(
+                        cursor.getString(cursor.getColumnIndex(this.code)),
+                        cursor.getString(cursor.getColumnIndex(this.description)),
+                        cursor.getString(cursor.getColumnIndex(this.image_url)),
+                        cursor.getInt(cursor.getColumnIndex(this.active))
+                ));
+            } while (cursor.moveToNext());
+        }
+        return returnData;
+    }
     public String getCropName(String code) {
         List<CropMasterModel> returnData = new ArrayList<>();
         String[] columns = new String[]{description};

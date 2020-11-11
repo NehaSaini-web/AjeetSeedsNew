@@ -181,6 +181,11 @@ public class EmployeeOrderBookFragment extends Fragment {
                 i.putExtra("cartcount", MainActivity.orderBookGlobalModel.alertCount);
                 getActivity().sendBroadcast(i);
             }
+            select_by_user_crop_code="";
+            selected_distributer_dropdown.setText("");
+            selectdCustomer=null;
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(selected_distributer_dropdown.getWindowToken(), 0);
             loadFragments(R.id.nav_order_book, "Order Book");
         });
     }
