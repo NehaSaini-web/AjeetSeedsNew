@@ -81,7 +81,9 @@
                 <TextView
                     android:id="@+id/sum_of_calculatedQty"
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
-                    android:layout_width="40dp"
+                    android:layout_width="wrap_content"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     android:layout_height="40dp"></TextView>
 
                 <Button

@@ -176,9 +176,18 @@ public class CropItemFragment extends Fragment {
                 if (position != -1) {
                     if (flag.contentEquals("Add")) {
                         crop_list.get(position).total_buy_qty++;
-                    } else {
+                    } else if(flag.contentEquals("Remove")) {
                         if (crop_list.get(position).total_buy_qty > 0)
                             crop_list.get(position).total_buy_qty--;
+                    }
+                    else if(flag.contains("ManualEnter_")){
+                        try{
+                            int packet_enput=Integer.parseInt(flag.split("ManualEnter_")[1]);
+                            crop_list.get(position).total_buy_qty=packet_enput;
+                        }catch (Exception e){
+                            crop_list.get(position).total_buy_qty=0;
+                        }
+
                     }
                     cropItemListViewAdapter.notifyDataSetChanged();
                     boolean verefy = false;

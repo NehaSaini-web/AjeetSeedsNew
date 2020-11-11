@@ -2,18 +2,24 @@ package com.example.ajeetseeds.ui.order_creation.orderBook.crop_item_List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.ajeetseeds.Model.AsyModel;
 import com.example.ajeetseeds.Model.StaticDataForApp;
 import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
@@ -21,7 +27,12 @@ import com.example.ajeetseeds.sqlLite.masters.crop.CropItemMasterTable;
 import com.example.ajeetseeds.sqlLite.masters.crop.CustomerMasterTable;
 import com.example.ajeetseeds.sqlLite.orderBook.OrderBookHeader;
 import com.example.ajeetseeds.sqlLite.orderBook.OrderBookLine;
+import com.example.ajeetseeds.ui.travel.approveTravel.ApproveTravelDetailFragment;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,8 +155,37 @@ public class CropItemListViewAdapter extends BaseAdapter implements Filterable {
             listener.onItemClick(dataModel.item_no, "Remove");
         });
         sum_of_calculatedQty.setText(String.valueOf(dataModel.total_buy_qty));
+        sum_of_calculatedQty.setOnClickListener(view -> {
+            manualAmountEnput(dataModel);
+        });
         return itemView;
 
+    }
+
+    void manualAmountEnput(CropItemMasterTable.CropItemMasterModel dataModel){
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(activity);
+        builder.setTitle("Manual Packet " + dataModel.name);
+        builder.setIcon(R.drawable.approve_order_icon);
+        LinearLayout parentVertical = new LinearLayout(activity);
+        LinearLayout.LayoutParams parentVerticalParams = new LinearLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT);
+        parentVertical.setLayoutParams(parentVerticalParams);
+        parentVertical.setOrientation(LinearLayout.VERTICAL);
+        TextView enterReson_tv = new TextView(activity);
+        enterReson_tv.setText("Please Enter Packets");
+        enterReson_tv.setTextColor(activity.getResources().getColor(R.color.colorAccent));
+        enterReson_tv.setPadding(10, 30, 0, 0);
+        EditText approvebudget = new EditText(activity);
+        approvebudget.setInputType(InputType.TYPE_CLASS_NUMBER); //for decimal numbers
+        parentVertical.addView(enterReson_tv);
+        parentVertical.addView(approvebudget);
+        parentVertical.setPadding(40, 20, 40, 10);
+        builder.setView(parentVertical);
+
+        builder.setPositiveButton("Confirm", (dialogInterface, i) -> {
+                listener.onItemClick(dataModel.item_no, "ManualEnter_"+approvebudget.getText().toString());
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
     }
 
 }
