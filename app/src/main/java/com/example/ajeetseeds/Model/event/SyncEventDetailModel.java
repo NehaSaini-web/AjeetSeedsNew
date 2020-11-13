@@ -28,6 +28,11 @@ public class SyncEventDetailModel {
     public String status;
     public String reject_reason;
     public String approve_on;
+
+    public String actual_farmers;
+    public String actual_distributers;
+    public String actual_dealers;
+
     public List<ExpanceLineModel> expense_line;
 
     public String crop_name;

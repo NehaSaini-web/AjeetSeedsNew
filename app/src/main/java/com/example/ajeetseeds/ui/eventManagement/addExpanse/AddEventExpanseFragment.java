@@ -118,6 +118,62 @@ public class AddEventExpanseFragment extends Fragment {
             dropdown_event_type.setOnItemClickListener((adapterView, view1, i, l) -> {
                 selectedExpenseType = expenseTypeList.get(i);
             });
+            et_quantity.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float userInputQty = 0;
+                    try {
+                        userInputQty = et_quantity.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_quantity.getText().toString());
+                        if (userInputQty > Float.parseFloat(selectedExpenseType.qty)) {
+                            et_quantity.setText(selectedExpenseType.qty);
+                            userInputQty = 0;
+                        }
+                    } catch (Exception e) {
+                        et_quantity.setText("0");
+                        userInputQty = 0;
+                    } finally {
+                        totalAmount.setText(String.valueOf(userInputQty * (et_unitCost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_unitCost.getText().toString()))));
+                    }
+                }
+            });
+            et_unitCost.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    float userInputUnitCost = 0;
+                    try {
+                        userInputUnitCost = et_unitCost.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_unitCost.getText().toString());
+                        if (userInputUnitCost > Float.parseFloat(selectedExpenseType.rate)) {
+                            et_unitCost.setText("0");
+                            userInputUnitCost = 0;
+                        }
+                    } catch (Exception e) {
+                        et_unitCost.setText("0");
+                        userInputUnitCost = 0;
+                    } finally {
+                        totalAmount.setText(String.valueOf(userInputUnitCost * (et_quantity.getText().toString().equalsIgnoreCase("") ? 0 : Float.parseFloat(et_quantity.getText().toString()))));
+                    }
+                }
+            });
             addExpenseLine.setOnClickListener(view1 -> {
                 if (dropdown_event_type.getText().toString().equalsIgnoreCase("")) {
                     dropdown_event_type.setError("Please Select Expense Type.");
@@ -172,54 +228,6 @@ public class AddEventExpanseFragment extends Fragment {
                     }
                 } catch (Exception e) {
 
-                }
-            });
-            et_quantity.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (!et_unitCost.getText().toString().equalsIgnoreCase("")) {
-                        if (et_quantity.getText().toString().equalsIgnoreCase("")) {
-                            totalAmount.setText("0");
-                        } else {
-                            totalAmount.setText(String.valueOf((Integer.parseInt(et_quantity.getText().toString()) * Integer.parseInt(et_unitCost.getText().toString()))));
-                        }
-                    } else {
-                        totalAmount.setText("0");
-                    }
-                }
-            });
-            et_unitCost.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-                    if (!et_quantity.getText().toString().equalsIgnoreCase("")) {
-                        if (et_unitCost.getText().toString().equalsIgnoreCase("")) {
-                            totalAmount.setText("0");
-                        } else {
-                            totalAmount.setText(String.valueOf((Integer.parseInt(et_quantity.getText().toString()) * Integer.parseInt(et_unitCost.getText().toString()))));
-                        }
-                    } else {
-                        totalAmount.setText("0");
-                    }
                 }
             });
             selectImages.setOnClickListener(view1 -> {
@@ -283,6 +291,9 @@ public class AddEventExpanseFragment extends Fragment {
             try {
                 MultipartUtility multipartUtility = new MultipartUtility(StaticDataForApp.insertEventExpense);
                 multipartUtility.addFormField("expancedata", postedArray);
+                multipartUtility.addFormField("actual_farmers", submiteEventData.actual_farmers);
+                multipartUtility.addFormField("actual_distributers", submiteEventData.actual_distributers);
+                multipartUtility.addFormField("actual_dealers", submiteEventData.actual_dealers);
                 for (String url : imagesEncodedList) {
                     multipartUtility.addFilePart("files", new File(url));
                 }

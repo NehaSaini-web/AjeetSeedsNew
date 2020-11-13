@@ -41,6 +41,10 @@ public class EventManagementTable {
     public static final String reject_reason = "reject_reason";
     public static final String approve_on = "approve_on";
 
+    public static final String actual_farmers = "actual_farmers";
+    public static final String actual_distributers = "actual_distributers";
+    public static final String actual_dealers = "actual_dealers";
+
     // Creating table query
     public static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "(" +
             android_event_code + " TEXT PRIMARY KEY," +
@@ -66,7 +70,11 @@ public class EventManagementTable {
             approver_email + " TEXT NOT NULL," +
             status + " TEXT NOT NULL," +
             reject_reason + " TEXT NULL," +
-            approve_on + " TEXT NULL" +
+            approve_on + " TEXT NULL," +
+
+            actual_farmers + " TEXT NULL," +
+            actual_distributers + " TEXT NULL," +
+            actual_dealers + " TEXT NULL" +
             ");";
 
     public static final String DROP_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -124,6 +132,10 @@ public class EventManagementTable {
             contentValue.put(this.status, passdata.status);
             contentValue.put(this.reject_reason, passdata.reject_reason);
             contentValue.put(this.approve_on, passdata.approve_on);
+
+            contentValue.put(this.actual_farmers, passdata.actual_farmers);
+            contentValue.put(this.actual_distributers, passdata.actual_distributers);
+            contentValue.put(this.actual_dealers, passdata.actual_dealers);
             long result = database.replace(TABLE_NAME, null, contentValue);
             database.setTransactionSuccessful();
             return result;
@@ -140,7 +152,9 @@ public class EventManagementTable {
 
     public List<EventManagemantModel> fetch() {
         List<EventManagemantModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{android_event_code, event_code, event_desc, event_date, event_type, event_budget, crop, variety, state, district, village, taluka, farmer_name, farmer_mobile_no, expected_farmers, expected_dealers, expected_distributer, event_cover_villages, created_on, created_by, approver_email, status, reject_reason, approve_on};
+        String[] columns = new String[]{android_event_code, event_code, event_desc, event_date, event_type, event_budget, crop, variety, state, district,
+                village, taluka, farmer_name, farmer_mobile_no, expected_farmers, expected_dealers, expected_distributer, event_cover_villages, created_on,
+                created_by, approver_email, status, reject_reason, approve_on,this.actual_farmers,this.actual_distributers,this.actual_dealers};
         Cursor cursor = database.query(TABLE_NAME, columns, null, null, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -169,7 +183,11 @@ public class EventManagementTable {
                         cursor.getString(cursor.getColumnIndex(this.approver_email)),
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.reject_reason)),
-                        cursor.getString(cursor.getColumnIndex(this.approve_on))
+                        cursor.getString(cursor.getColumnIndex(this.approve_on)),
+
+                        cursor.getString(cursor.getColumnIndex(this.actual_farmers)),
+                        cursor.getString(cursor.getColumnIndex(this.actual_distributers)),
+                        cursor.getString(cursor.getColumnIndex(this.actual_dealers))
                 ));
             } while (cursor.moveToNext());
         }
@@ -179,7 +197,9 @@ public class EventManagementTable {
 
     public List<EventManagemantModel> fetchUnsendData() {
         List<EventManagemantModel> returnData = new ArrayList<>();
-        String[] columns = new String[]{android_event_code, event_code, event_desc, event_date, event_type, event_budget, crop, variety, state, district, village, taluka, farmer_name, farmer_mobile_no, expected_farmers, expected_dealers, expected_distributer, event_cover_villages, created_on, created_by, approver_email, status, reject_reason, approve_on};
+        String[] columns = new String[]{android_event_code, event_code, event_desc, event_date, event_type, event_budget, crop, variety, state, district,
+                village, taluka, farmer_name, farmer_mobile_no, expected_farmers, expected_dealers, expected_distributer, event_cover_villages,
+                created_on, created_by, approver_email, status, reject_reason, approve_on,this.actual_farmers,this.actual_distributers,this.actual_dealers};
         Cursor cursor = database.query(TABLE_NAME, columns, event_code + "=?", new String[]{"0"}, null, null, null);
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -208,39 +228,46 @@ public class EventManagementTable {
                         cursor.getString(cursor.getColumnIndex(this.approver_email)),
                         cursor.getString(cursor.getColumnIndex(this.status)),
                         cursor.getString(cursor.getColumnIndex(this.reject_reason)),
-                        cursor.getString(cursor.getColumnIndex(this.approve_on))
+                        cursor.getString(cursor.getColumnIndex(this.approve_on)),
+
+                        cursor.getString(cursor.getColumnIndex(this.actual_farmers)),
+                        cursor.getString(cursor.getColumnIndex(this.actual_distributers)),
+                        cursor.getString(cursor.getColumnIndex(this.actual_dealers))
                 ));
             } while (cursor.moveToNext());
         }
         return returnData;
     }
-    public int update_EventStatus(String event_code,String status) {
+
+    public int update_EventStatus(String event_code, String status) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.status, status);
-            int i = database.update(TABLE_NAME, contentValues, this.event_code + " = '" + event_code+"'", null);
+            int i = database.update(TABLE_NAME, contentValues, this.event_code + " = '" + event_code + "'", null);
             database.setTransactionSuccessful();
             return i;
         } finally {
             database.endTransaction();
         }
     }
-    public int update_EventStatus(String event_code,String status,String reject_reason,String approve_on) {
+
+    public int update_EventStatus(String event_code, String status, String reject_reason, String approve_on) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
             contentValues.put(this.status, status);
             contentValues.put(this.reject_reason, reject_reason);
             contentValues.put(this.approve_on, approve_on);
-            int i = database.update(TABLE_NAME, contentValues, this.event_code + " = '" + event_code+"'", null);
+            int i = database.update(TABLE_NAME, contentValues, this.event_code + " = '" + event_code + "'", null);
             database.setTransactionSuccessful();
             return i;
         } finally {
             database.endTransaction();
         }
     }
-    public int update(String android_event_code, String event_code,String created_on) {
+
+    public int update(String android_event_code, String event_code, String created_on) {
         database.beginTransaction();
         try {
             ContentValues contentValues = new ContentValues();
@@ -254,6 +281,20 @@ public class EventManagementTable {
         }
     }
 
+    public int updateFarmaerDealerDistributers(String android_event_code, String event_code, String actual_farmers,String actual_distributers,String actual_dealers) {
+        database.beginTransaction();
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(this.actual_farmers, actual_farmers);
+            contentValues.put(this.actual_dealers, actual_dealers);
+            contentValues.put(this.actual_distributers, actual_distributers);
+            int i = database.update(TABLE_NAME, contentValues, this.android_event_code + " = " + android_event_code +" and "+this.event_code+"='"+event_code+"'", null);
+            database.setTransactionSuccessful();
+            return i;
+        } finally {
+            database.endTransaction();
+        }
+    }
 
     public void delete(String event_code) {
         database.delete(TABLE_NAME, this.event_code + "=" + event_code, null);
@@ -291,11 +332,16 @@ public class EventManagementTable {
         public String district_name;
         public String taluka_name;
 
+        public String actual_farmers;
+        public String actual_distributers;
+        public String actual_dealers;
+
         public EventManagemantModel(String android_event_code, String event_code, String event_desc, String event_date, String event_type,
                                     String event_budget, String crop, String variety, String state, String district, String village,
                                     String taluka, String farmer_name, String farmer_mobile_no, String expected_farmers, String expected_dealers,
                                     String expected_distributer, String event_cover_villages, String created_on, String created_by, String approver_email,
-                                    String status, String reject_reason, String approve_on) {
+                                    String status, String reject_reason, String approve_on, String actual_farmers, String actual_distributers,
+                                    String actual_dealers) {
             this.android_event_code = android_event_code;
             this.event_code = event_code;
             this.event_desc = event_desc;
@@ -320,6 +366,10 @@ public class EventManagementTable {
             this.status = status;
             this.reject_reason = reject_reason;
             this.approve_on = approve_on;
+
+            this.actual_farmers = actual_farmers;
+            this.actual_distributers = actual_distributers;
+            this.actual_dealers = actual_dealers;
         }
     }
 }

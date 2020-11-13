@@ -82,7 +82,7 @@ public class EventApproveListAdapter extends BaseAdapter {
         event_desc.setText(listdata.get(position).event_desc);
         event_type.setText(listdata.get(position).event_type);
         event_budget.setText(listdata.get(position).event_budget);
-        event_date.setText(DateUtilsCustome.getDateOnly(listdata.get(position).event_date));
+        event_date.setText(DateUtilsCustome.getDateOnlyMM_DD_YYYY(listdata.get(position).event_date));
         event_status.setText(DateUtilsCustome.getDate_Time(listdata.get(position).created_on) + " " + listdata.get(position).status);
         try {
             CropMasterTable cropMasterTable = new CropMasterTable(activity);
@@ -118,6 +118,9 @@ public class EventApproveListAdapter extends BaseAdapter {
         });
         reject_order.setOnClickListener(view -> {
             listener.onItemClick(listdata.get(position), position, "reject");
+        });
+        convertView.setOnClickListener(view -> {
+            listener.onItemClick(listdata.get(position), position, "view");
         });
         village.setText(listdata.get(position).village);
         return convertView;

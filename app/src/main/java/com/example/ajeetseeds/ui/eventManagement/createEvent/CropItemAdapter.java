@@ -39,7 +39,7 @@ public class CropItemAdapter extends ArrayAdapter<CropItemMasterTable.CropItemMa
             }
         CropItemMasterTable.CropItemMasterModel cropitem = getItem(position);
             TextView name = (TextView) view.findViewById(R.id.textview1);
-            name.setText(cropitem.name);
+            name.setText(cropitem.name+" ("+cropitem.crop+")");
         return view;
     }
 
@@ -69,7 +69,7 @@ public class CropItemAdapter extends ArrayAdapter<CropItemMasterTable.CropItemMa
         @Override
         public CharSequence convertResultToString(Object resultValue) {
             CropItemMasterTable.CropItemMasterModel cropitem = (CropItemMasterTable.CropItemMasterModel) resultValue;
-            return cropitem.name;
+            return cropitem.name +" ("+cropitem.crop+")";
         }
 
         @Override

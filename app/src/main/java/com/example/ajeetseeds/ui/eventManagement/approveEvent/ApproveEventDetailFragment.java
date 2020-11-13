@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.ajeetseeds.Http_Hanler.GlobalPostingMethod;
 import com.example.ajeetseeds.Http_Hanler.HttpHandlerModel;
@@ -69,7 +71,7 @@ public class ApproveEventDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sessionManagement = new SessionManagement(getActivity());
         event_List = view.findViewById(R.id.event_List);
-        new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.getEventDeatil + "getEventApproveExpense&email="+sessionManagement.getUserEmail(), null, "UpdateOrderStatus"));
+        new CommanHitToServer().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, new AsyModel(StaticDataForApp.getEventDeatil + "getEventApproveExpense&email=" + sessionManagement.getUserEmail(), null, "UpdateOrderStatus"));
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -125,7 +127,7 @@ public class ApproveEventDetailFragment extends Fragment {
                 if (responseslist.size() > 0 && responseslist.get(0).condition) {
                     list = responseslist;
                     bindUiListData();
-                }else{
+                } else {
                     Snackbar.make(event_List, responseslist.size() > 0 ? responseslist.get(0).message : "Record Not inserted.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
                     }).show();
                 }
@@ -135,7 +137,7 @@ public class ApproveEventDetailFragment extends Fragment {
                 if (responseslist.size() > 0 && responseslist.get(0).condition) {
                     list.remove(position);
                     event_Adapter.notifyDataSetChanged();
-                }else {
+                } else {
                     Snackbar.make(event_List, responseslist.size() > 0 ? responseslist.get(0).message : "Record Not inserted.", Snackbar.LENGTH_INDEFINITE).setAction("Cancel", view -> {
                     }).show();
                 }
@@ -149,9 +151,24 @@ public class ApproveEventDetailFragment extends Fragment {
 
     private void bindUiListData() {
         event_Adapter = new EventApproveListAdapter(getActivity(), list, (selectedeventData, position, flag) -> {
-            approveRejectOrder(selectedeventData, position, flag);
+            if (flag.equalsIgnoreCase("approve") || flag.equalsIgnoreCase("reject"))
+                approveRejectOrder(selectedeventData, position, flag);
+            else if (flag.equalsIgnoreCase("view")) {
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("flag", true);
+                bundle.putBoolean("approveView", true);
+                bundle.putString("passdata", new Gson().toJson(list.get(position)));
+                loadFragments(R.id.nav_event_create, "Create Event", bundle);
+            }
         });
         event_List.setAdapter(event_Adapter);
+    }
+
+    private void loadFragments(int id, String fragmentName, Bundle bundle) {
+        NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment);
+//        navController.navigateUp();
+        navController.navigate(id, bundle);
+        getActivity().setTitle(fragmentName);
     }
 
     void approveRejectOrder(SyncEventDetailModel selectedeventData, int position, String flag) {
@@ -213,5 +230,9 @@ public class ApproveEventDetailFragment extends Fragment {
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().setTitle("Event Approve");
+    }
 }

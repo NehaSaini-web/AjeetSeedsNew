@@ -492,18 +492,18 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
     }
 
     void deleteActiveOneRecordForAllTables() {
-        try {
-            DatabaseHelper dbHelper = new DatabaseHelper(activity);
-            SQLiteDatabase database = dbHelper.getWritableDatabase();
-            for (int i = 0; i < AllTablesName.activeRecordTable.length; i++) {
-                int result = database.delete(AllTablesName.activeRecordTable[i], "active=1", null);
-                Log.e("Delete " + AllTablesName.activeRecordTable[i], result + "");
-            }
-            database.close();
-            dbHelper.close();
-        } catch (Exception e) {
-
-        }
+//        try {
+//            DatabaseHelper dbHelper = new DatabaseHelper(activity);
+//            SQLiteDatabase database = dbHelper.getWritableDatabase();
+//            for (int i = 0; i < AllTablesName.activeRecordTable.length; i++) {
+//                int result = database.delete(AllTablesName.activeRecordTable[i], "active=1", null);
+//                Log.e("Delete " + AllTablesName.activeRecordTable[i], result + "");
+//            }
+//            database.close();
+//            dbHelper.close();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     void Sync_EventBookingData(String flag) {
@@ -542,7 +542,8 @@ public class SyncAppWithServerAsyTask extends AsyncTask<Void, Void, Void> {
                                 responseobject.crop, responseobject.variety, responseobject.state, responseobject.district, responseobject.village,
                                 responseobject.taluka, responseobject.farmer_name, responseobject.farmer_mobile_no, responseobject.expected_farmers
                                 , responseobject.expected_dealers, responseobject.expected_distributer, responseobject.event_cover_villages, responseobject.created_on,
-                                responseobject.created_by, responseobject.approver_email, responseobject.status, responseobject.reject_reason, responseobject.approve_on));
+                                responseobject.created_by, responseobject.approver_email, responseobject.status, responseobject.reject_reason, responseobject.approve_on,
+                                responseobject.actual_farmers, responseobject.actual_distributers, responseobject.actual_dealers));
                         for (SyncEventDetailModel.ExpanceLineModel lineObject : responseobject.expense_line) {
                             if (lineObject.line_no != null && lineObject.event_code != null) {
                                 EventManagementExpenseLineTable eventManagementExpenseLineTable = new EventManagementExpenseLineTable(activity);

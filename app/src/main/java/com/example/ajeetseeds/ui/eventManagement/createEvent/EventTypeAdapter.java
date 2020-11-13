@@ -13,9 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ajeetseeds.R;
+import com.example.ajeetseeds.golobalClass.StaticMethods;
 import com.example.ajeetseeds.sqlLite.event.EventTypeMaster;
 
 import java.util.List;
+
 
 public class EventTypeAdapter extends ArrayAdapter<EventTypeMaster.EventTypeMasterModel> {
     Context context;
@@ -39,7 +41,7 @@ public class EventTypeAdapter extends ArrayAdapter<EventTypeMaster.EventTypeMast
             }
         EventTypeMaster.EventTypeMasterModel event_type = getItem(position);
             TextView name = (TextView) view.findViewById(R.id.textview1);
-            name.setText(event_type.event_type+" ("+event_type.budget+")");
+            name.setText(event_type.event_type+" , Budget : "+ StaticMethods.removeDecimal(event_type.rate)+" Rs.");
         return view;
     }
 

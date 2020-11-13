@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ajeetseeds.Http_Hanler.GlobalPostingMethod;
@@ -35,6 +36,7 @@ import com.example.ajeetseeds.R;
 import com.example.ajeetseeds.SessionManageMent.SessionManagement;
 import com.example.ajeetseeds.backup.AndroidExceptionHandel;
 import com.example.ajeetseeds.globalconfirmation.LoadingDialog;
+import com.example.ajeetseeds.golobalClass.CustomDatePicker;
 import com.example.ajeetseeds.golobalClass.DateUtilsCustome;
 import com.example.ajeetseeds.Model.event.EventCreateResponseModel;
 import com.example.ajeetseeds.sqlLite.AllTablesName;
@@ -50,6 +52,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -65,9 +68,11 @@ public class CreateEventFragment extends Fragment {
     AutoCompleteTextView dropdown_event_type, dropdown_crop, dropdown_variety, dropdown_state, dropdown_district, dropdown_taluka;
     ChipGroup selected_no_odvillageCovered_chipgroup;
     ImageView add_village_name_button;
-    AppCompatEditText et_event_desc, et_event_date, et_village, et_farmer_name, et_farmer_contact_no, et_expected_farmers, et_expected_dealers,
+    AppCompatEditText et_event_desc, et_village, et_farmer_name, et_farmer_contact_no, et_expected_farmers, et_expected_dealers,
             et_expected_distributers, et_village_covered_name;
     Button submitPage, add_eventExpense;
+    TextInputEditText et_event_date, et_Actual_farmers, et_Actual_dealers, et_Actual_distributers;
+    LinearLayout create_approval_section;
 
     public static CreateEventFragment newInstance() {
         return new CreateEventFragment();
@@ -105,7 +110,7 @@ public class CreateEventFragment extends Fragment {
 
         et_event_desc = view.findViewById(R.id.et_event_desc);
         et_event_date = view.findViewById(R.id.et_event_date);
-        et_event_date.setText(DateUtilsCustome.getCurrentDateBY());
+        et_event_date.setText(DateUtilsCustome.getCurrentDateBYMM_DD_YYYY());
 
         et_village = view.findViewById(R.id.et_village);
         et_farmer_name = view.findViewById(R.id.et_farmer_name);
@@ -116,16 +121,22 @@ public class CreateEventFragment extends Fragment {
 
         submitPage = view.findViewById(R.id.submitPage);
         add_eventExpense = view.findViewById(R.id.add_eventExpense);
+        create_approval_section = view.findViewById(R.id.create_approval_section);
+        et_Actual_farmers = view.findViewById(R.id.et_Actual_farmers);
+        et_Actual_dealers = view.findViewById(R.id.et_Actual_dealers);
+        et_Actual_distributers = view.findViewById(R.id.et_Actual_distributers);
         checkBackFragmentData();
     }
 
     private boolean passBackFragmentData = false;
+    private boolean approve_view_display = false;
     EventManagementTable.EventManagemantModel submiteEventData = null;
 
     void checkBackFragmentData() {
         try {
             passBackFragmentData = getArguments().getBoolean("flag", false);
             submiteEventData = new Gson().fromJson(getArguments().getString("passdata", ""), EventManagementTable.EventManagemantModel.class);
+            approve_view_display = getArguments().getBoolean("approveView", false);
         } catch (Exception e) {
         } finally {
             if (passBackFragmentData) {
@@ -147,7 +158,7 @@ public class CreateEventFragment extends Fragment {
                 add_village_name_button.setVisibility(View.GONE);
 
                 et_event_desc.setText(submiteEventData.event_desc);
-                et_event_date.setText(DateUtilsCustome.getDateMMMDDYYYY(submiteEventData.event_date));
+                et_event_date.setText(DateUtilsCustome.getDateOnlyMM_DD_YYYY(submiteEventData.event_date));
                 dropdown_event_type.setText(submiteEventData.event_type);
                 dropdown_crop.setText(submiteEventData.crop_name);
                 dropdown_variety.setText(submiteEventData.variety_name);
@@ -173,23 +184,73 @@ public class CreateEventFragment extends Fragment {
                     if (submiteEventData.status.equalsIgnoreCase("CREATE REJECTED")) {
                         Snackbar.make(add_eventExpense, "You don't have Expense line So Go Back.", Snackbar.LENGTH_LONG).show();
                     } else {
+                        if (submiteEventData.status.equalsIgnoreCase("CREATE APPROVED")) {
+                            if (et_Actual_farmers.getText().toString().equalsIgnoreCase("")) {
+                                Snackbar.make(add_eventExpense, "Please Enter Actual Farmers.", Snackbar.LENGTH_LONG).show();
+                                return;
+                            } else if (et_Actual_distributers.getText().toString().equalsIgnoreCase("")) {
+                                Snackbar.make(add_eventExpense, "Please Enter Actual Distributers.", Snackbar.LENGTH_LONG).show();
+                                return;
+                            } else if (et_Actual_dealers.getText().toString().equalsIgnoreCase("")) {
+                                Snackbar.make(add_eventExpense, "Please Enter Actual Dealers.", Snackbar.LENGTH_LONG).show();
+                                return;
+                            }
+                            try {
+                                EventManagementTable eventManagementTable = new EventManagementTable(getActivity());
+                                eventManagementTable.open();
+                                eventManagementTable.updateFarmaerDealerDistributers(submiteEventData.android_event_code, submiteEventData.event_code,
+                                        et_Actual_farmers.getText().toString(), et_Actual_distributers.getText().toString(), et_Actual_dealers.getText().toString());
+                                eventManagementTable.close();
+                                submiteEventData.actual_farmers = et_Actual_farmers.getText().toString();
+                                submiteEventData.actual_distributers = et_Actual_distributers.getText().toString();
+                                submiteEventData.actual_dealers = et_Actual_dealers.getText().toString();
+
+                            } catch (Exception e) {
+                            }
+                        }
                         Bundle bundle = new Bundle();
                         bundle.putString("dataPass", new Gson().toJson(submiteEventData));
                         loadFragments(R.id.nav_event_expanse_Add, "Add Expance " + submiteEventData.event_code, bundle);
                     }
                 });
-                getActivity().setTitle("Update Event " + submiteEventData.event_code);
                 if (submiteEventData.status.equalsIgnoreCase("PENDING")) {
                     add_eventExpense.setVisibility(View.GONE);
+                    create_approval_section.setVisibility(View.GONE);
+                } else if (submiteEventData.status.equalsIgnoreCase("CREATE REJECTED")) {
+                    create_approval_section.setVisibility(View.GONE);
+                } else if (submiteEventData.status.equalsIgnoreCase("CREATE APPROVED")) {
+                    create_approval_section.setVisibility(View.VISIBLE);
+                    et_Actual_dealers.setText(submiteEventData.actual_dealers);
+                    et_Actual_distributers.setText(submiteEventData.actual_distributers);
+                    et_Actual_farmers.setText(submiteEventData.actual_farmers);
+                } else {
+                    create_approval_section.setVisibility(View.VISIBLE);
+                    et_Actual_dealers.setEnabled(false);
+                    et_Actual_distributers.setEnabled(false);
+                    et_Actual_farmers.setEnabled(false);
+                    et_Actual_dealers.setText(submiteEventData.actual_dealers);
+                    et_Actual_distributers.setText(submiteEventData.actual_distributers);
+                    et_Actual_farmers.setText(submiteEventData.actual_farmers);
+                    //todo disable all input field of this section;
                 }
+                if (approve_view_display) {
+                    getActivity().setTitle("View Event " + submiteEventData.event_code);
+                    if (submiteEventData.status.equalsIgnoreCase("PENDING")) {
+                        add_eventExpense.setVisibility(View.GONE);
+                    }
+                    else if (submiteEventData.status.equalsIgnoreCase("CREATE APPROVED")) {
+                        add_eventExpense.setVisibility(View.GONE);
+                    }else{
+                        add_eventExpense.setVisibility(View.VISIBLE);
+                    }
+                    submitPage.setVisibility(View.GONE);
+                } else
+                    getActivity().setTitle("Update Event " + submiteEventData.event_code);
+
             } else {
-                et_event_date.setOnClickListener(view1 -> {
-                    MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-                    MaterialDatePicker picker = builder.build();
-                    picker.show(getActivity().getSupportFragmentManager(), picker.toString());
-                    picker.addOnPositiveButtonClickListener(selection -> {
-                        et_event_date.setText(picker.getHeaderText());
-                    });
+                et_event_date.setOnTouchListener((view, motionEvent) -> {
+                    new CustomDatePicker(getActivity()).showDatePickerDialog(et_event_date);
+                    return true;
                 });
                 add_village_name_button.setVisibility(View.VISIBLE);
                 bindEventType();
@@ -261,27 +322,25 @@ public class CreateEventFragment extends Fragment {
                 } else if (et_event_date.getText().toString().equalsIgnoreCase("")) {
                     et_event_date.setError("Please Enter Event Date.");
                     return;
-                }else if (selectedEventType==null || !selectedEventType.event_type.equalsIgnoreCase(dropdown_event_type.getText().toString())) {
+                } else if (selectedEventType == null || !selectedEventType.event_type.equalsIgnoreCase(dropdown_event_type.getText().toString())) {
                     dropdown_event_type.setError("Please Select Event Type.");
                     return;
-                }else if (selectedCrop==null || !selectedCrop.description.equalsIgnoreCase(dropdown_crop.getText().toString())) {
+                } else if (selectedCrop == null || !selectedCrop.description.equalsIgnoreCase(dropdown_crop.getText().toString())) {
                     dropdown_crop.setError("Please Select Crop.");
                     return;
-                }else if (selectedCropItem==null || !selectedCropItem.item_desc.equalsIgnoreCase(dropdown_variety.getText().toString())) {
+                } else if (selectedCropItem == null || !dropdown_variety.getText().toString().contains(selectedCropItem.item_desc)) {
                     dropdown_variety.setError("Please Select Variety.");
                     return;
-                }else if (selectedState==null || !selectedState.name.equalsIgnoreCase(dropdown_state.getText().toString())) {
+                } else if (selectedState == null || !selectedState.name.equalsIgnoreCase(dropdown_state.getText().toString())) {
                     dropdown_state.setError("Please Select State.");
                     return;
-                }
-                else if (selecteddistrict==null || !selecteddistrict.name.equalsIgnoreCase(dropdown_district.getText().toString())) {
+                } else if (selecteddistrict == null || !selecteddistrict.name.equalsIgnoreCase(dropdown_district.getText().toString())) {
                     dropdown_district.setError("Please Select District.");
                     return;
-                }  else if (selectedTaluka==null || !selectedTaluka.description.equalsIgnoreCase(dropdown_taluka.getText().toString())) {
+                } else if (selectedTaluka == null || !selectedTaluka.description.equalsIgnoreCase(dropdown_taluka.getText().toString())) {
                     dropdown_taluka.setError("Please Select Taluka.");
                     return;
-                }
-                else if (et_village.getText().toString().equalsIgnoreCase("")) {
+                } else if (et_village.getText().toString().equalsIgnoreCase("")) {
                     et_village.setError("Please Enter Village Name.");
                     return;
                 } else if (et_farmer_name.getText().toString().equalsIgnoreCase("")) {
@@ -290,17 +349,16 @@ public class CreateEventFragment extends Fragment {
                 } else if (et_farmer_contact_no.getText().toString().equalsIgnoreCase("")) {
                     et_farmer_contact_no.setError("Please Enter Contact no.");
                     return;
-                }else if (et_expected_farmers.getText().toString().equalsIgnoreCase("")) {
+                } else if (et_expected_farmers.getText().toString().equalsIgnoreCase("")) {
                     et_expected_farmers.setError("Please Enter Expected Farmers.");
                     return;
-                }else if (et_expected_dealers.getText().toString().equalsIgnoreCase("")) {
+                } else if (et_expected_dealers.getText().toString().equalsIgnoreCase("")) {
                     et_expected_dealers.setError("Please Enter Expected Dealers.");
                     return;
-                }else if (et_expected_distributers.getText().toString().equalsIgnoreCase("")) {
+                } else if (et_expected_distributers.getText().toString().equalsIgnoreCase("")) {
                     et_expected_distributers.setError("Please Enter Expected Distributers.");
                     return;
-                }
-                else if (VillagesCoveredNameList==null || VillagesCoveredNameList.size()==0) {
+                } else if (VillagesCoveredNameList == null || VillagesCoveredNameList.size() == 0) {
                     et_village_covered_name.setError("Please Enter Village Covered Name.");
                     return;
                 }
@@ -316,7 +374,7 @@ public class CreateEventFragment extends Fragment {
                         postedJson.put("event_desc", et_event_desc.getText().toString());
                         postedJson.put("event_date", et_event_date.getText().toString());
                         postedJson.put("event_type", selectedEventType.event_type);
-                        postedJson.put("event_budget", selectedEventType.budget);
+                        postedJson.put("event_budget", selectedEventType.rate);
                         postedJson.put("crop", selectedCrop.code);
                         postedJson.put("variety", selectedCropItem.item_no);
                         postedJson.put("state", selectedState.code);
@@ -404,11 +462,12 @@ public class CreateEventFragment extends Fragment {
             eventManagementTable.open();
             String android_event_code = eventManagementTable.getTableSequenceNo();
             EventManagementTable.EventManagemantModel insertObject = eventManagementTable.new EventManagemantModel(android_event_code,
-                    event_code, et_event_desc.getText().toString(), et_event_date.getText().toString(), selectedEventType.event_type, selectedEventType.budget,
+                    event_code, et_event_desc.getText().toString(), et_event_date.getText().toString(), selectedEventType.event_type, selectedEventType.rate,
                     selectedCrop.code, selectedCropItem.item_no, selectedState.code, selecteddistrict.code, et_village.getText().toString(),
                     selectedTaluka.code, et_farmer_name.getText().toString(), et_farmer_contact_no.getText().toString(), et_expected_farmers.getText().toString()
                     , et_expected_dealers.getText().toString(), et_expected_distributers.getText().toString(), event_cover_villages, created_on,
-                    sessionManagement.getUserEmail(), sessionManagement.getApprover_id(), "PENDING", null, null);
+                    sessionManagement.getUserEmail(), sessionManagement.getApprover_id(), "PENDING", null, null,
+                    "", "", "");
             eventManagementTable.insert(insertObject);
             eventManagementTable.close();
             //todo master entry Table out redy is going to be 1 so that data uploaded to the server
@@ -423,6 +482,7 @@ public class CreateEventFragment extends Fragment {
         } catch (Exception e) {
         }
     }
+
     public void SuccessMessage(String event_code) {
 
         try {
@@ -564,4 +624,5 @@ public class CreateEventFragment extends Fragment {
             selected_no_odvillageCovered_chipgroup.addView(chip);
         }
     }
+
 }

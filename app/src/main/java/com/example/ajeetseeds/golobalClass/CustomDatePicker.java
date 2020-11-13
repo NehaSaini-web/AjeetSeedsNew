@@ -17,7 +17,7 @@ public class CustomDatePicker {
     }
 
     public void showDatePickerDialog(TextInputEditText editTextDate) {
-        //todo date formate shoud be 5-12-2013
+        //todo date formate shoud be MM-dd-yyyy
         if (datePickerDialog == null || !datePickerDialog.isShowing()) {
             String passdate = editTextDate.getText().toString();
             int day = 0, month = 0, year = 0;

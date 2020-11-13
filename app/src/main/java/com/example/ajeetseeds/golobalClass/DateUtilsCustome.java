@@ -149,6 +149,15 @@ public class DateUtilsCustome {
         int date = c.get(Calendar.DATE);
         return month + " " + date + ", " + year;
     }
+
+    public static String getCurrentDateBYMM_DD_YYYY() {
+        Calendar c = Calendar.getInstance();
+
+         int month = c.get(Calendar.MONTH)+1;
+        int year = c.get(Calendar.YEAR);
+        int date = c.get(Calendar.DATE);
+        return month + "/" + date + "/" + year;
+    }
     public static String getCurrentDateBY_() {
         Calendar c = Calendar.getInstance();
 
@@ -179,6 +188,17 @@ public class DateUtilsCustome {
             SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             Date date = formatter1.parse(value);
             SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
+            return newFormat.format(date);
+        } catch (Exception e) {
+            return value;
+        }
+    }
+
+    public static String getDateOnlyMM_DD_YYYY(String value) {
+        try {
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            Date date = formatter1.parse(value);
+            SimpleDateFormat newFormat = new SimpleDateFormat("MM/dd/yyyy");
             return newFormat.format(date);
         } catch (Exception e) {
             return value;
